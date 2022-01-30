@@ -1,6 +1,6 @@
 enum RequestPaths {
   WORDS = '/words',
-  USERS = '/users'
+  USERS = '/users',
 }
 
 enum ResponseStatuses {
@@ -11,29 +11,30 @@ enum ResponseStatuses {
   BAD_REQUEST = 400,
   NO_CONTENT = 204,
   FORBIDDEN = 403,
+  PAYMENT_REQUIRED = 402,
 }
 
 interface WordResponse {
-  id: string,
-  group: number,
-  page: number,
-  word: string,
-  image: string,
-  audio: string,
-  audioMeaning: string,
-  audioExample: string,
-  textMeaning: string, // TODO fix type
-  textExample: string, // TODO fix type
-  transcription: string,
-  textExampleTranslate: string,
-  textMeaningTranslate: string,
-  wordTranslate: string
+  id: string;
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string; // TODO fix type
+  textExample: string; // TODO fix type
+  transcription: string;
+  textExampleTranslate: string;
+  textMeaningTranslate: string;
+  wordTranslate: string;
 }
 
 interface UserResponse {
-    id: string;
-    name: string;
-    email: string;
+  id: string;
+  name: string;
+  email: string;
 }
 
 interface UserRequest {
@@ -48,8 +49,17 @@ interface TokenResponse {
   refreshToken: string;
   userId: string;
   name: string;
-
 }
 
-export {RequestPaths, ResponseStatuses}
-export type {WordResponse, UserResponse, UserRequest, TokenResponse }
+interface UserWordOptions {
+  // TODO what is word options?
+  option1?: string;
+}
+
+interface UserWordResponse {
+  difficulty: string;
+  optional: UserWordOptions;
+}
+
+export { RequestPaths, ResponseStatuses };
+export type { WordResponse, UserResponse, UserRequest, TokenResponse, UserWordResponse };
