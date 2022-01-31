@@ -188,10 +188,11 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { 
-          from: "assets",
-          to: "assets",
+          from: 'assets',
+          to: 'assets',
+          noErrorOnMissing: true,
           globOptions: {
-            ignore: ["*.html", "*.ico"],
+            ignore: ['**/*.html', '**/*.ico'],
           },
         },
       ],
