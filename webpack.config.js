@@ -210,6 +210,7 @@ function cssLoaders() {
     {
       loader: 'css-loader',
       options: {
+        url: false,
         modules: {
           auto: /\.module\.\w+$/,
           exportLocalsConvention: 'camelCase',

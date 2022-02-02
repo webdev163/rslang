@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve",
-    "build": "cross-env NODE_ENV=production webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json build --report report.html --mode static -O && cross-env NODE_ENV=production webpack",
+    "build": "cross-env NODE_ENV=production webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json build --report report.html --mode static -O && cross-env NODE_ENV=production webpack && serve -s build",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,scss}\"",
     "lint": "eslint --fix \"src/**/*.{ts,tsx,js,jsx}\"",
     "pre-commit": "lint-staged",
@@ -47,6 +47,7 @@
     "react-refresh": "^0.11.0",
     "sass": "^1.37.5",
     "sass-loader": "^12.1.0",
+    "serve": "^13.0.2",
     "style-loader": "^3.3.0",
     "terser-webpack-plugin": "^5.1.4",
     "ts-node": "^10.4.0",
