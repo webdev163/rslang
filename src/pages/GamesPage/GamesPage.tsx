@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import NavMenu from '../../components/NavMenu';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -21,7 +20,6 @@ const Title = styled.h1`
 const GamesPage: FC = () => {
   return (
     <div>
-      <NavMenu />
       <Title>Games Page</Title>
       <LinksWrapper>
         <StyledLink to="/games/audio">Мини-игра &quot;Аудиовызов&quot;</StyledLink>

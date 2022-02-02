@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import NavMenu from '../NavMenu';
 import styled from 'styled-components';
 
 const Title = styled.h1`
@@ -9,7 +8,6 @@ const Title = styled.h1`
 const GameAudio: FC = () => {
   return (
     <div>
-      <NavMenu />
       <Title>Audio Game</Title>
     </div>
   );
