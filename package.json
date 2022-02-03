@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve",
-    "build": "cross-env NODE_ENV=production webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json build --report report.html --mode static -O && cross-env NODE_ENV=production webpack",
+    "build": "cross-env NODE_ENV=production webpack --mode production --json > stats.json && webpack-bundle-analyzer stats.json build --report report.html --mode static -O && cross-env NODE_ENV=production webpack && serve -s build",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,scss}\"",
     "lint": "eslint --fix \"src/**/*.{ts,tsx,js,jsx}\"",
     "pre-commit": "lint-staged",
@@ -19,13 +19,11 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
-    "@types/styled-components": "^5.1.21",
     "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
     "autoprefixer": "^10.3.1",
     "babel-loader": "^8.2.2",
-    "babel-plugin-styled-components": "^2.0.2",
     "copy-webpack-plugin": "^10.2.1",
     "cross-env": "^7.0.3",
     "css-loader": "^6.5.1",
@@ -47,6 +45,8 @@
     "react-refresh": "^0.11.0",
     "sass": "^1.37.5",
     "sass-loader": "^12.1.0",
+    "sass-resources-loader": "^2.2.4",
+    "serve": "^13.0.2",
     "style-loader": "^3.3.0",
     "terser-webpack-plugin": "^5.1.4",
     "ts-node": "^10.4.0",
@@ -63,8 +63,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "redux": "^4.1.2",
-    "redux-thunk": "^2.4.1",
-    "styled-components": "^5.3.3"
+    "redux-thunk": "^2.4.1"
   },
   "browserslist": {
     "production": [

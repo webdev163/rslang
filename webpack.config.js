@@ -101,6 +101,12 @@ module.exports = {
         test: /\.s[ac]ss$/,
         use: [...cssLoaders(),
           'sass-loader',
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              resources: path.resolve(__dirname, 'src/style/_variables.scss'),
+            },
+          },
         ],
       },
       {
@@ -210,10 +216,11 @@ function cssLoaders() {
     {
       loader: 'css-loader',
       options: {
+        url: false,
         modules: {
           auto: /\.module\.\w+$/,
           exportLocalsConvention: 'camelCase',
-          localIdentName: '[local]_[hash:base64:5]',
+          localIdentName: isProd ? '[hash:base64:16]' : '[local]_[hash:base64:5]',
         },
       },
     },

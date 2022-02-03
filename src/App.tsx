@@ -1,24 +1,30 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
+import MainPage from './pages/MainPage';
+import LoginPage from './pages/LoginPage';
+import GuidePage from './pages/GuidePage';
+import GamesPage from './pages/GamesPage';
+import StatsPage from './pages/StatsPage';
+import GameAudio from './components/GameAudio';
+import GameSprint from './components/GameSprint';
+import NavMenu from './components/NavMenu';
+import { Routes, Route } from 'react-router-dom';
 
-import './style.scss';
-
-const Title = styled.h1`
-  font-size: 1.5em;
-  text-align: center;
-  color: palevioletred;
-`;
-
-const Wrapper = styled.section`
-  padding: 2em;
-  background: papayawhip;
-`;
+import './style/style.scss';
 
 const App: FC = () => {
   return (
-    <Wrapper className="App">
-      <Title>Hello world!</Title>
-    </Wrapper>
+    <div className="app">
+      <NavMenu />
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="guide" element={<GuidePage />} />
+        <Route path="games" element={<GamesPage />} />
+        <Route path="games/audio" element={<GameAudio />} />
+        <Route path="games/sprint" element={<GameSprint />} />
+        <Route path="stats" element={<StatsPage />} />
+      </Routes>
+    </div>
   );
 };
 
