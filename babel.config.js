@@ -9,7 +9,6 @@ module.exports = (api) => {
 
   const plugins = [
     ['@babel/transform-runtime'],
-    ['babel-plugin-styled-components', { minify: true, pure: true }]
   ];
 
   if (api.env('development')) {

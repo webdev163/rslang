@@ -1,14 +1,11 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
 
-const Title = styled.h1`
-  color: #396bf3;
-`;
+import styles from './MainPage.module.scss';
 
 const MainPage: FC = () => {
   return (
-    <div className="main-page">
-      <Title>Main Page</Title>
+    <div>
+      <h1 className={styles.title}>Main Page</h1>
     </div>
   );
 };

@@ -1,49 +1,39 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 
-const NavWrapper = styled.nav`
-  max-width: 550px;
-`;
-
-const NavList = styled.ul`
-  padding-left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const NavItem = styled.li`
-  list-style: none;
-`;
-
-const StyledLink = styled(Link)`
-  color: palevioletred;
-  text-decoration: none;
-  font-size: 20px;
-`;
+import styles from './NavMenu.module.scss';
 
 const NavMenu: FC = () => {
   return (
-    <NavWrapper>
-      <NavList>
-        <NavItem>
-          <StyledLink to="/">Главная</StyledLink>
-        </NavItem>
-        <NavItem>
-          <StyledLink to="/login">Войти</StyledLink>
-        </NavItem>
-        <NavItem>
-          <StyledLink to="/guide">Учебник</StyledLink>
-        </NavItem>
-        <NavItem>
-          <StyledLink to="/games">Мини-игры</StyledLink>
-        </NavItem>
-        <NavItem>
-          <StyledLink to="/stats">Статистика</StyledLink>
-        </NavItem>
-      </NavList>
-    </NavWrapper>
+    <nav className={styles.wrapper}>
+      <ul className={styles.list}>
+        <li className={styles.item}>
+          <Link className={styles.link} to="/">
+            Главная
+          </Link>
+        </li>
+        <li className={styles.item}>
+          <Link className={styles.link} to="/login">
+            Войти
+          </Link>
+        </li>
+        <li className={styles.item}>
+          <Link className={styles.link} to="/guide">
+            Учебник
+          </Link>
+        </li>
+        <li className={styles.item}>
+          <Link className={styles.link} to="/games">
+            Мини-игры
+          </Link>
+        </li>
+        <li className={styles.item}>
+          <Link className={styles.link} to="/stats">
+            Статистика
+          </Link>
+        </li>
+      </ul>
+    </nav>
   );
 };
 

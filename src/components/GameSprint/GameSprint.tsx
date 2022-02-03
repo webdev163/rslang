@@ -1,14 +1,11 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
 
-const Title = styled.h1`
-  color: #396bf3;
-`;
+import styles from './GameSprint.module.scss';
 
 const GameSprint: FC = () => {
   return (
     <div>
-      <Title>Sprint Game</Title>
+      <h1 className={styles.title}>Sprint Game</h1>
     </div>
   );
 };

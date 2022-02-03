@@ -1,14 +1,11 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
 
-const Title = styled.h1`
-  color: #396bf3;
-`;
+import styles from './GameAudio.module.scss';
 
 const GameAudio: FC = () => {
   return (
     <div>
-      <Title>Audio Game</Title>
+      <h1 className={styles.title}>Audio Game</h1>
     </div>
   );
 };

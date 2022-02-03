@@ -1,14 +1,11 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
 
-const Title = styled.h1`
-  color: #396bf3;
-`;
+import styles from './GuidePage.module.scss';
 
 const GuidePage: FC = () => {
   return (
     <div>
-      <Title>Guide Page</Title>
+      <h1 className={styles.title}>Guide Page</h1>
     </div>
   );
 };

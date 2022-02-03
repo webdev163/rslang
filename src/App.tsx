@@ -9,7 +9,7 @@ import GameSprint from './components/GameSprint';
 import NavMenu from './components/NavMenu';
 import { Routes, Route } from 'react-router-dom';
 
-import './style.scss';
+import './style/style.scss';
 
 const App: FC = () => {
   return (

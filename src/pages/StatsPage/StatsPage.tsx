@@ -1,14 +1,11 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
 
-const Title = styled.h1`
-  color: #396bf3;
-`;
+import styles from './StatsPage.module.scss';
 
 const StatsPage: FC = () => {
   return (
     <div>
-      <Title>Stats Page</Title>
+      <h1 className={styles.title}>Stats Page</h1>
     </div>
   );
 };
