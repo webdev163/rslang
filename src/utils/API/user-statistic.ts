@@ -1,5 +1,5 @@
 import { API_URL } from '../constants';
-import { RequestPaths, ResponseStatuses, UserStatisticsResponse } from '../types/requests';
+import { RequestPaths, ResponseStatuses, UserStatisticsResponse } from '../../types/requests';
 
 const getUserStatistic = async (userId: string, token: string): Promise<UserStatisticsResponse[]> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${userId}${RequestPaths.STATISTICS}`, {

@@ -1,6 +1,6 @@
 import { API_URL } from '../constants';
-import { RequestPaths, ResponseStatuses, TokenResponse, UserRequest, UserResponse } from '../types/requests';
-import { User } from '../types/types';
+import { RequestPaths, ResponseStatuses, UserRequest, UserResponse } from '../../types/requests';
+import { User } from '../../types/types';
 
 const addUser = async (user: UserRequest): Promise<UserResponse | string> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}`, {

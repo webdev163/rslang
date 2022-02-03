@@ -1,5 +1,5 @@
 import { API_URL } from '../constants';
-import { RequestPaths, ResponseStatuses, UserWordResponse } from '../types/requests';
+import { RequestPaths, ResponseStatuses, UserWordResponse } from '../../types/requests';
 
 const getUserWords = async (userId: string, token: string): Promise<UserWordResponse[]> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${userId}${RequestPaths.WORDS}`, {
@@ -95,13 +95,7 @@ const updateUserWord = async (
   return true;
 };
 
-const deleteUserWord = async (
-  userId: string,
-  token: string,
-  wordId: string,
-  difficulty: string,
-  optional = {},
-): Promise<boolean> => {
+const deleteUserWord = async (userId: string, token: string, wordId: string): Promise<boolean> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${userId}${RequestPaths.WORDS}/${wordId}`, {
     method: 'DELETE',
     headers: {

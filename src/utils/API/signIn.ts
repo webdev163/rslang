@@ -1,5 +1,5 @@
 import { API_URL } from '../constants';
-import { RequestPaths, ResponseStatuses, TokenResponse } from '../types/requests';
+import { RequestPaths, ResponseStatuses, TokenResponse } from '../../types/requests';
 
 const signIn = async (email: string, password: string): Promise<TokenResponse> => {
   const resp = await fetch(`${API_URL}${RequestPaths.SIGNIN}`, {
