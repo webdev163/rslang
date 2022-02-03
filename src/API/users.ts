@@ -14,6 +14,9 @@ const addUser = async (user: UserRequest): Promise<UserResponse | string> => {
     const data = await resp.json();
     throw new Error(data.error.errors[0].message);
   }
+  if (resp.status === ResponseStatuses.EXPECTATION_FAILED) {
+    throw new Error('user with this e-mail exists');
+  }
   const data = await resp.json();
   return data;
 };
@@ -68,20 +71,4 @@ const deleteUser = async (id: string): Promise<boolean> => {
   return false;
 };
 
-const getUserToken = async (id: string): Promise<TokenResponse> => {
-  const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${id}/tokens`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (resp.status === ResponseStatuses.UNAUTHORIZED) {
-    throw new Error('Unauthorized');
-  }
-  if (resp.status === ResponseStatuses.FORBIDDEN) {
-    throw new Error('Access token is missing, expired or invalid');
-  }
-  const data = resp.json();
-  return data;
-};
-
-export { addUser, getUser, updateUser, deleteUser, getUserToken };
+export { addUser, getUser, updateUser, deleteUser };

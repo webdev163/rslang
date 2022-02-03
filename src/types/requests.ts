@@ -1,6 +1,9 @@
 enum RequestPaths {
   WORDS = '/words',
   USERS = '/users',
+  SIGNIN = '/signin',
+  STATISTICS = '/statistics',
+  TOKENS = '/tokens',
 }
 
 enum ResponseStatuses {
@@ -12,6 +15,7 @@ enum ResponseStatuses {
   NO_CONTENT = 204,
   FORBIDDEN = 403,
   PAYMENT_REQUIRED = 402,
+  EXPECTATION_FAILED = 417,
 }
 
 interface WordResponse {
@@ -56,10 +60,20 @@ interface UserWordOptions {
   option1?: string;
 }
 
+interface UserStatisticOptions {
+  // TODO what is word options?
+  option1?: string;
+}
+
 interface UserWordResponse {
   difficulty: string;
   optional: UserWordOptions;
 }
 
+interface UserStatisticsResponse {
+  learnedWords: number;
+  optional: UserStatisticOptions;
+}
+
 export { RequestPaths, ResponseStatuses };
-export type { WordResponse, UserResponse, UserRequest, TokenResponse, UserWordResponse };
+export type { WordResponse, UserResponse, UserRequest, TokenResponse, UserWordResponse, UserStatisticsResponse };

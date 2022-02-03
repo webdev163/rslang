@@ -1,6 +1,7 @@
-import { signIn } from './signIn';
-import { addUser, getUser, updateUser, deleteUser, getUserToken } from './users';
-import { addUserWord, deleteUserWord, getUserWord, getUserWords, updateUserWord } from './userWords';
+import { signIn, getUserToken } from './signIn';
+import { getUserStatistic, updateUserStatistic } from './user-statistic';
+import { addUser, getUser, updateUser, deleteUser } from './users';
+import { addUserWord, deleteUserWord, getUserWord, getUserWords, updateUserWord } from './users-words';
 import { getWords, getWord } from './words';
 
 export {
@@ -13,8 +14,10 @@ export {
   deleteUser,
   getUserToken,
   getUserWords,
-  addUserWord,
   getUserWord,
+  addUserWord,
   updateUserWord,
   deleteUserWord,
+  getUserStatistic,
+  updateUserStatistic,
 };
