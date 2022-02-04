@@ -73,6 +73,22 @@ const GameSprint: FC = () => {
     receiveAnswer(false);
   };
 
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const key = e.code;
+      if (key === 'ArrowRight') {
+        receiveAnswer(true);
+      }
+      if (key === 'ArrowLeft') {
+        receiveAnswer(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [currentWord]);
+
   const answersCounterTemplate = points < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
 
   return (
