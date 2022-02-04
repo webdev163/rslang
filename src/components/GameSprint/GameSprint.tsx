@@ -54,8 +54,8 @@ const GameSprint: FC = () => {
     return words[randomNum];
   };
 
-  const handleTrueButton = () => {
-    if (isTrue.current) {
+  const receiveAnswer = (answer: boolean) => {
+    if (isTrue.current === answer) {
       setScore(score => score + points);
       setRightAnswers(prev => prev + 1);
     } else {
@@ -65,15 +65,12 @@ const GameSprint: FC = () => {
     setCurrentWord(getRandomWord());
   };
 
+  const handleTrueButton = () => {
+    receiveAnswer(true);
+  };
+
   const handleFalseButton = () => {
-    if (!isTrue.current) {
-      setScore(score => score + points);
-      setRightAnswers(prev => prev + 1);
-    } else {
-      setRightAnswers(0);
-      setPoints(10);
-    }
-    setCurrentWord(getRandomWord());
+    receiveAnswer(false);
   };
 
   const answersCounterTemplate = points < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
