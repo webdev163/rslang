@@ -20,7 +20,7 @@ module.exports = {
   output: {
     filename: isProd ? './js/[name].[contenthash].js' : './js/[name].js',
     path: path.resolve(__dirname, 'build'),
-    publicPath: '',
+    publicPath: '/',
     clean: true,
   },
   context: path.resolve(__dirname, 'src'),
