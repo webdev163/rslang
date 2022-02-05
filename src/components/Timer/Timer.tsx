@@ -18,7 +18,7 @@ const Timer: FC<ITimer> = ({ initialTime = 60, onEnd }) => {
     return () => {
       clearTimeout(timer);
     };
-  });
+  }, [count]);
 
   return <div>{count}</div>;
 };
