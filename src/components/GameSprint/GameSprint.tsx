@@ -1,6 +1,9 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useWordsPage } from '../../hooks/useWordsPage';
 import { WordResponse } from '../../types/requests';
+import Modal from '../Modal';
+
+import Timer from '../Timer';
 
 import styles from './GameSprint.module.scss';
 
@@ -15,6 +18,8 @@ const GameSprint: FC = () => {
       setCurrentWord(words[0]);
     }
   }, [words]);
+
+  const [showStop, setShowStop] = useState(false);
 
   const [score, setScore] = useState(0);
 
@@ -94,6 +99,7 @@ const GameSprint: FC = () => {
   return (
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
+      <Timer initialTime={10} onEnd={() => setShowStop(true)} />
       <div className={styles.points}>{score}</div>
       <div className={styles.game}>
         {(rightAnswers > 0 || points > 10) && answersCounterTemplate}
@@ -113,6 +119,7 @@ const GameSprint: FC = () => {
           </div>
         )}
       </div>
+      {showStop && <Modal>STOP. Result - {score}</Modal>}
     </div>
   );
 };
