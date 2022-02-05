@@ -6,4 +6,6 @@ const PASSWORD_RULES = {
   numbers: false,
 };
 
-export { API_URL, PASSWORD_RULES };
+const MAX_USER_NAME_LENGTH = 10;
+
+export { API_URL, PASSWORD_RULES, MAX_USER_NAME_LENGTH };

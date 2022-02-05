@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import PasswordInput from '../../components/PasswordInput';
+import LoginForm from '../../components/LoginForm';
+import RegistrationForm from '../../components/RegistrationForm ';
 
 import styles from './LoginPage.module.scss';
 
@@ -7,7 +8,8 @@ const LoginPage: FC = () => {
   return (
     <div>
       <h1 className={styles.title}>Login Page</h1>
-      <PasswordInput label="Пароль" onFulfilled={(ff: boolean) => console.log(ff)} />
+      <LoginForm />
+      <RegistrationForm />
     </div>
   );
 };

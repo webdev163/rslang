@@ -1,0 +1,51 @@
+@import "./variables";
+
+@mixin text-input {
+  width: calc(100% - 20px);
+  padding: 0 35px 0 15px;
+  box-sizing: border-box;
+  margin: 0 20px;
+  border: 1px solid $base-color;
+  border-radius: 10px;
+  line-height: 30px;
+  outline-color: $secondary-color;
+  outline-width: 1px;
+  color: $text-color;
+}
+@mixin input-label {
+  margin: 10px;
+  display: block;
+  color: $base-color;
+  line-height: 30px;
+}
+
+@mixin active{
+  cursor: pointer;
+  &:hover{
+    transform:scale(1.1)
+  }
+  &:active{
+    transform: translate(2px, 2px)
+  }
+}
+
+@mixin primary-button {
+  background-color: none;
+  border: 1px solid $base-color;
+  border-radius: 10px;
+  line-height: 30px;
+  outline-color: $secondary-color;
+  outline-width: 1px;
+  color: $base-color;
+}
+
+
+@mixin secondary-button {
+  background-color: none;
+  border: 1px solid $secondary-color;
+  border-radius: 10px;
+  line-height: 30px;
+  outline-color: $secondary-color;
+  outline-width: 1px;
+  color: $secondary-color;
+}

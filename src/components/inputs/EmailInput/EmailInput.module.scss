@@ -1,0 +1,19 @@
+@import '~/style/variables';
+@import '~/style/mixins';
+.email{
+  &__input{
+    @include text-input;
+  }
+
+  &__label{
+    position: relative;
+    @include input-label;
+  }
+
+  &__warning{
+    position: absolute;
+    font-size: 0.7em;
+    bottom: -0.7em;
+    right: 0;
+  }
+}
