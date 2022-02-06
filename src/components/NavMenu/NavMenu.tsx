@@ -9,9 +9,8 @@ import styles from './NavMenu.module.scss';
 const NavMenu: FC = () => {
   const dispatch = useDispatch();
   const auth = useTypedSelector(state => state.auth);
-
   const isAuthorized = auth.isAuthorized;
-  console.log(isAuthorized);
+
   const handleSignOut = useCallback(() => {
     dispatch(SignOutAction());
   }, []);

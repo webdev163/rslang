@@ -1,12 +1,10 @@
 import React, { FC, useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import LoginForm from '../../components/LoginForm';
-import RegistrationForm from '../../components/RegistrationForm ';
+import RegistrationForm from '../../components/RegistrationForm';
 
 import styles from './LoginPage.module.scss';
 
 const LoginPage: FC = () => {
-
   const [signUp, setSignUp] = useState<boolean>(false);
   const handleSignIn = useCallback(() => {
     setSignUp(false);
