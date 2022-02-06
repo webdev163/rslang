@@ -23,9 +23,6 @@ const LoginForm: FC = () => {
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
   const [data, setData] = useState<LoginData>({ email: '', password: '' });
 
-  const login = useTypedSelector(state => state.auth);
-  console.log(login);
-
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
       setChecks(prevState => ({ ...prevState, [key]: isFulfilled }));

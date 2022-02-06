@@ -1,24 +1,16 @@
 import React, { FC, useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import LoginForm from '../../components/LoginForm';
-import RegistrationForm from '../../components/RegistrationForm ';
-import { SignOutAction } from '../../store/action-creators/auth';
+import RegistrationForm from '../../components/RegistrationForm';
 
 import styles from './LoginPage.module.scss';
 
 const LoginPage: FC = () => {
-  const dispatch = useDispatch();
-
   const [signUp, setSignUp] = useState<boolean>(false);
   const handleSignIn = useCallback(() => {
     setSignUp(false);
   }, []);
   const handleSignUp = useCallback(() => {
     setSignUp(true);
-  }, []);
-
-  const handleSignOut = useCallback(() => {
-    dispatch(SignOutAction());
   }, []);
 
   return (
@@ -33,9 +25,6 @@ const LoginPage: FC = () => {
         </button>
       </div>
       {signUp ? <RegistrationForm /> : <LoginForm />}
-
-      {/* TODO remove it */}
-      <button onClick={handleSignOut}>logout</button>
     </div>
   );
 };
