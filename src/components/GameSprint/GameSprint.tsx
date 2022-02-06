@@ -1,6 +1,8 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect } from 'react';
+import { batch } from 'react-redux';
 import { useWordsPage } from '../../hooks/useWordsPage';
-import { WordResponse } from '../../types/requests';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 import Modal from '../Modal';
 
 import Timer from '../Timer';
@@ -11,63 +13,32 @@ const GameSprint: FC = () => {
   const words = useWordsPage();
   console.log('render');
 
-  const [currentWord, setCurrentWord] = useState<WordResponse | null>(null);
+  const { currentWord, isGameOn, score, pointsForAnswer, rightAnswers, translate, isTrue } = useTypedSelector(
+    state => state.sprint,
+  );
+  const { setCurrentWord, setRandowWord, stopGame, incrementScore, incrementRightAnswers, resetRigthAnswers } =
+    useActions();
 
   useEffect(() => {
     if (words.length) {
-      setCurrentWord(words[0]);
+      setCurrentWord(words[0], words);
     }
   }, [words]);
 
-  const [showStop, setShowStop] = useState(false);
-
-  const [score, setScore] = useState(0);
-
-  const [translate, setTranslate] = useState('');
-
-  const [points, setPoints] = useState(10);
-
-  const isTrue = useRef(false);
-  const [rightAnswers, setRightAnswers] = useState(0);
-  useEffect(() => {
-    if (rightAnswers === 3) {
-      setPoints(points => (points < 80 ? points * 2 : points));
-      setRightAnswers(0);
-    }
-  }, [rightAnswers]);
-
-  useEffect(() => {
-    const randomNum = Math.random() - 0.5;
-    console.log(randomNum);
-    if (randomNum >= 0) {
-      isTrue.current = true;
-    } else {
-      isTrue.current = false;
-    }
-    if (currentWord) {
-      if (isTrue.current) {
-        setTranslate(currentWord.wordTranslate);
-      } else {
-        const word = getRandomWord();
-        setTranslate(word.wordTranslate);
-      }
-    }
-  }, [currentWord]);
-
-  const getRandomWord = () => {
-    const randomNum = Math.floor(Math.random() * words.length);
-    return words[randomNum];
-  };
-
   const receiveAnswer = (answer: boolean) => {
-    if (isTrue.current === answer) {
-      setScore(score => score + points);
-      setRightAnswers(prev => prev + 1);
+    if (!isGameOn) return;
+    if (isTrue === answer) {
+      batch(() => {
+        incrementScore();
+        incrementRightAnswers(pointsForAnswer, rightAnswers);
+        setRandowWord(words);
+      });
     } else {
-      setRightAnswers(0);
-      setPoints(10);
+      batch(() => {
+        resetRigthAnswers();
+        setRandowWord(words);
+      });
     }
-    setCurrentWord(getRandomWord());
   };
 
   const handleTrueButton = () => {
@@ -94,18 +65,18 @@ const GameSprint: FC = () => {
     };
   }, [currentWord]);
 
-  const answersCounterTemplate = points < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
+  const answersCounterTemplate = pointsForAnswer < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
 
   return (
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
-      <Timer initialTime={10} onEnd={() => setShowStop(true)} />
+      <Timer initialTime={30} onEnd={() => stopGame()} />
       <div className={styles.points}>{score}</div>
       <div className={styles.game}>
-        {(rightAnswers > 0 || points > 10) && answersCounterTemplate}
-        {points > 10 && (
+        {(rightAnswers > 0 || pointsForAnswer > 10) && answersCounterTemplate}
+        {pointsForAnswer > 10 && (
           <div>
-            <p>+{points} за слово</p>
+            <p>+{pointsForAnswer} за слово</p>
           </div>
         )}
         {currentWord && (
@@ -119,7 +90,7 @@ const GameSprint: FC = () => {
           </div>
         )}
       </div>
-      {showStop && <Modal>STOP. Result - {score}</Modal>}
+      {!isGameOn && <Modal>STOP. Result - {score}</Modal>}
     </div>
   );
 };
