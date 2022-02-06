@@ -32,6 +32,13 @@ const authReducer = (state = initialState, action: AuthAction): AuthState => {
         loading: false,
         error: action.payload,
       };
+    case SignInActionTypes.SIGN_OUT:
+      return {
+        user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
+        isAuthorized: false,
+        loading: false,
+        error: null,
+      };
     case RegistrationActionTypes.REGISTRATION:
       return {
         user: { message: '', refreshToken: '', userId: '', name: '', token: '' },

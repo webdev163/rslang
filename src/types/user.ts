@@ -4,6 +4,7 @@ enum SignInActionTypes {
   SIGN_IN = 'SIGN_IN',
   SUCCESS = 'SIGN_IN_SUCCESS',
   ERROR = 'SIGN_IN_ERROR',
+  SIGN_OUT = 'SIGN_OUT',
 }
 
 enum RegistrationActionTypes {
@@ -32,6 +33,9 @@ interface SignInErrorAction {
   type: SignInActionTypes.ERROR;
   payload: string;
 }
+interface SignOutAction {
+  type: SignInActionTypes.SIGN_OUT;
+}
 interface RegistrationAction {
   type: RegistrationActionTypes.REGISTRATION;
 }
@@ -50,6 +54,7 @@ type AuthAction =
   | SignInAction
   | SignInSuccessAction
   | SignInErrorAction
+  | SignOutAction
   | RegistrationAction
   | RegistrationErrorAction
   | RegistrationSuccessAction;
