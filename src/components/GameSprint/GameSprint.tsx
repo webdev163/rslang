@@ -5,7 +5,7 @@ import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import Modal from '../Modal';
 
-import Timer from '../Timer';
+import GameSprintTimer from '../GameSprintTimer';
 
 import styles from './GameSprint.module.scss';
 
@@ -69,7 +69,7 @@ const GameSprint: FC = () => {
   return (
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
-      <Timer initialTime={30} onEnd={() => stopGame()} />
+      <GameSprintTimer initialTime={30} onEnd={() => stopGame()} />
       <div className={styles.points}>{score}</div>
       <div className={styles.game}>
         {(rightAnswers > 0 || pointsForAnswer > 10) && answersCounterTemplate}

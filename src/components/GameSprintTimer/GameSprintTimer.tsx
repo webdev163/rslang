@@ -5,7 +5,7 @@ interface ITimer {
   onEnd: () => void;
 }
 
-const Timer: FC<ITimer> = ({ initialTime = 60, onEnd }) => {
+const GameSprintTimer: FC<ITimer> = ({ initialTime = 60, onEnd }) => {
   const [count, setCount] = useState(initialTime);
 
   useEffect(() => {
@@ -23,4 +23,4 @@ const Timer: FC<ITimer> = ({ initialTime = 60, onEnd }) => {
   return <div>{count}</div>;
 };
 
-export default Timer;
+export default GameSprintTimer;
