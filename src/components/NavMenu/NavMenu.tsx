@@ -1,9 +1,20 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { SignOutAction } from '../../store/action-creators/auth';
 
 import styles from './NavMenu.module.scss';
 
 const NavMenu: FC = () => {
+  const dispatch = useDispatch();
+  const auth = useTypedSelector(state => state.auth);
+
+  const isAuthorized = auth.isAuthorized;
+  console.log(isAuthorized);
+  const handleSignOut = useCallback(() => {
+    dispatch(SignOutAction());
+  }, []);
   return (
     <nav className={styles.wrapper}>
       <ul className={styles.list}>
@@ -13,9 +24,15 @@ const NavMenu: FC = () => {
           </Link>
         </li>
         <li className={styles.item}>
-          <Link className={styles.link} to="/login">
-            Войти
-          </Link>
+          {!isAuthorized ? (
+            <Link className={styles.link} to="/login">
+              Войти
+            </Link>
+          ) : (
+            <Link onClick={handleSignOut} className={styles.link} to="#">
+              Выйти
+            </Link>
+          )}
         </li>
         <li className={styles.item}>
           <Link className={styles.link} to="/guide">
