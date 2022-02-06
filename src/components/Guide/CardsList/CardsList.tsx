@@ -2,11 +2,12 @@ import React, { FC } from 'react';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { WordResponse } from '../../../types/requests';
 import CardItem from '../CardItem';
+import Loader from '../../Loader';
 
 import styles from './CardsList.module.scss';
 
 const CardsList: FC = () => {
-  const { wordsArr } = useTypedSelector(state => state.guide);
+  const { wordsArr, isLoading } = useTypedSelector(state => state.guide);
 
   const renderCards = wordsArr.map((word: WordResponse) => {
     return (
@@ -27,7 +28,11 @@ const CardsList: FC = () => {
     );
   }) as JSX.Element[];
 
-  return <ul className={styles.cardsWrapper}>{renderCards}</ul>;
+  return (
+    <div>
+      <ul className={styles.cardsWrapper}>{isLoading ? <Loader /> : renderCards}</ul>
+    </div>
+  );
 };
 
 export default CardsList;

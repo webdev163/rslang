@@ -1,9 +1,29 @@
 @import 'normalize.css/normalize';
 @import 'variables';
 @import 'fonts';
+@import 'pagination';
 
 body {
   padding-left: 1%;
   padding-right: 1%;
   font-family: 'Montserrat';
+}
+
+.color-group-1 {
+  background-color: $color-difficulty-1;
+}
+.color-group-2 {
+  background-color: $color-difficulty-2;
+}
+.color-group-3 {
+  background-color: $color-difficulty-3;
+}
+.color-group-4 {
+  background-color: $color-difficulty-4;
+}
+.color-group-5 {
+  background-color: $color-difficulty-5;
+}
+.color-group-6 {
+  background-color: $color-difficulty-6;
 }
