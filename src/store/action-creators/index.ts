@@ -1,1 +1,1 @@
-export * from './sprintActionCreators';
+export * from './sprint';

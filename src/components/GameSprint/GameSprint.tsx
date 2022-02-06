@@ -11,7 +11,6 @@ import styles from './GameSprint.module.scss';
 
 const GameSprint: FC = () => {
   const words = useWordsPage();
-  console.log('render');
 
   const { currentWord, isGameOn, score, pointsForAnswer, rightAnswers, translate, isTrue } = useTypedSelector(
     state => state.sprint,

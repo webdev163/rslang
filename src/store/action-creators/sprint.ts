@@ -10,7 +10,6 @@ export const setCurrentWord = (word: WordResponse, words: WordResponse[]): Sprin
   const randomNum = Math.random() - 0.5;
   let isTrue: boolean;
   let translate: string;
-  console.log(randomNum);
   if (randomNum >= 0) {
     isTrue = true;
     translate = word.wordTranslate;
