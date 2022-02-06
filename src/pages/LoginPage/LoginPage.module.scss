@@ -1,3 +1,21 @@
+@import '~/style/variables';
+@import '~/style/mixins';
+
 .title {
   color: $base-color;
+}
+.tab{
+  @include secondary-button;
+  @include active;
+}
+
+.tab__selected{
+  @include primary-button;
+  @include active;
+}
+.tabs button:first-child{
+  border-radius: 10px 0 0 10px;
+}
+.tabs button:last-child{
+  border-radius: 0 10px 10px 0;
 }

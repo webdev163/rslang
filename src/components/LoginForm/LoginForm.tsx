@@ -1,4 +1,7 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { signInAction } from '../../store/action-creators/auth';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
 
@@ -15,8 +18,13 @@ interface LoginData {
 }
 
 const LoginForm: FC = () => {
+  const dispatch = useDispatch();
+
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
   const [data, setData] = useState<LoginData>({ email: '', password: '' });
+
+  const login = useTypedSelector(state => state.auth);
+  console.log(login);
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
@@ -24,12 +32,11 @@ const LoginForm: FC = () => {
     },
     [],
   );
-  console.log(data, checks);
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (checks.email && checks.password) console.log('DONE'); // TODO add api function
+      if (checks.email && checks.password) dispatch(signInAction(data.email, data.password));
     },
     [checks],
   );

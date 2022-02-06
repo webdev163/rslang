@@ -1,4 +1,6 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { RegistrationAction } from '../../store/action-creators/auth';
 import { MAX_USER_NAME_LENGTH } from '../../utils/constants';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
@@ -18,6 +20,8 @@ interface RegistrationChecks {
   password: boolean;
 }
 const RegistrationForm: FC = () => {
+  const dispatch = useDispatch();
+
   const [checks, setChecks] = useState<RegistrationChecks>({ name: false, email: false, password: false });
   const [data, setData] = useState<RegistrationData>({ name: '', email: '', password: '' });
 
@@ -27,12 +31,12 @@ const RegistrationForm: FC = () => {
     },
     [],
   );
-  console.log(data, checks);
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (checks.name && checks.email && checks.password) console.log('DONE'); // TODO add api function
+      if (checks.name && checks.email && checks.password)
+        dispatch(RegistrationAction(data.name, data.email, data.password));
     },
     [checks],
   );
