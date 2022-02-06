@@ -2,7 +2,7 @@ import { API_URL } from '../constants';
 import { RequestPaths, ResponseStatuses, UserRequest, UserResponse } from '../../types/requests';
 import { User } from '../../types/types';
 
-const addUser = async (user: UserRequest): Promise<UserResponse | string> => {
+const addUser = async (user: UserRequest): Promise<UserResponse> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}`, {
     method: 'POST',
     headers: {
@@ -22,6 +22,7 @@ const addUser = async (user: UserRequest): Promise<UserResponse | string> => {
 };
 
 const getUser = async (id: string): Promise<UserResponse> => {
+  // TODO fix with token before use
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${id}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -38,6 +39,7 @@ const getUser = async (id: string): Promise<UserResponse> => {
 };
 
 const updateUser = async (id: string, user: Pick<User, 'email' | 'password'>) => {
+  // TODO fix with token before use
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}`, {
     method: 'PUT',
     headers: {
@@ -56,6 +58,7 @@ const updateUser = async (id: string, user: Pick<User, 'email' | 'password'>) =>
 };
 
 const deleteUser = async (id: string): Promise<boolean> => {
+  // TODO fix with token before use
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${id}`, {
     method: 'DELETE',
     headers: {

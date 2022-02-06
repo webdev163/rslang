@@ -14,7 +14,7 @@ const signIn = async (email: string, password: string): Promise<TokenResponse> =
     throw new Error('Incorrect e-mail or password');
   }
   const data = await resp.json();
-  window.localStorage.setItem('rs-lang-user', JSON.stringify(data)); //TODO move to redux
+  // window.localStorage.setItem('rs-lang-user', JSON.stringify(data)); //TODO move to redux
   return data;
 };
 

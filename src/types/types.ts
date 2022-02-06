@@ -5,4 +5,10 @@ interface User {
   password: string;
 }
 
-export type { User };
+interface PasswordChecks {
+  length: boolean;
+  differentCase: boolean;
+  numbers: boolean;
+}
+
+export type { User, PasswordChecks };
