@@ -1,18 +1,16 @@
 import React, { FC, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { SignOutAction } from '../../store/action-creators/auth';
 
 import styles from './NavMenu.module.scss';
 
 const NavMenu: FC = () => {
-  const dispatch = useDispatch();
   const auth = useTypedSelector(state => state.auth);
   const isAuthorized = auth.isAuthorized;
-
+  const { SignOutAction } = useActions();
   const handleSignOut = useCallback(() => {
-    dispatch(SignOutAction());
+    SignOutAction();
   }, []);
   return (
     <nav className={styles.wrapper}>

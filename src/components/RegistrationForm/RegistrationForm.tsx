@@ -1,29 +1,18 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { RegistrationAction } from '../../store/action-creators/auth';
 import { MAX_USER_NAME_LENGTH } from '../../utils/constants';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
 import TextInput from '../inputs/TextInput';
+import { RegistrationChecks, RegistrationData } from './types';
 
 import styles from './RegistrationForm.module.scss';
+import { useActions } from '../../hooks/useActions';
 
-interface RegistrationData {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface RegistrationChecks {
-  name: boolean;
-  email: boolean;
-  password: boolean;
-}
 const RegistrationForm: FC = () => {
-  const dispatch = useDispatch();
-
   const [checks, setChecks] = useState<RegistrationChecks>({ name: false, email: false, password: false });
   const [data, setData] = useState<RegistrationData>({ name: '', email: '', password: '' });
+
+  const { RegistrationAction } = useActions();
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
@@ -35,8 +24,7 @@ const RegistrationForm: FC = () => {
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (checks.name && checks.email && checks.password)
-        dispatch(RegistrationAction(data.name, data.email, data.password));
+      if (checks.name && checks.email && checks.password) RegistrationAction(data.name, data.email, data.password);
     },
     [checks],
   );

@@ -1,12 +1,7 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
+import { EmailInputProps } from './types';
 
 import styles from './EmailInput.module.scss';
-
-interface EmailInputProps {
-  label: string;
-  onFulfilled: CallableFunction;
-  onInput: CallableFunction;
-}
 
 const EmailInput: FC<EmailInputProps> = ({ label, onFulfilled, onInput }) => {
   const [isEmailValid, setIsEmailValid] = useState<boolean>(false);

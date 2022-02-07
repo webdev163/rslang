@@ -1,15 +1,9 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
 import { PasswordChecks } from '../../../types/types';
 import { PASSWORD_RULES } from '../../../utils/constants';
+import { PasswordInputProps } from './types';
 
 import styles from './PasswordInput.module.scss';
-
-interface PasswordInputProps {
-  label: string;
-  onFulfilled: CallableFunction;
-  tips?: boolean;
-  onInput: CallableFunction;
-}
 
 const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInput }) => {
   const [passwordChecks, setPasswordChecks] = useState<PasswordChecks>({

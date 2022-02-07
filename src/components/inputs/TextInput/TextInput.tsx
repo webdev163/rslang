@@ -1,13 +1,7 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
 
 import styles from './TextInput.module.scss';
-
-interface TextInputProps {
-  label: string;
-  length: number;
-  onFulfilled: CallableFunction;
-  onInput: CallableFunction;
-}
+import { TextInputProps } from './types';
 
 const TextInput: FC<TextInputProps> = ({ label, length, onFulfilled, onInput }) => {
   const [isTextLengthValid, setIsTextLengthValid] = useState<boolean>(false);

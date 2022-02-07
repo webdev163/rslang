@@ -1,27 +1,16 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { signInAction } from '../../store/action-creators/auth';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
+import { LoginChecks, LoginData } from './types';
 
 import styles from './LoginForm.module.scss';
-
-interface LoginChecks {
-  email: boolean;
-  password: boolean;
-}
-
-interface LoginData {
-  email: string;
-  password: string;
-}
+import { useActions } from '../../hooks/useActions';
 
 const LoginForm: FC = () => {
-  const dispatch = useDispatch();
-
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
   const [data, setData] = useState<LoginData>({ email: '', password: '' });
+
+  const { signInAction } = useActions();
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
@@ -33,7 +22,7 @@ const LoginForm: FC = () => {
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (checks.email && checks.password) dispatch(signInAction(data.email, data.password));
+      if (checks.email && checks.password) signInAction(data.email, data.password);
     },
     [checks],
   );
