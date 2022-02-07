@@ -1,4 +1,7 @@
+import { TokenResponse } from '../../../types/requests';
+
 export interface CardItemProps {
+  wordId: string;
   audio: string;
   audioExample: string;
   audioMeaning: string;
@@ -10,4 +13,6 @@ export interface CardItemProps {
   transcription: string;
   word: string;
   wordTranslate: string;
+  isAuthorized: boolean;
+  userData: TokenResponse;
 }

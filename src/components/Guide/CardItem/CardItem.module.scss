@@ -2,12 +2,12 @@
   flex-basis: 100%;
   display: flex;
   margin: 25px;
-  background-color: lighten($base-color, 25%);
+  background-color: #f5f5f5;
   border-radius: 10px;
   max-width: 1400px;
   box-shadow: 0 6px 19px rgb(117 117 117 / 20%);
   border: 1px solid #f0f0f0;
-  font-size: 19px;
+  font-size: 20px;
   min-height: 400px;
 }
 
@@ -24,12 +24,27 @@
   padding-top: 20px;
   width: 55%;
   margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 45px;
 }
 
 .card-name-wrapper {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.label {
+  width: 5px;
+  height: 35px;
+  margin-right: 10px;
 }
 
 .word-name {
@@ -72,13 +87,6 @@
   margin-top: 10px;
 }
 
-.text-example-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 15px;
-}
-
 .text-example {
   margin-top: 0;
   margin-bottom: 0;
@@ -91,14 +99,6 @@
   padding-bottom: 20px;
 }
 
-.text-meaning-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
 .text-meaning {
   margin-top: 0;
   margin-bottom: 0;
@@ -107,5 +107,60 @@
 
 .text-meaning-translation {
   margin-top: 10px;
-  margin-bottom: 0;
+  margin-bottom: 15px;
+}
+
+.card-hard {
+  border: 1px solid #ffdb8e;
+  filter: drop-shadow(0 0 10px #f5c96a);
+}
+
+.card-learnt {
+  filter: drop-shadow(0 0 10px #acfca5);
+}
+
+.card-buttons-wrapper {
+  margin-top: auto;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.card-button {
+  border: none;
+  background-color: #fafafa;
+  border: 1px solid #d8d8d8;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 18px;
+  transition: filter .3s, background-color .3s;
+  flex-basis: 48%;
+  outline: none;
+  &:hover {
+    cursor: pointer;
+    background-color: #ffebd4;
+    filter: drop-shadow(0 0 10px #ffdb8e);
+  }
+}
+
+.card-labels-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label-hard {
+  padding: 10px 25px;
+  background-color: #ffdb8e;
+  border-radius: 10px;
+}
+
+.label-learnt {
+  padding: 10px 25px;
+  background-color: #bbff8e;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  margin-left: 15px;
 }

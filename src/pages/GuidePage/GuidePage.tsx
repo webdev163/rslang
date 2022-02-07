@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import GarageHeader from '../../components/Guide/GarageHeader';
+import GuideHeader from '../../components/Guide/GuideHeader';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useActions } from '../../hooks/useActions';
 import CardsList from '../../components/Guide/CardsList';
@@ -16,7 +16,7 @@ const GuidePage: FC = () => {
   return (
     <div className={styles.guideWrapper}>
       <h1 className={styles.title}>Учебник</h1>
-      <GarageHeader />
+      <GuideHeader />
       <CardsList />
     </div>
   );

@@ -3,9 +3,9 @@ import { useActions } from '../../../hooks/useActions';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import ReactPaginate from 'react-paginate';
 
-import styles from './GarageHeader.module.scss';
+import styles from './GuideHeader.module.scss';
 
-const GarageHeader: FC = () => {
+const GuideHeader: FC = () => {
   const { setWordsGroup, setGuidePage } = useActions();
   const { page } = useTypedSelector(state => state.guide);
 
@@ -56,4 +56,4 @@ const GarageHeader: FC = () => {
   );
 };
 
-export default GarageHeader;
+export default GuideHeader;
