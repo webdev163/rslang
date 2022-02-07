@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.difficulty-wrapper {
+  max-width: 400px;
+}
+
+.btn-difficulty {
+  margin: 5px;
+  padding: 7px 15px;
+  padding: 15px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  height: 55px;
+  width: 55px;
+  transition: filter .3s;
+  box-shadow: 0 6px 19px rgb(117 117 117 / 20%);
+  &:hover {
+    cursor: pointer;
+    filter: contrast(90%);
+  }
+}
