@@ -17,4 +17,23 @@
   min-width: 300px;
   max-width: 500px;
   width: 80%;
+  margin: 0 auto;
+  &-message{
+    padding: 5px 20px;
+    background-color: rgba(139, 0, 0, 0.3);
+    color: $wrong-color;
+    border-color: $wrong-color;
+    border-radius: 0 0 10px 10px;
+    text-align: center;
+  }
+}
+.buttons{
+  display: flex;
+  gap:10px;
+  flex-direction: row-reverse;
+  justify-content: center;
+  margin: 10px;
+}
+.hidden{
+  visibility: hidden;
 }

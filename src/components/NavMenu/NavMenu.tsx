@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
@@ -8,10 +8,11 @@ import styles from './NavMenu.module.scss';
 const NavMenu: FC = () => {
   const auth = useTypedSelector(state => state.auth);
   const isAuthorized = auth.isAuthorized;
-  const { SignOutAction } = useActions();
+  const { SignOutAction, getUserWordsAction } = useActions();
   const handleSignOut = useCallback(() => {
     SignOutAction();
   }, []);
+
   return (
     <nav className={styles.wrapper}>
       <ul className={styles.list}>

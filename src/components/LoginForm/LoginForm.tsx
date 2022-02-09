@@ -5,12 +5,16 @@ import { LoginChecks, LoginData } from './types';
 
 import styles from './LoginForm.module.scss';
 import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const LoginForm: FC = () => {
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
   const [data, setData] = useState<LoginData>({ email: '', password: '' });
 
   const { signInAction } = useActions();
+
+  const { auth }  = useTypedSelector(state => state);
+  // console.log('LoginForm: State', state);
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
@@ -35,14 +39,21 @@ const LoginForm: FC = () => {
   );
   return (
     <form className={styles['login-form']} onSubmit={handleSubmit}>
+      <div className={`${styles['login-form-message']} ${(auth.loading || !auth.error) && styles.hidden}`}>{`${
+        auth.error && auth.error.includes('Incorrect e-mail or password')
+          ? 'Неверный адрес или пароль'
+          : 'Адрес не найден'
+      }`}</div>
       <EmailInput label={'Почта'} onFulfilled={handleFulfilled('email')} onInput={handleInput('email')} />
       <PasswordInput label={'Пароль'} onFulfilled={handleFulfilled('password')} onInput={handleInput('password')} />
-      <button type="submit" className={styles.button__primary}>
-        Войти
-      </button>
-      <button type="reset" className={styles.button__secondary}>
-        Сброс
-      </button>
+      <div className={styles.buttons}>
+        <button type="submit" className={styles.button__primary}>
+          Войти
+        </button>
+        <button type="reset" className={styles.button__secondary}>
+          Сброс
+        </button>
+      </div>
     </form>
   );
 };

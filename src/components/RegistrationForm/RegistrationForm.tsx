@@ -7,11 +7,12 @@ import { RegistrationChecks, RegistrationData } from './types';
 
 import styles from './RegistrationForm.module.scss';
 import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const RegistrationForm: FC = () => {
   const [checks, setChecks] = useState<RegistrationChecks>({ name: false, email: false, password: false });
   const [data, setData] = useState<RegistrationData>({ name: '', email: '', password: '' });
-
+  const { auth }  = useTypedSelector(state => state);
   const { RegistrationAction } = useActions();
 
   const handleFulfilled = useCallback(
@@ -38,6 +39,9 @@ const RegistrationForm: FC = () => {
 
   return (
     <form className={styles['login-form']} onSubmit={handleSubmit}>
+      <div className={`${styles['login-form-message']} ${(auth.loading || !auth.error) && styles.hidden}`}>{`${
+        auth.error && auth.error.includes('user with this e-mail exists') ? "Адрес занят" : "Ошибка регистрации"
+      }`}</div>
       <TextInput
         label={'Имя'}
         length={MAX_USER_NAME_LENGTH}
@@ -51,12 +55,14 @@ const RegistrationForm: FC = () => {
         tips
         onInput={handleInput('password')}
       />
-      <button type="submit" className={styles.button__primary}>
-        Регистрация
-      </button>
-      <button type="reset" className={styles.button__secondary}>
-        Сброс
-      </button>
+      <div className={styles.buttons}>
+        <button type="submit" className={styles.button__primary}>
+          Регистрация
+        </button>
+        <button type="reset" className={styles.button__secondary}>
+          Сброс
+        </button>
+      </div>
     </form>
   );
 };

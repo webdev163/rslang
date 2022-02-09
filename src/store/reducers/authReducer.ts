@@ -1,5 +1,4 @@
 import { AuthAction, AuthState, RegistrationActionTypes, SignInActionTypes } from '../../types/user';
-
 const initialState: AuthState = {
   user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
   isAuthorized: false,
@@ -30,7 +29,7 @@ const authReducer = (state = initialState, action: AuthAction): AuthState => {
         user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
         isAuthorized: false,
         loading: false,
-        error: action.payload,
+        error: action.payload.toString(),
       };
     case SignInActionTypes.SIGN_OUT:
       return {
@@ -66,7 +65,7 @@ const authReducer = (state = initialState, action: AuthAction): AuthState => {
         user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
         isAuthorized: false,
         loading: false,
-        error: action.payload,
+        error: action.payload.toString(),
       };
 
     default:

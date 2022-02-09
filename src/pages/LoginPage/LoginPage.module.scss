@@ -4,6 +4,19 @@
 .title {
   color: $base-color;
 }
+
+.tabs-wrp{
+  position: relative;
+  margin-top: 40px;
+  border: 1px solid $base-color;
+  border-radius: 0 10px 10px 10px;
+  min-width: 400px;
+  width: min-content;
+}
+.tabs{
+  position: absolute;
+  top:-35px;
+}
 .tab{
   @include secondary-button;
   @include active;
@@ -14,8 +27,8 @@
   @include active;
 }
 .tabs button:first-child{
-  border-radius: 10px 0 0 10px;
+  border-radius: 10px 0 0 0;
 }
 .tabs button:last-child{
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 0 0;
 }
