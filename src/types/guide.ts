@@ -6,6 +6,7 @@ export interface GuideState {
   error: null | string;
   group: number;
   page: number;
+  doneArr: number[][];
 }
 
 export enum GuideActionTypes {
@@ -14,6 +15,7 @@ export enum GuideActionTypes {
   FETCH_WORDS_ERROR = 'FETCH_WORDS_ERROR',
   SET_WORDS_GROUP = 'SET_WORDS_GROUP',
   SET_GUIDE_PAGE = 'SET_GUIDE_PAGE',
+  SET_DONE_ARR = 'SET_DONE_ARR',
 }
 
 interface FetchWordsAction {
@@ -40,9 +42,15 @@ interface SetGuidePage {
   payload: number;
 }
 
+interface SetDoneArr {
+  type: GuideActionTypes.SET_DONE_ARR;
+  payload: number[][];
+}
+
 export type GuideAction =
   | FetchWordsAction
   | FetchWordsErrorAction
   | FetchWordsSuccessAction
   | SetWordsGroup
-  | SetGuidePage;
+  | SetGuidePage
+  | SetDoneArr;

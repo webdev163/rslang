@@ -24,3 +24,7 @@ export function setWordsGroup(group: number): GuideAction {
 export function setGuidePage(page: number): GuideAction {
   return { type: GuideActionTypes.SET_GUIDE_PAGE, payload: page };
 }
+
+export function setDoneArr(arr: number[][]): GuideAction {
+  return { type: GuideActionTypes.SET_DONE_ARR, payload: arr };
+}

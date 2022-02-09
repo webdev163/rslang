@@ -3,6 +3,8 @@ import { CardItemProps } from './types';
 import { API_URL } from '../../../utils/constants';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { addUserWord } from '../../../utils/API';
+import { setDoneArr } from '../../../store/action-creators';
+import Button from '@mui/material/Button';
 
 import styles from './CardItem.module.scss';
 
@@ -21,8 +23,11 @@ const CardItem: FC<CardItemProps> = ({
   transcription,
   word,
   wordTranslate,
+  cardItemNumber,
+  pageStatus,
+  setPageStatus,
 }) => {
-  const { group } = useTypedSelector(state => state.guide);
+  const { group, page, doneArr } = useTypedSelector(state => state.guide);
   const [isHard, setHard] = useState(false);
   const [isLearnt, setLearnt] = useState(false);
 
@@ -71,28 +76,45 @@ const CardItem: FC<CardItemProps> = ({
     }
   };
 
+  const checkComplete = () => {
+    const newStatus = pageStatus;
+    newStatus[cardItemNumber] = 1;
+    setPageStatus(newStatus);
+    const result = pageStatus.filter(el => el === 0);
+    if (!result.length) {
+      const newDoneArr = doneArr;
+      newDoneArr[group] = [...newDoneArr[group].slice(0, page), 1, ...newDoneArr[group].slice(page, 29)];
+      setDoneArr(newDoneArr);
+    }
+  };
+
   const generateCardButtons = () => {
     if (isAuthorized) {
       return (
         <div className={styles.cardButtonsWrapper}>
-          <button
-            className={styles.cardButton}
+          <Button
+            variant="outlined"
             onClick={() => {
               // addUserWord(userData.userId, userData.token, wordId, 'hard');
               setHard(!isHard);
+              setLearnt(false);
+              checkComplete();
             }}
+            sx={{ flexBasis: '48%', fontSize: 18, border: '1px solid #b9b9b9' }}
           >
-            {isHard ? 'Убрасть из сложных' : 'Добавить в сложные'}
-          </button>
-          <button
-            className={styles.cardButton}
+            {isHard ? 'Убрать из сложных' : 'Добавить в сложные'}
+          </Button>
+          <Button
+            variant="outlined"
             onClick={() => {
-              if (!isLearnt) setHard(false);
+              setHard(false);
               setLearnt(!isLearnt);
+              checkComplete();
             }}
+            sx={{ flexBasis: '48%', fontSize: 18, border: '1px solid #b9b9b9' }}
           >
-            {isLearnt ? 'Убрасть из изученных' : 'Добавить в изученные'}
-          </button>
+            {isLearnt ? 'Убрать из изученных' : 'Добавить в изученные'}
+          </Button>
         </div>
       );
     }
@@ -100,7 +122,7 @@ const CardItem: FC<CardItemProps> = ({
   };
 
   return (
-    <div className={`${styles.cardWrapper} ${isHard ? styles.cardHard : ''} ${isLearnt ? styles.cardLearnt : ''}`}>
+    <div className={styles.cardWrapper}>
       <div className={styles.imgWrapper} style={{ backgroundImage: `url(${API_URL}/${image})` }}></div>
       <div className={styles.cardBody}>
         <div className={styles.cardHeaderWrapper}>
