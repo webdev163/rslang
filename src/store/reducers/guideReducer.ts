@@ -6,6 +6,7 @@ const initialState: GuideState = {
   error: null,
   group: 0,
   page: 0,
+  doneArr: new Array(6).fill(new Array(30).fill(0)),
 };
 
 export const guideReducer = (state = initialState, action: GuideAction): GuideState => {
@@ -20,6 +21,8 @@ export const guideReducer = (state = initialState, action: GuideAction): GuideSt
       return { ...state, group: action.payload };
     case GuideActionTypes.SET_GUIDE_PAGE:
       return { ...state, page: action.payload };
+    case GuideActionTypes.SET_DONE_ARR:
+      return { ...state, doneArr: action.payload };
     default:
       return state;
   }

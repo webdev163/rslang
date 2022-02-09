@@ -1,7 +1,8 @@
 .card-wrapper {
   flex-basis: 100%;
   display: flex;
-  margin: 25px;
+  margin-top: 25px;
+  margin-bottom: 25px;
   background-color: #f5f5f5;
   border-radius: 10px;
   max-width: 1400px;
@@ -108,15 +109,6 @@
 .text-meaning-translation {
   margin-top: 10px;
   margin-bottom: 15px;
-}
-
-.card-hard {
-  border: 1px solid #ffdb8e;
-  filter: drop-shadow(0 0 10px #f5c96a);
-}
-
-.card-learnt {
-  filter: drop-shadow(0 0 10px #acfca5);
 }
 
 .card-buttons-wrapper {
