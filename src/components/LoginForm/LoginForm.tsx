@@ -8,13 +8,15 @@ import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const LoginForm: FC = () => {
+  const { auth } = useTypedSelector(state => state);
+
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
-  const [data, setData] = useState<LoginData>({ email: '', password: '' });
+  const [data, setData] = useState<LoginData>({ email: auth.email, password: '' });
 
   const { signInAction } = useActions();
 
-  const { auth }  = useTypedSelector(state => state);
-  // console.log('LoginForm: State', state);
+
+  console.log('LoginForm: State', auth);
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
@@ -44,7 +46,12 @@ const LoginForm: FC = () => {
           ? 'Неверный адрес или пароль'
           : 'Адрес не найден'
       }`}</div>
-      <EmailInput label={'Почта'} onFulfilled={handleFulfilled('email')} onInput={handleInput('email')} />
+      <EmailInput
+        label={'Почта'}
+        onFulfilled={handleFulfilled('email')}
+        onInput={handleInput('email')}
+        value={auth.email}
+      />
       <PasswordInput label={'Пароль'} onFulfilled={handleFulfilled('password')} onInput={handleInput('password')} />
       <div className={styles.buttons}>
         <button type="submit" className={styles.button__primary}>

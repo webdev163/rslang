@@ -19,10 +19,12 @@ interface AuthState {
   isAuthorized: boolean;
   loading: boolean;
   error: null | string;
+  email:string;
 }
 
 interface SignInAction {
   type: SignInActionTypes.SIGN_IN;
+  payload: string;
 }
 
 interface SignInSuccessAction {
@@ -39,6 +41,7 @@ interface SignOutAction {
 }
 interface RegistrationAction {
   type: RegistrationActionTypes.REGISTRATION;
+  payload: string;
 }
 
 interface RegistrationSuccessAction {

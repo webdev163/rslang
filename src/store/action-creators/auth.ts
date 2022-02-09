@@ -6,7 +6,7 @@ import { LS_AUTH_KEY } from '../../utils/constants';
 
 export const signInAction = (email: string, password: string) => {
   return async (dispatch: Dispatch<AnyAction>) => {
-    dispatch({ type: SignInActionTypes.SIGN_IN });
+    dispatch({ type: SignInActionTypes.SIGN_IN, payload: email });
     signIn(email, password)
       .then(data => {
         dispatch({ type: SignInActionTypes.SUCCESS, payload: data });
@@ -28,7 +28,7 @@ export const signInAction = (email: string, password: string) => {
 
 export const RegistrationAction =
   (name: string, email: string, password: string) => async (dispatch: Dispatch<AuthAction>) => {
-    dispatch({ type: RegistrationActionTypes.REGISTRATION });
+    dispatch({ type: RegistrationActionTypes.REGISTRATION, payload: email });
     addUser({ name, email, password })
       .then(data => dispatch({ type: RegistrationActionTypes.SUCCESS, payload: data as UserResponse }))
       .catch(e => {

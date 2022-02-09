@@ -10,9 +10,9 @@ import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const RegistrationForm: FC = () => {
+  const { auth } = useTypedSelector(state => state);
   const [checks, setChecks] = useState<RegistrationChecks>({ name: false, email: false, password: false });
-  const [data, setData] = useState<RegistrationData>({ name: '', email: '', password: '' });
-  const { auth }  = useTypedSelector(state => state);
+  const [data, setData] = useState<RegistrationData>({ name: '', email: auth.email, password: '' });
   const { RegistrationAction } = useActions();
 
   const handleFulfilled = useCallback(
@@ -48,7 +48,12 @@ const RegistrationForm: FC = () => {
         onFulfilled={handleFulfilled('name')}
         onInput={handleInput('name')}
       />
-      <EmailInput label={'Почта'} onFulfilled={handleFulfilled('email')} onInput={handleInput('email')} />
+      <EmailInput
+        label={'Почта'}
+        onFulfilled={handleFulfilled('email')}
+        onInput={handleInput('email')}
+        value={auth.email}
+      />
       <PasswordInput
         label={'Пароль'}
         onFulfilled={handleFulfilled('password')}
