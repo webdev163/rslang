@@ -2,7 +2,6 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { useActions } from './../../hooks/useActions';
 import { useTypedSelector } from './../../hooks/useTypedSelector';
 import { API_URL } from '../../utils/constants';
-import Modal from '../Modal';
 import { shuffle } from '../../utils/arrays';
 import { Button, Grid, Container, Dialog, DialogTitle, DialogContent } from '@mui/material';
 
@@ -36,31 +35,29 @@ const GameAudio: FC = () => {
   if (!isGameOn) {
     return (
       <Container>
-        {showModal && (
-          <Dialog
-            onClose={() => {
-              setShowModal(false);
-            }}
-            open={showModal}
-          >
-            <DialogTitle>Выберите сложность</DialogTitle>
-            <DialogContent>
-              {[...Array(6).keys()].map(item => (
-                <Button
-                  key={item}
-                  onClick={() => {
-                    setAudioGroup(item);
-                    startAudioGame();
-                    setShowModal(false);
-                  }}
-                >
-                  {item + 1}
-                </Button>
-              ))}
-            </DialogContent>
-          </Dialog>
-        )}
-        {showResult && <Modal>Result: {score}</Modal>}
+        <Dialog
+          onClose={() => {
+            setShowModal(false);
+          }}
+          open={showModal}
+        >
+          <DialogTitle>Выберите сложность</DialogTitle>
+          <DialogContent>
+            {[...Array(6).keys()].map(item => (
+              <Button
+                key={item}
+                onClick={() => {
+                  setAudioGroup(item);
+                  startAudioGame();
+                  setShowModal(false);
+                }}
+              >
+                {item + 1}
+              </Button>
+            ))}
+          </DialogContent>
+        </Dialog>
+        <Dialog open={showResult}>Result: {score}</Dialog>
       </Container>
     );
   }
