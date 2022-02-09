@@ -3,11 +3,7 @@ import { RootState } from '../reducers';
 import { WordResponse } from '../../types/requests';
 import { AudioAction, AudioActionTypes, AudioCallOption } from '../../types/audiocall';
 import { getWords } from '../../utils/API';
-
-const getRandomItem = <T>(arr: T[]): T => {
-  const randomNum = Math.floor(Math.random() * arr.length);
-  return arr[randomNum];
-};
+import { getRandomItem } from '../../utils/arrays';
 
 export const setAudioWords = (words: WordResponse[]): AudioAction => ({
   type: AudioActionTypes.SET_WORDS,

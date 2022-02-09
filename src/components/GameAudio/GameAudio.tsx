@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useWordsPage } from '../../hooks/useWordsPage';
 import { useActions } from './../../hooks/useActions';
-
-import styles from './GameAudio.module.scss';
 import { useTypedSelector } from './../../hooks/useTypedSelector';
 import { API_URL } from '../../utils/constants';
 import Modal from '../Modal';
+import { shuffle } from '../../utils/arrays';
+
+import styles from './GameAudio.module.scss';
 
 const GameAudio: FC = () => {
   const pageWords = useWordsPage();
@@ -36,6 +37,26 @@ const GameAudio: FC = () => {
     }
   }, [currentWord]);
 
+  if (!isGameOn) {
+    return (
+      <div>
+        {showModal && (
+          <Modal>
+            <button
+              onClick={() => {
+                startAudioGame();
+                setShowModal(false);
+              }}
+            >
+              START
+            </button>
+          </Modal>
+        )}
+        {showResult && <Modal>Result: {score}</Modal>}
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1 className={styles.title}>Audio Game</h1>
@@ -43,7 +64,7 @@ const GameAudio: FC = () => {
       <p>
         <button onClick={() => audio.current.play()}>Play</button>
       </p>
-      {options.map(option => (
+      {shuffle(options).map(option => (
         <button
           key={option.translate}
           onClick={() => {
@@ -57,19 +78,6 @@ const GameAudio: FC = () => {
           {option.translate}
         </button>
       ))}
-      {showModal && (
-        <Modal>
-          <button
-            onClick={() => {
-              startAudioGame();
-              setShowModal(false);
-            }}
-          >
-            START
-          </button>
-        </Modal>
-      )}
-      {showResult && <Modal>Result: {score}</Modal>}
     </div>
   );
 };

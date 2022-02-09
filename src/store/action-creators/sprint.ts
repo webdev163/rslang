@@ -1,10 +1,6 @@
 import { WordResponse } from '../../types/requests';
 import { SprintAction, SprintActionTypes } from '../../types/sprint';
-
-const getRandomItem = <T>(arr: T[]): T => {
-  const randomNum = Math.floor(Math.random() * arr.length);
-  return arr[randomNum];
-};
+import { getRandomItem } from '../../utils/arrays';
 
 export const setCurrentWord = (word: WordResponse, words: WordResponse[]): SprintAction => {
   const randomNum = Math.random() - 0.5;
