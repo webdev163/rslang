@@ -13,9 +13,11 @@ const GameAudio: FC = () => {
 
   const [showModal, setShowModal] = useState(true);
   const [showResult, setShowResult] = useState(false);
+  const [answerIsReceived, setAnswerIsReceived] = useState(false);
 
   const { words, currentWord, isGameOn, options, score } = useTypedSelector(state => state.audio);
-  const { setAudioWords, setNextAudioWord, removeAudioCallWord, startAudioGame, incrementAudioScore } = useActions();
+  const { setAudioWords, setNextAudioWord, removeAudioCallWord, startAudioGame, stopAudioGame, incrementAudioScore } =
+    useActions();
   const audio = useRef(new Audio());
 
   useEffect(() => {
@@ -61,23 +63,43 @@ const GameAudio: FC = () => {
     <div>
       <h1 className={styles.title}>Audio Game</h1>
       <div>Score: {score}</div>
-      <p>
-        <button onClick={() => audio.current.play()}>Play</button>
-      </p>
+      {answerIsReceived ? (
+        <p>{currentWord?.word}</p>
+      ) : (
+        <p>
+          <button onClick={() => audio.current.play()}>Play</button>
+        </p>
+      )}
       {shuffle(options).map(option => (
         <button
           key={option.translate}
+          disabled={answerIsReceived}
           onClick={() => {
             if (option.isTrue) {
               incrementAudioScore();
             }
-            if (words.length === 1) setShowResult(true);
-            if (currentWord) removeAudioCallWord(currentWord);
+            setAnswerIsReceived(true);
           }}
         >
           {option.translate}
         </button>
       ))}
+      <div>
+        {answerIsReceived && (
+          <button
+            onClick={() => {
+              if (words.length === 1) {
+                setShowResult(true);
+                stopAudioGame();
+              }
+              if (currentWord) removeAudioCallWord(currentWord);
+              setAnswerIsReceived(false);
+            }}
+          >
+            NEXT
+          </button>
+        )}
+      </div>
     </div>
   );
 };
