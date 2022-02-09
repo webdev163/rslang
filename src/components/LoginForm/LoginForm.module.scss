@@ -4,7 +4,7 @@
 
 .button__primary{
   @include primary-button;
-  @include active
+  @include active;
 }
 
 
@@ -38,3 +38,4 @@
 .hidden{
   visibility: hidden;
 }
+

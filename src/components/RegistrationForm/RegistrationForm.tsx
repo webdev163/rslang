@@ -61,7 +61,11 @@ const RegistrationForm: FC = () => {
         onInput={handleInput('password')}
       />
       <div className={styles.buttons}>
-        <button type="submit" className={styles.button__primary}>
+        <button
+          type="submit"
+          className={styles.button__primary}
+          disabled={!(checks.name && checks.email && checks.password)}
+        >
           Регистрация
         </button>
         <button type="reset" className={styles.button__secondary}>

@@ -15,7 +15,6 @@ const LoginForm: FC = () => {
 
   const { signInAction } = useActions();
 
-
   console.log('LoginForm: State', auth);
 
   const handleFulfilled = useCallback(
@@ -54,7 +53,7 @@ const LoginForm: FC = () => {
       />
       <PasswordInput label={'Пароль'} onFulfilled={handleFulfilled('password')} onInput={handleInput('password')} />
       <div className={styles.buttons}>
-        <button type="submit" className={styles.button__primary}>
+        <button type="submit" className={styles.button__primary} disabled={!(checks.email && checks.password)}>
           Войти
         </button>
         <button type="reset" className={styles.button__secondary}>
