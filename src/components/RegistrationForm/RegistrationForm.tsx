@@ -4,10 +4,10 @@ import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
 import TextInput from '../inputs/TextInput';
 import { RegistrationChecks, RegistrationData } from './types';
-
-import styles from './RegistrationForm.module.scss';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+
+import styles from './RegistrationForm.module.scss';
 
 const RegistrationForm: FC = () => {
   const { auth } = useTypedSelector(state => state);
@@ -40,7 +40,7 @@ const RegistrationForm: FC = () => {
   return (
     <form className={styles['login-form']} onSubmit={handleSubmit}>
       <div className={`${styles['login-form-message']} ${(auth.loading || !auth.error) && styles.hidden}`}>{`${
-        auth.error && auth.error.includes('user with this e-mail exists') ? "Адрес занят" : "Ошибка регистрации"
+        auth.error && auth.error.includes('user with this e-mail exists') ? 'Адрес занят' : 'Ошибка регистрации'
       }`}</div>
       <TextInput
         label={'Имя'}

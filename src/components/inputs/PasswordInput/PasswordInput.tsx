@@ -17,7 +17,7 @@ const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInp
     const input = e.currentTarget.value;
     const curPasswordChecks = {
       numbers: /\d/.test(input),
-      differentCase: /[a-z]/.test(input) && /[A-Z]/.test(input), // TODO why input === input.toUpperCase => true
+      differentCase: /[a-z]/.test(input) && /[A-Z]/.test(input),
       length: input.length < PASSWORD_RULES.length ? false : true,
     };
     const validator =

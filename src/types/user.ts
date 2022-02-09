@@ -19,7 +19,7 @@ interface AuthState {
   isAuthorized: boolean;
   loading: boolean;
   error: null | string;
-  email:string;
+  email: string;
 }
 
 interface SignInAction {

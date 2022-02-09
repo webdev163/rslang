@@ -2,10 +2,10 @@ import React, { FC, FormEvent, useCallback, useState } from 'react';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
 import { LoginChecks, LoginData } from './types';
-
-import styles from './LoginForm.module.scss';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+
+import styles from './LoginForm.module.scss';
 
 const LoginForm: FC = () => {
   const { auth } = useTypedSelector(state => state);
@@ -14,8 +14,6 @@ const LoginForm: FC = () => {
   const [data, setData] = useState<LoginData>({ email: auth.email, password: '' });
 
   const { signInAction } = useActions();
-
-  console.log('LoginForm: State', auth);
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
