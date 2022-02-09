@@ -4,6 +4,7 @@ import { WordResponse } from '../../types/requests';
 import { AudioAction, AudioActionTypes, AudioCallOption } from '../../types/audiocall';
 import { getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
+import { Dispatch } from 'redux';
 
 export const setAudioWords = (words: WordResponse[]): AudioAction => ({
   type: AudioActionTypes.SET_WORDS,
@@ -41,6 +42,18 @@ export const setNextAudioWord =
       payload: { word, options },
     });
   };
+
+export const setAudioGroup = (group: number) => async (dispatch: Dispatch<AudioAction>) => {
+  const randomPage = Math.floor(Math.random() * 30);
+  const words = await getWords(group, randomPage);
+  dispatch({
+    type: AudioActionTypes.SET_GROUP,
+    payload: {
+      words,
+      group,
+    },
+  });
+};
 
 export const removeAudioCallWord = (word: WordResponse): AudioAction => ({
   type: AudioActionTypes.REMOVE_WORD,

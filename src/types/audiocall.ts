@@ -19,6 +19,7 @@ export enum AudioActionTypes {
   SET_WORDS = 'SET_WORDS',
   SET_CURRENT_WORD = 'SET_CURRENT_WORD',
   REMOVE_WORD = 'REMOVE_WORD',
+  SET_GROUP = 'SET_GROUP',
   START_GAME = 'START_GAME',
   STOP_GAME = 'STOP_GAME',
   INCREMENT_SCORE = 'INCREMENT_SCORE',
@@ -42,6 +43,14 @@ interface RemoveWordAction {
   payload: WordResponse;
 }
 
+interface SetWordsGroupAction {
+  type: AudioActionTypes.SET_GROUP;
+  payload: {
+    group: number;
+    words: WordResponse[];
+  };
+}
+
 interface StartGameAction {
   type: AudioActionTypes.START_GAME;
 }
@@ -58,6 +67,7 @@ export type AudioAction =
   | SetWordsAction
   | SetCurrentWordAction
   | RemoveWordAction
+  | SetWordsGroupAction
   | StartGameAction
   | StopGameAction
   | IncrementScoreAction;

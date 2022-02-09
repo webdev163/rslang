@@ -18,6 +18,8 @@ export const audioReducer = (state = initialState, action: AudioAction): AudioSt
       return { ...state, currentWord: action.payload.word, options: action.payload.options };
     case AudioActionTypes.REMOVE_WORD:
       return { ...state, words: state.words.filter(word => word.word !== action.payload.word) };
+    case AudioActionTypes.SET_GROUP:
+      return { ...state, group: action.payload.group, words: action.payload.words };
     case AudioActionTypes.START_GAME:
       return { ...state, isGameOn: true };
     case AudioActionTypes.STOP_GAME:
