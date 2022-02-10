@@ -4,6 +4,7 @@ enum RequestPaths {
   SIGNIN = '/signin',
   STATISTICS = '/statistics',
   TOKENS = '/tokens',
+  AGGREGATED_WORDS = '/aggregatedWords',
 }
 
 enum ResponseStatuses {
@@ -16,6 +17,7 @@ enum ResponseStatuses {
   FORBIDDEN = 403,
   PAYMENT_REQUIRED = 402,
   EXPECTATION_FAILED = 417,
+  NO_DATA = 204,
 }
 
 interface WordResponse {
@@ -80,5 +82,18 @@ interface UserStatisticsResponse {
   optional: UserStatisticOptions;
 }
 
+interface AggregatedWordsResponse{
+  paginatedResults: WordResponse[];
+  totalCount: Record<'count', number>;
+}
+
 export { RequestPaths, ResponseStatuses };
-export type { WordResponse, UserResponse, UserRequest, TokenResponse, UserWordResponse, UserStatisticsResponse };
+export type {
+  WordResponse,
+  UserResponse,
+  UserRequest,
+  TokenResponse,
+  UserWordResponse,
+  UserStatisticsResponse,
+  AggregatedWordsResponse,
+};
