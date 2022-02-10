@@ -26,6 +26,8 @@ export const audioReducer = (state = initialState, action: AudioAction): AudioSt
       return { ...state, isGameOn: false };
     case AudioActionTypes.INCREMENT_SCORE:
       return { ...state, score: state.score + state.pointsForAnswer };
+    case AudioActionTypes.RESET_STATE:
+      return initialState;
     default:
       return state;
   }

@@ -13,6 +13,7 @@ export interface SprintState {
 }
 
 export enum SprintActionTypes {
+  RESET_STATE = 'RESET_STATE',
   SET_WORDS = 'SET_WORDS',
   SET_CURRENT_WORD = 'SET_CURRENT_WORD',
   SET_GROUP = 'SET_GROUP',
@@ -21,6 +22,10 @@ export enum SprintActionTypes {
   INCREMENT_SCORE = 'INCREMENT_SCORE',
   INCREMENT_RIGHT_ANSWERS = 'INCREMENT_RIGHT_ANSWERS',
   RESET_RIGHT_ANSWERS = 'RESET_RIGHT_ANSWERS',
+}
+
+interface ResetStateAction {
+  type: SprintActionTypes.RESET_STATE;
 }
 
 interface SetWordsAction {
@@ -70,6 +75,7 @@ interface ResetRightAnswersAction {
 }
 
 export type SprintAction =
+  | ResetStateAction
   | SetWordsAction
   | SetCurrentWordAction
   | SetWordsGroupAction

@@ -17,12 +17,17 @@ export interface AudioState {
 
 export enum AudioActionTypes {
   SET_WORDS = 'SET_WORDS',
+  RESET_STATE = 'RESET_STATE',
   SET_CURRENT_WORD = 'SET_CURRENT_WORD',
   REMOVE_WORD = 'REMOVE_WORD',
   SET_GROUP = 'SET_GROUP',
   START_GAME = 'START_GAME',
   STOP_GAME = 'STOP_GAME',
   INCREMENT_SCORE = 'INCREMENT_SCORE',
+}
+
+interface ResetStateAction {
+  type: AudioActionTypes.RESET_STATE;
 }
 
 interface SetWordsAction {
@@ -64,6 +69,7 @@ interface IncrementScoreAction {
 }
 
 export type AudioAction =
+  | ResetStateAction
   | SetWordsAction
   | SetCurrentWordAction
   | RemoveWordAction

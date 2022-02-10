@@ -14,8 +14,15 @@ const GameAudio: FC = () => {
   const [answerIsReceived, setAnswerIsReceived] = useState(false);
 
   const { words, currentWord, isGameOn, options, score } = useTypedSelector(state => state.audio);
-  const { setNextAudioWord, removeAudioCallWord, setAudioGroup, startAudioGame, stopAudioGame, incrementAudioScore } =
-    useActions();
+  const {
+    setNextAudioWord,
+    removeAudioCallWord,
+    setAudioGroup,
+    startAudioGame,
+    stopAudioGame,
+    incrementAudioScore,
+    resetAudioState,
+  } = useActions();
   const audio = useRef(new Audio());
 
   useEffect(() => {
@@ -31,6 +38,13 @@ const GameAudio: FC = () => {
     }
   }, [currentWord]);
 
+  useEffect(
+    () => () => {
+      resetAudioState();
+    },
+    [],
+  );
+
   if (!isGameOn) {
     return (
       <Container>
@@ -42,7 +56,9 @@ const GameAudio: FC = () => {
             setShowDifficulty(false);
           }}
         />
-        <Dialog open={showResult}>Result: {score}</Dialog>
+        <Dialog open={showResult} onClose={() => resetAudioState()}>
+          Result: {score}
+        </Dialog>
       </Container>
     );
   }

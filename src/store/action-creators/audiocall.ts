@@ -11,6 +11,10 @@ export const setAudioWords = (words: WordResponse[]): AudioAction => ({
   payload: words,
 });
 
+export const resetAudioState = (): AudioAction => ({
+  type: AudioActionTypes.RESET_STATE,
+});
+
 export const setNextAudioWord =
   (): ThunkAction<void, RootState, unknown, AudioAction> => async (dispatch, getState) => {
     const state = getState();

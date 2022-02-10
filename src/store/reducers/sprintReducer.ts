@@ -35,6 +35,8 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
       return { ...state, pointsForAnswer: action.payload.points, rightAnswers: action.payload.rightAnswers };
     case SprintActionTypes.RESET_RIGHT_ANSWERS:
       return { ...state, pointsForAnswer: 10, rightAnswers: 0 };
+    case SprintActionTypes.RESET_STATE:
+      return initialState;
     default:
       return state;
   }

@@ -9,6 +9,10 @@ export const setSprintWords = (words: WordResponse[]): SprintAction => ({
   payload: words,
 });
 
+export const resetSprintState = (): SprintAction => ({
+  type: SprintActionTypes.RESET_STATE,
+});
+
 export const setCurrentWord = (word: WordResponse, words: WordResponse[]): SprintAction => {
   const randomNum = Math.random() - 0.5;
   let isTrue: boolean;

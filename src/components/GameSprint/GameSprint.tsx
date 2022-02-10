@@ -25,6 +25,7 @@ const GameSprint: FC = () => {
     incrementScore,
     incrementRightAnswers,
     resetRigthAnswers,
+    resetSprintState,
   } = useActions();
 
   useEffect(() => {
@@ -32,6 +33,13 @@ const GameSprint: FC = () => {
       setCurrentWord(words[0], words);
     }
   }, [words]);
+
+  useEffect(
+    () => () => {
+      resetSprintState();
+    },
+    [],
+  );
 
   const receiveAnswer = (answer: boolean) => {
     if (!isGameOn) return;
@@ -91,6 +99,7 @@ const GameSprint: FC = () => {
           onClose={() => {
             setShowResult(false);
             setShowDifficulty(true);
+            resetSprintState();
           }}
         >
           STOP. Result - {score}
