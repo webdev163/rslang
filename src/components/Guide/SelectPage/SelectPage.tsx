@@ -19,7 +19,7 @@ const SelectPage: FC = () => {
 
   const menuItemsArr = [...Array(30).keys()];
   const renderMenuItems = menuItemsArr.map(el => (
-    <MenuItem key={el} value={el} sx={{ fontSize: 20 }} className={el === 1 ? 'green' : ''}>
+    <MenuItem key={el} value={el} sx={{ fontSize: 20 }}>
       Страница {el + 1}
     </MenuItem>
   ));
