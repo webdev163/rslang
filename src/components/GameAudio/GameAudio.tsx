@@ -31,8 +31,6 @@ const GameAudio: FC = () => {
     }
   }, [currentWord]);
 
-  console.log([...Array(6).keys()]);
-
   if (!isGameOn) {
     return (
       <Container>

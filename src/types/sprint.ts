@@ -1,6 +1,8 @@
 import { WordResponse } from './requests';
 
 export interface SprintState {
+  words: WordResponse[];
+  group: number;
   currentWord: WordResponse | null;
   translate: string;
   isTrue: boolean;
@@ -11,12 +13,19 @@ export interface SprintState {
 }
 
 export enum SprintActionTypes {
+  SET_WORDS = 'SET_WORDS',
   SET_CURRENT_WORD = 'SET_CURRENT_WORD',
+  SET_GROUP = 'SET_GROUP',
   START_GAME = 'START_GAME',
   STOP_GAME = 'STOP_GAME',
   INCREMENT_SCORE = 'INCREMENT_SCORE',
   INCREMENT_RIGHT_ANSWERS = 'INCREMENT_RIGHT_ANSWERS',
   RESET_RIGHT_ANSWERS = 'RESET_RIGHT_ANSWERS',
+}
+
+interface SetWordsAction {
+  type: SprintActionTypes.SET_WORDS;
+  payload: WordResponse[];
 }
 
 interface SetCurrentWordAction {
@@ -25,6 +34,14 @@ interface SetCurrentWordAction {
     word: WordResponse;
     isTrue: boolean;
     translate: string;
+  };
+}
+
+interface SetWordsGroupAction {
+  type: SprintActionTypes.SET_GROUP;
+  payload: {
+    group: number;
+    words: WordResponse[];
   };
 }
 
@@ -53,7 +70,9 @@ interface ResetRightAnswersAction {
 }
 
 export type SprintAction =
+  | SetWordsAction
   | SetCurrentWordAction
+  | SetWordsGroupAction
   | StartGameAction
   | StopGameAction
   | IncrementScoreAction

@@ -1,10 +1,12 @@
 import { SprintAction, SprintActionTypes, SprintState } from '../../types/sprint';
 
 const initialState: SprintState = {
+  words: [],
+  group: 0,
   currentWord: null,
   translate: '',
   isTrue: false,
-  isGameOn: true,
+  isGameOn: false,
   score: 0,
   pointsForAnswer: 10,
   rightAnswers: 0,
@@ -12,6 +14,8 @@ const initialState: SprintState = {
 
 export const sprintReducer = (state = initialState, action: SprintAction): SprintState => {
   switch (action.type) {
+    case SprintActionTypes.SET_WORDS:
+      return { ...state, words: action.payload };
     case SprintActionTypes.SET_CURRENT_WORD:
       return {
         ...state,
@@ -19,6 +23,8 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
         isTrue: action.payload.isTrue,
         translate: action.payload.translate,
       };
+    case SprintActionTypes.SET_GROUP:
+      return { ...state, group: action.payload.group, words: action.payload.words };
     case SprintActionTypes.START_GAME:
       return { ...state, isGameOn: true };
     case SprintActionTypes.STOP_GAME:

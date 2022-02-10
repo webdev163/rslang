@@ -1,6 +1,13 @@
+import { Dispatch } from 'redux';
 import { WordResponse } from '../../types/requests';
 import { SprintAction, SprintActionTypes } from '../../types/sprint';
+import { getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
+
+export const setSprintWords = (words: WordResponse[]): SprintAction => ({
+  type: SprintActionTypes.SET_WORDS,
+  payload: words,
+});
 
 export const setCurrentWord = (word: WordResponse, words: WordResponse[]): SprintAction => {
   const randomNum = Math.random() - 0.5;
@@ -23,6 +30,18 @@ export const setCurrentWord = (word: WordResponse, words: WordResponse[]): Sprin
 export const setRandowWord = (words: WordResponse[]): SprintAction => {
   const word = getRandomItem(words);
   return setCurrentWord(word, words);
+};
+
+export const setSprintGroup = (group: number) => async (dispatch: Dispatch<SprintAction>) => {
+  const randomPage = Math.floor(Math.random() * 30);
+  const words = await getWords(group, randomPage);
+  dispatch({
+    type: SprintActionTypes.SET_GROUP,
+    payload: {
+      words,
+      group,
+    },
+  });
 };
 
 export const startGame = (): SprintAction => ({

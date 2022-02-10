@@ -1,22 +1,31 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { batch } from 'react-redux';
-import { useWordsPage } from '../../hooks/useWordsPage';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import Modal from '../Modal';
 
 import GameSprintTimer from '../GameSprintTimer';
 
 import styles from './GameSprint.module.scss';
+import { Container, Dialog } from '@mui/material';
+import DifficultyDialog from '../DifficultyDialog';
 
 const GameSprint: FC = () => {
-  const words = useWordsPage();
+  const [showDifficulty, setShowDifficulty] = useState(true);
+  const [showResult, setShowResult] = useState(false);
 
-  const { currentWord, isGameOn, score, pointsForAnswer, rightAnswers, translate, isTrue } = useTypedSelector(
+  const { words, currentWord, isGameOn, score, pointsForAnswer, rightAnswers, translate, isTrue } = useTypedSelector(
     state => state.sprint,
   );
-  const { setCurrentWord, setRandowWord, stopGame, incrementScore, incrementRightAnswers, resetRigthAnswers } =
-    useActions();
+  const {
+    setSprintGroup,
+    setCurrentWord,
+    setRandowWord,
+    startGame,
+    stopGame,
+    incrementScore,
+    incrementRightAnswers,
+    resetRigthAnswers,
+  } = useActions();
 
   useEffect(() => {
     if (words.length) {
@@ -66,10 +75,40 @@ const GameSprint: FC = () => {
 
   const answersCounterTemplate = pointsForAnswer < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
 
+  if (!isGameOn) {
+    return (
+      <Container>
+        <DifficultyDialog
+          open={showDifficulty}
+          onSelect={index => {
+            setSprintGroup(index);
+            startGame();
+            setShowDifficulty(false);
+          }}
+        />
+        <Dialog
+          open={showResult}
+          onClose={() => {
+            setShowResult(false);
+            setShowDifficulty(true);
+          }}
+        >
+          STOP. Result - {score}
+        </Dialog>
+      </Container>
+    );
+  }
+
   return (
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
-      <GameSprintTimer initialTime={30} onEnd={() => stopGame()} />
+      <GameSprintTimer
+        initialTime={30}
+        onEnd={() => {
+          stopGame();
+          setShowResult(true);
+        }}
+      />
       <div className={styles.points}>{score}</div>
       <div className={styles.game}>
         {(rightAnswers > 0 || pointsForAnswer > 10) && answersCounterTemplate}
@@ -89,7 +128,6 @@ const GameSprint: FC = () => {
           </div>
         )}
       </div>
-      {!isGameOn && <Modal>STOP. Result - {score}</Modal>}
     </div>
   );
 };
