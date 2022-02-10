@@ -78,7 +78,7 @@ const CardItem: FC<CardItemProps> = ({
 
   const checkComplete = () => {
     const newStatus = pageStatus;
-    newStatus[cardItemNumber] = 1;
+    newStatus[cardItemNumber] = pageStatus[cardItemNumber] === 0 ? 1 : 0;
     setPageStatus(newStatus);
     const result = pageStatus.filter(el => el === 0);
     if (!result.length) {
@@ -97,28 +97,27 @@ const CardItem: FC<CardItemProps> = ({
             onClick={() => {
               // addUserWord(userData.userId, userData.token, wordId, 'hard');
               setHard(!isHard);
-              setLearnt(false);
               checkComplete();
             }}
             sx={{ flexBasis: '48%', fontSize: 18, border: '1px solid #b9b9b9' }}
+            disabled={isLearnt}
           >
             {isHard ? 'Убрать из сложных' : 'Добавить в сложные'}
           </Button>
           <Button
             variant="outlined"
             onClick={() => {
-              setHard(false);
               setLearnt(!isLearnt);
               checkComplete();
             }}
             sx={{ flexBasis: '48%', fontSize: 18, border: '1px solid #b9b9b9' }}
+            disabled={isHard}
           >
             {isLearnt ? 'Убрать из изученных' : 'Добавить в изученные'}
           </Button>
         </div>
       );
     }
-    return false;
   };
 
   return (
