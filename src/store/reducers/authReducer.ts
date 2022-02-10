@@ -1,24 +1,27 @@
 import { AuthAction, AuthState, RegistrationActionTypes, SignInActionTypes } from '../../types/user';
-
 const initialState: AuthState = {
   user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
   isAuthorized: false,
   loading: false,
   error: null,
+  email: '',
 };
 
 const authReducer = (state = initialState, action: AuthAction): AuthState => {
   switch (action.type) {
     case SignInActionTypes.SIGN_IN:
       return {
+        ...state,
         user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
         isAuthorized: false,
         loading: true,
         error: null,
+        email: action.payload,
       };
 
     case SignInActionTypes.SUCCESS:
       return {
+        ...state,
         user: action.payload,
         isAuthorized: true,
         loading: false,
@@ -27,13 +30,15 @@ const authReducer = (state = initialState, action: AuthAction): AuthState => {
 
     case SignInActionTypes.ERROR:
       return {
+        ...state,
         user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
         isAuthorized: false,
         loading: false,
-        error: action.payload,
+        error: action.payload.toString(),
       };
     case SignInActionTypes.SIGN_OUT:
       return {
+        ...state,
         user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
         isAuthorized: false,
         loading: false,
@@ -41,14 +46,17 @@ const authReducer = (state = initialState, action: AuthAction): AuthState => {
       };
     case RegistrationActionTypes.REGISTRATION:
       return {
+        ...state,
         user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
         isAuthorized: false,
         loading: true,
         error: null,
+        email: action.payload,
       };
 
     case RegistrationActionTypes.SUCCESS:
       return {
+        ...state,
         user: {
           message: '',
           refreshToken: '',
@@ -63,10 +71,11 @@ const authReducer = (state = initialState, action: AuthAction): AuthState => {
 
     case RegistrationActionTypes.ERROR:
       return {
+        ...state,
         user: { message: '', refreshToken: '', userId: '', name: '', token: '' },
         isAuthorized: false,
         loading: false,
-        error: action.payload,
+        error: action.payload.toString(),
       };
 
     default:

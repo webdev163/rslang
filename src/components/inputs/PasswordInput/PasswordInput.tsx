@@ -1,15 +1,9 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
 import { PasswordChecks } from '../../../types/types';
 import { PASSWORD_RULES } from '../../../utils/constants';
+import { PasswordInputProps } from './types';
 
 import styles from './PasswordInput.module.scss';
-
-interface PasswordInputProps {
-  label: string;
-  onFulfilled: CallableFunction;
-  tips?: boolean;
-  onInput: CallableFunction;
-}
 
 const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInput }) => {
   const [passwordChecks, setPasswordChecks] = useState<PasswordChecks>({
@@ -23,7 +17,7 @@ const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInp
     const input = e.currentTarget.value;
     const curPasswordChecks = {
       numbers: /\d/.test(input),
-      differentCase: /[a-z]/.test(input) && /[A-Z]/.test(input), // TODO why input === input.toUpperCase => true
+      differentCase: /[a-z]/.test(input) && /[A-Z]/.test(input),
       length: input.length < PASSWORD_RULES.length ? false : true,
     };
     const validator =
@@ -69,21 +63,21 @@ const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInp
               PASSWORD_RULES.length > 0 ? styles['password__rule-required'] : styles['password__rule-hidden']
             } ${passwordChecks.length && styles['password__rule-fulfilled']}`}
           >
-            Пароль содержит {PASSWORD_RULES.length} символов
+            Минимум {PASSWORD_RULES.length} символов
           </li>
           <li
             className={`${
               PASSWORD_RULES.differentCase ? styles['password__rule-required'] : styles['password__rule-recommended']
             } ${passwordChecks.differentCase && styles['password__rule-fulfilled']}`}
           >
-            Пароль содержит символы в верхнем и нижнем регистре
+            Символы в верхнем и нижнем регистре
           </li>
           <li
             className={`${
               PASSWORD_RULES.numbers ? styles['password__rule-required'] : styles['password__rule-recommended']
             } ${passwordChecks.numbers && styles['password__rule-fulfilled']}`}
           >
-            Пароль содержит цифры
+            Цифры
           </li>
         </ul>
       )}

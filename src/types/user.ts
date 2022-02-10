@@ -1,5 +1,6 @@
-import { TokenResponse, UserResponse } from './requests';
+import { TokenResponse, UserResponse, UserWordResponse } from './requests';
 
+// Auth
 enum SignInActionTypes {
   SIGN_IN = 'SIGN_IN',
   SUCCESS = 'SIGN_IN_SUCCESS',
@@ -18,10 +19,12 @@ interface AuthState {
   isAuthorized: boolean;
   loading: boolean;
   error: null | string;
+  email: string;
 }
 
 interface SignInAction {
   type: SignInActionTypes.SIGN_IN;
+  payload: string;
 }
 
 interface SignInSuccessAction {
@@ -38,6 +41,7 @@ interface SignOutAction {
 }
 interface RegistrationAction {
   type: RegistrationActionTypes.REGISTRATION;
+  payload: string;
 }
 
 interface RegistrationSuccessAction {
@@ -59,5 +63,43 @@ type AuthAction =
   | RegistrationErrorAction
   | RegistrationSuccessAction;
 
-export { SignInActionTypes, RegistrationActionTypes };
-export type { SignInAction, SignInSuccessAction, SignInErrorAction, AuthAction, AuthState };
+// Words
+
+enum UsersWordsActionTypes {
+  GET_USERS_WORDS = 'GET_USERS_WORDS',
+  SUCCESS = 'GET_USERS_WORDS_SUCCESS',
+  ERROR = 'GET_USERS_WORDS_ERROR',
+}
+
+interface UserWordsState {
+  words: UserWordResponse[];
+  loading: boolean;
+  error: null | string;
+}
+
+interface GetUserWordsAction {
+  type: UsersWordsActionTypes.GET_USERS_WORDS;
+}
+
+interface GetUserWordsSuccessAction {
+  type: UsersWordsActionTypes.SUCCESS;
+  payload: UserWordResponse[];
+}
+
+interface GetUserWordsErrorAction {
+  type: UsersWordsActionTypes.ERROR;
+  payload: string;
+}
+
+type UserWordsActions = GetUserWordsAction | GetUserWordsErrorAction | GetUserWordsSuccessAction;
+
+export { SignInActionTypes, RegistrationActionTypes, UsersWordsActionTypes };
+export type {
+  SignInAction,
+  SignInSuccessAction,
+  SignInErrorAction,
+  AuthAction,
+  AuthState,
+  UserWordsState,
+  UserWordsActions,
+};

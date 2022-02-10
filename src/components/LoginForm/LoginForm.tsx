@@ -1,27 +1,19 @@
 import React, { FC, FormEvent, useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { signInAction } from '../../store/action-creators/auth';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
+import { LoginChecks, LoginData } from './types';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 import styles from './LoginForm.module.scss';
 
-interface LoginChecks {
-  email: boolean;
-  password: boolean;
-}
-
-interface LoginData {
-  email: string;
-  password: string;
-}
-
 const LoginForm: FC = () => {
-  const dispatch = useDispatch();
+  const { auth } = useTypedSelector(state => state);
 
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
-  const [data, setData] = useState<LoginData>({ email: '', password: '' });
+  const [data, setData] = useState<LoginData>({ email: auth.email, password: '' });
+
+  const { signInAction } = useActions();
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
@@ -33,7 +25,7 @@ const LoginForm: FC = () => {
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (checks.email && checks.password) dispatch(signInAction(data.email, data.password));
+      if (checks.email && checks.password) signInAction(data.email, data.password);
     },
     [checks],
   );
@@ -46,14 +38,26 @@ const LoginForm: FC = () => {
   );
   return (
     <form className={styles['login-form']} onSubmit={handleSubmit}>
-      <EmailInput label={'Почта'} onFulfilled={handleFulfilled('email')} onInput={handleInput('email')} />
+      <div className={`${styles['login-form-message']} ${(auth.loading || !auth.error) && styles.hidden}`}>{`${
+        auth.error && auth.error.includes('Incorrect e-mail or password')
+          ? 'Неверный адрес или пароль'
+          : 'Адрес не найден'
+      }`}</div>
+      <EmailInput
+        label={'Почта'}
+        onFulfilled={handleFulfilled('email')}
+        onInput={handleInput('email')}
+        value={auth.email}
+      />
       <PasswordInput label={'Пароль'} onFulfilled={handleFulfilled('password')} onInput={handleInput('password')} />
-      <button type="submit" className={styles.button__primary}>
-        Войти
-      </button>
-      <button type="reset" className={styles.button__secondary}>
-        Сброс
-      </button>
+      <div className={styles.buttons}>
+        <button type="submit" className={styles.button__primary} disabled={!(checks.email && checks.password)}>
+          Войти
+        </button>
+        <button type="reset" className={styles.button__secondary}>
+          Сброс
+        </button>
+      </div>
     </form>
   );
 };

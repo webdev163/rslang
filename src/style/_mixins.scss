@@ -37,6 +37,10 @@
   outline-color: $secondary-color;
   outline-width: 1px;
   color: $base-color;
+  &[disabled]{
+    pointer-events: none;
+    filter: grayscale(0.5)
+  }
 }
 
 
