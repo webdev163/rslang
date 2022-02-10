@@ -1,9 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { CardItemProps } from './types';
 import { API_URL } from '../../../utils/constants';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
-import { addUserWord } from '../../../utils/API';
-import { setDoneArr } from '../../../store/action-creators';
+import { addUserWord, updateUserWord } from '../../../utils/API';
+import { useActions } from '../../../hooks/useActions';
 import Button from '@mui/material/Button';
 
 import styles from './CardItem.module.scss';
@@ -23,13 +23,28 @@ const CardItem: FC<CardItemProps> = ({
   transcription,
   word,
   wordTranslate,
-  cardItemNumber,
-  pageStatus,
-  setPageStatus,
+  hardArr,
+  learntArr,
 }) => {
-  const { group, page, doneArr } = useTypedSelector(state => state.guide);
+  const { group, page, doneCounter } = useTypedSelector(state => state.guide);
+  const { incDoneCounter, decDoneCounter } = useActions();
+  const { words } = useTypedSelector(state => state.userWords);
+
   const [isHard, setHard] = useState(false);
   const [isLearnt, setLearnt] = useState(false);
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    if (isAuthorized) {
+      if (hardArr.includes(wordId)) {
+        setHard(true);
+        incDoneCounter();
+      } else if (learntArr.includes(wordId)) {
+        setLearnt(true);
+        incDoneCounter();
+      }
+    }
+  }, [hardArr, learntArr]);
 
   const playSound = () => {
     const audioElem = new Audio();
@@ -39,14 +54,12 @@ const CardItem: FC<CardItemProps> = ({
       'ended',
       () => {
         audioElem.src = `${API_URL}/${audioExample}`;
-        audioElem.pause();
         audioElem.load();
         audioElem.play();
         audioElem.addEventListener(
           'ended',
           () => {
             audioElem.src = `${API_URL}/${audioMeaning}`;
-            audioElem.pause();
             audioElem.load();
             audioElem.play();
           },
@@ -56,6 +69,60 @@ const CardItem: FC<CardItemProps> = ({
       { once: true },
     );
   };
+
+  const toggleHard = () => {
+    setHard(isHard => !isHard);
+    setCounter(1);
+  };
+
+  const toggleLearnt = () => {
+    setLearnt(isLearnt => !isLearnt);
+    setCounter(1);
+  };
+
+  useEffect(() => {
+    if (isAuthorized && counter > 0) {
+      const current = words.filter(el => el.wordId === wordId)[0];
+      if (isHard && current && 'optional' in current) {
+        incDoneCounter();
+        updateUserWord(userData.userId, userData.token, wordId, 'hard', { ...current.optional });
+      } else if (!isHard && current && 'optional' in current) {
+        decDoneCounter();
+        updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional });
+      } else if (isHard && current && !('optional' in current)) {
+        incDoneCounter();
+        updateUserWord(userData.userId, userData.token, wordId, 'hard');
+      } else if (!isHard && current && !('optional' in current)) {
+        decDoneCounter();
+        updateUserWord(userData.userId, userData.token, wordId, 'weak');
+      } else if (isHard) {
+        incDoneCounter();
+        addUserWord(userData.userId, userData.token, wordId, 'hard');
+      } else if (!isHard) {
+        decDoneCounter();
+        addUserWord(userData.userId, userData.token, wordId, 'weak');
+      }
+    }
+  }, [isHard]);
+
+  useEffect(() => {
+    if (isAuthorized && counter > 0) {
+      const current = words.filter(el => el.wordId === wordId)[0];
+      if (isLearnt && current && 'optional' in current) {
+        updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional, done: true });
+      } else if (!isLearnt && current && 'optional' in current) {
+        updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional, done: false });
+      } else if (isLearnt && current && !('optional' in current)) {
+        updateUserWord(userData.userId, userData.token, wordId, 'weak', { done: true });
+      } else if (!isLearnt && current && !('optional' in current)) {
+        updateUserWord(userData.userId, userData.token, wordId, 'weak', { done: false });
+      } else if (isLearnt) {
+        addUserWord(userData.userId, userData.token, wordId, 'weak', { done: true });
+      } else if (!isLearnt) {
+        addUserWord(userData.userId, userData.token, wordId, 'weak', { done: false });
+      }
+    }
+  }, [isLearnt]);
 
   const getColor = () => {
     switch (group) {
@@ -76,29 +143,13 @@ const CardItem: FC<CardItemProps> = ({
     }
   };
 
-  const checkComplete = () => {
-    const newStatus = pageStatus;
-    newStatus[cardItemNumber] = pageStatus[cardItemNumber] === 0 ? 1 : 0;
-    setPageStatus(newStatus);
-    const result = pageStatus.filter(el => el === 0);
-    if (!result.length) {
-      const newDoneArr = doneArr;
-      newDoneArr[group] = [...newDoneArr[group].slice(0, page), 1, ...newDoneArr[group].slice(page, 29)];
-      setDoneArr(newDoneArr);
-    }
-  };
-
   const generateCardButtons = () => {
     if (isAuthorized) {
       return (
         <div className={styles.cardButtonsWrapper}>
           <Button
             variant="outlined"
-            onClick={() => {
-              // addUserWord(userData.userId, userData.token, wordId, 'hard');
-              setHard(!isHard);
-              checkComplete();
-            }}
+            onClick={toggleHard}
             sx={{ flexBasis: '48%', fontSize: 18, border: '1px solid #b9b9b9' }}
             disabled={isLearnt}
           >
@@ -106,10 +157,7 @@ const CardItem: FC<CardItemProps> = ({
           </Button>
           <Button
             variant="outlined"
-            onClick={() => {
-              setLearnt(!isLearnt);
-              checkComplete();
-            }}
+            onClick={toggleLearnt}
             sx={{ flexBasis: '48%', fontSize: 18, border: '1px solid #b9b9b9' }}
             disabled={isHard}
           >

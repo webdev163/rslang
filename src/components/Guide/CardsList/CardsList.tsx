@@ -3,16 +3,61 @@ import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { WordResponse } from '../../../types/requests';
 import CardItem from '../CardItem';
 import Loader from '../../Loader';
+import Alert from '@mui/material/Alert';
+import { makeStyles } from '@mui/styles';
+import { useActions } from '../../../hooks/useActions';
 
 import styles from './CardsList.module.scss';
 
 const CardsList: FC = () => {
-  const { wordsArr, isLoading, group, page, doneArr } = useTypedSelector(state => state.guide);
+  const { emptyDoneCounter } = useActions();
+  const { wordsArr, isLoading, group, page, doneCounter } = useTypedSelector(state => state.guide);
   const { user, isAuthorized } = useTypedSelector(state => state.auth);
+  const { words } = useTypedSelector(state => state.userWords);
 
-  const [pageStatus, setPageStatus] = useState<number[]>(new Array(20).fill(0));
+  const [counter, setCounter] = useState(0);
+  const [hardArr, setHardArr] = useState<string[]>([]);
+  const [learntArr, setLearntArr] = useState<string[]>([]);
 
-  const renderCards = wordsArr.map((word: WordResponse, ndx: number) => {
+  useEffect(() => {
+    if (isAuthorized) {
+      setHardArr(
+        words
+          .filter(el => el.difficulty)
+          .filter(el => el.difficulty === 'hard')
+          .map(el => el.wordId),
+      );
+      setLearntArr(
+        words
+          .filter(el => el.optional)
+          .filter(el => el.optional.done)
+          .map(el => el.wordId),
+      );
+    }
+  }, []);
+
+  const getAlert = () => {
+    const isDone = doneCounter > 19;
+    if (isDone) {
+      return (
+        <Alert severity="success" className={classes.root}>
+          Эта страница полностью изучена!
+        </Alert>
+      );
+    } else {
+      return <div></div>;
+    }
+  };
+
+  useEffect(() => {
+    getAlert();
+  }, [doneCounter]);
+
+  useEffect(() => {
+    emptyDoneCounter();
+  }, [group, page]);
+
+  const renderCards = wordsArr.map((word: WordResponse) => {
     return (
       <CardItem
         key={word.id}
@@ -30,16 +75,33 @@ const CardsList: FC = () => {
         wordTranslate={word.wordTranslate}
         isAuthorized={isAuthorized}
         userData={user}
-        cardItemNumber={ndx}
-        pageStatus={pageStatus}
-        setPageStatus={setPageStatus}
+        hardArr={hardArr}
+        learntArr={learntArr}
+        doneCounter={counter}
+        setDoneCounter={setCounter}
       />
     );
   }) as JSX.Element[];
 
+  const useStyles = makeStyles({
+    root: {
+      marginTop: 30,
+      paddingTop: 20,
+      paddingBottom: 20,
+      paddingLeft: 30,
+      fontSize: 20,
+      '& .MuiAlert-icon': {
+        fontSize: 30,
+      },
+      borderRadius: 10,
+    },
+  });
+
+  const classes = useStyles();
+
   return (
     <div>
-      {doneArr[group][page] === 1 ? <h2>Страница {page + 1} изучена!</h2> : ''}
+      {getAlert()}
       <ul className={styles.cardsWrapper}>{isLoading ? <Loader /> : renderCards}</ul>
     </div>
   );

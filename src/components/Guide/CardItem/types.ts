@@ -15,7 +15,8 @@ export interface CardItemProps {
   wordTranslate: string;
   isAuthorized: boolean;
   userData: TokenResponse;
-  cardItemNumber: number;
-  pageStatus: number[];
-  setPageStatus: React.Dispatch<React.SetStateAction<number[]>>;
+  doneCounter: number;
+  setDoneCounter: React.Dispatch<React.SetStateAction<number>>;
+  hardArr: string[];
+  learntArr: string[];
 }

@@ -56,8 +56,11 @@ interface TokenResponse {
 }
 
 interface UserWordOptions {
-  // TODO what is word options?
-  option1?: string;
+  viewed?: number;
+  wrongAnswers?: number;
+  rightAnswers?: number;
+  rightChain?: number;
+  done?: boolean;
 }
 
 interface UserStatisticOptions {
@@ -66,6 +69,8 @@ interface UserStatisticOptions {
 }
 
 interface UserWordResponse {
+  id: string;
+  wordId: string;
   difficulty: string;
   optional: UserWordOptions;
 }

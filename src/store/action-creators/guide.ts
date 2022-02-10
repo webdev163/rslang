@@ -25,6 +25,14 @@ export function setGuidePage(page: number): GuideAction {
   return { type: GuideActionTypes.SET_GUIDE_PAGE, payload: page };
 }
 
-export function setDoneArr(arr: number[][]): GuideAction {
-  return { type: GuideActionTypes.SET_DONE_ARR, payload: arr };
+export function incDoneCounter(): GuideAction {
+  return { type: GuideActionTypes.INC_DONE_COUNTER };
+}
+
+export function decDoneCounter(): GuideAction {
+  return { type: GuideActionTypes.DEC_DONE_COUNTER };
+}
+
+export function emptyDoneCounter(): GuideAction {
+  return { type: GuideActionTypes.EMPTY_DONE_COUNTER };
 }
