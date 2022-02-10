@@ -109,16 +109,22 @@ const CardItem: FC<CardItemProps> = ({
     if (isAuthorized && counter > 0) {
       const current = words.filter(el => el.wordId === wordId)[0];
       if (isLearnt && current && 'optional' in current) {
+        incDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional, done: true });
       } else if (!isLearnt && current && 'optional' in current) {
+        decDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional, done: false });
       } else if (isLearnt && current && !('optional' in current)) {
+        incDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'weak', { done: true });
       } else if (!isLearnt && current && !('optional' in current)) {
+        decDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'weak', { done: false });
       } else if (isLearnt) {
+        incDoneCounter();
         addUserWord(userData.userId, userData.token, wordId, 'weak', { done: true });
       } else if (!isLearnt) {
+        decDoneCounter();
         addUserWord(userData.userId, userData.token, wordId, 'weak', { done: false });
       }
     }
