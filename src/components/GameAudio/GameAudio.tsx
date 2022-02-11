@@ -1,21 +1,16 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useActions } from './../../hooks/useActions';
 import { useTypedSelector } from './../../hooks/useTypedSelector';
+import { useLocationFrom } from '../../hooks/useLocationFrom';
 import { API_URL } from '../../utils/constants';
 import { shuffle } from '../../utils/arrays';
 import DifficultyDialog from './../DifficultyDialog/DifficultyDialog';
-import { RouterParams, RouterState } from '../../types/types';
 import { Button, Grid, Container, Dialog } from '@mui/material';
 
 import styles from './GameAudio.module.scss';
 
 const GameAudio: FC = () => {
-  const location = useLocation();
-  let from: RouterParams | undefined;
-  if (location.state) {
-    from = (location.state as RouterState).from;
-  }
+  const from = useLocationFrom();
 
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
