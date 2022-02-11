@@ -8,25 +8,54 @@ import GameSprintTimer from '../GameSprintTimer';
 import styles from './GameSprint.module.scss';
 import { Container, Dialog } from '@mui/material';
 import DifficultyDialog from '../DifficultyDialog';
+import { useLocation } from 'react-router-dom';
+import { RouterParams, RouterState } from '../../types/types';
 
 const GameSprint: FC = () => {
+  const location = useLocation();
+  let from: RouterParams | undefined;
+  if (location.state) {
+    from = (location.state as RouterState).from;
+  }
+
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
 
-  const { words, currentWord, isGameOn, score, pointsForAnswer, rightAnswers, translate, isTrue } = useTypedSelector(
-    state => state.sprint,
-  );
+  const {
+    words,
+    currentWord,
+    isGameOn,
+    isRouterParamsReceived,
+    score,
+    pointsForAnswer,
+    rightAnswers,
+    translate,
+    isTrue,
+  } = useTypedSelector(state => state.sprint);
+
   const {
     setSprintGroup,
     setCurrentWord,
     setRandowWord,
     startGame,
     stopGame,
+    receiveRouterStateAction,
     incrementScore,
     incrementRightAnswers,
     resetRigthAnswers,
     resetSprintState,
   } = useActions();
+
+  useEffect(() => {
+    if (from) {
+      receiveRouterStateAction();
+
+      console.log(from);
+      const group = +from.group;
+      const page = +from.page;
+      setSprintGroup(group, page);
+    }
+  }, []);
 
   useEffect(() => {
     if (words.length) {
@@ -83,7 +112,9 @@ const GameSprint: FC = () => {
 
   const answersCounterTemplate = pointsForAnswer < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
 
-  if (!isGameOn) {
+  console.log(!isGameOn && !isRouterParamsReceived);
+
+  if (!isGameOn && !isRouterParamsReceived) {
     return (
       <Container>
         <DifficultyDialog

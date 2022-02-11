@@ -11,4 +11,13 @@ interface PasswordChecks {
   numbers: boolean;
 }
 
-export type { User, PasswordChecks };
+interface RouterParams {
+  group: string;
+  page: string;
+}
+
+interface RouterState {
+  from: RouterParams;
+}
+
+export type { User, PasswordChecks, RouterParams, RouterState };

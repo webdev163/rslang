@@ -7,6 +7,7 @@ export interface SprintState {
   translate: string;
   isTrue: boolean;
   isGameOn: boolean;
+  isRouterParamsReceived: boolean;
   score: number;
   pointsForAnswer: number;
   rightAnswers: number;
@@ -19,6 +20,7 @@ export enum SprintActionTypes {
   SET_GROUP = 'SET_GROUP',
   START_GAME = 'START_GAME',
   STOP_GAME = 'STOP_GAME',
+  RECEIVE_ROUTER_STATE = 'RECEIVE_ROUTER_STATE',
   INCREMENT_SCORE = 'INCREMENT_SCORE',
   INCREMENT_RIGHT_ANSWERS = 'INCREMENT_RIGHT_ANSWERS',
   RESET_RIGHT_ANSWERS = 'RESET_RIGHT_ANSWERS',
@@ -58,6 +60,10 @@ interface StopGameAction {
   type: SprintActionTypes.STOP_GAME;
 }
 
+interface ReceiveRouterStateAction {
+  type: SprintActionTypes.RECEIVE_ROUTER_STATE;
+}
+
 interface IncrementScoreAction {
   type: SprintActionTypes.INCREMENT_SCORE;
 }
@@ -81,6 +87,7 @@ export type SprintAction =
   | SetWordsGroupAction
   | StartGameAction
   | StopGameAction
+  | ReceiveRouterStateAction
   | IncrementScoreAction
   | IncrementRightAnswersAction
   | ResetRightAnswersAction;

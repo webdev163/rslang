@@ -7,6 +7,7 @@ const initialState: SprintState = {
   translate: '',
   isTrue: false,
   isGameOn: false,
+  isRouterParamsReceived: false,
   score: 0,
   pointsForAnswer: 10,
   rightAnswers: 0,
@@ -29,6 +30,8 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
       return { ...state, isGameOn: true };
     case SprintActionTypes.STOP_GAME:
       return { ...state, isGameOn: false };
+    case SprintActionTypes.RECEIVE_ROUTER_STATE:
+      return { ...state, isRouterParamsReceived: true };
     case SprintActionTypes.INCREMENT_SCORE:
       return { ...state, score: state.score + state.pointsForAnswer };
     case SprintActionTypes.INCREMENT_RIGHT_ANSWERS:

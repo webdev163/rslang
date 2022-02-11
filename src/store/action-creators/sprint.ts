@@ -36,17 +36,18 @@ export const setRandowWord = (words: WordResponse[]): SprintAction => {
   return setCurrentWord(word, words);
 };
 
-export const setSprintGroup = (group: number) => async (dispatch: Dispatch<SprintAction>) => {
-  const randomPage = Math.floor(Math.random() * 30);
-  const words = await getWords(group, randomPage);
-  dispatch({
-    type: SprintActionTypes.SET_GROUP,
-    payload: {
-      words,
-      group,
-    },
-  });
-};
+export const setSprintGroup =
+  (group: number, page = Math.floor(Math.random() * 30)) =>
+  async (dispatch: Dispatch<SprintAction>) => {
+    const words = await getWords(group, page);
+    dispatch({
+      type: SprintActionTypes.SET_GROUP,
+      payload: {
+        words,
+        group,
+      },
+    });
+  };
 
 export const startGame = (): SprintAction => ({
   type: SprintActionTypes.START_GAME,
@@ -54,6 +55,10 @@ export const startGame = (): SprintAction => ({
 
 export const stopGame = (): SprintAction => ({
   type: SprintActionTypes.STOP_GAME,
+});
+
+export const receiveRouterStateAction = (): SprintAction => ({
+  type: SprintActionTypes.RECEIVE_ROUTER_STATE,
 });
 
 export const incrementScore = (): SprintAction => ({
