@@ -37,6 +37,27 @@ interface WordResponse {
   wordTranslate: string;
 }
 
+interface AggregatedWordResponse {
+  _id: string;
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  textExampleTranslate: string;
+  textMeaningTranslate: string;
+  wordTranslate: string;
+  userWord: {
+    difficulty: string;
+    optional: UserWordOptions;
+  };
+}
+
 interface UserResponse {
   id: string;
   name: string;
@@ -82,8 +103,8 @@ interface UserStatisticsResponse {
   optional: UserStatisticOptions;
 }
 
-interface AggregatedWordsResponse{
-  paginatedResults: WordResponse[];
+interface AggregatedWordsResponse {
+  paginatedResults: AggregatedWordResponse[];
   totalCount: Record<'count', number>;
 }
 
@@ -94,6 +115,8 @@ export type {
   UserRequest,
   TokenResponse,
   UserWordResponse,
+  UserWordOptions,
   UserStatisticsResponse,
   AggregatedWordsResponse,
+  AggregatedWordResponse,
 };

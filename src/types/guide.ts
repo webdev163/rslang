@@ -1,7 +1,8 @@
-import { WordResponse } from './requests';
+import { WordResponse, AggregatedWordsResponse, AggregatedWordResponse } from './requests';
 
 export interface GuideState {
   wordsArr: WordResponse[];
+  wordsHardArr: AggregatedWordResponse[];
   isLoading: boolean;
   error: null | string;
   group: number;
@@ -13,6 +14,9 @@ export enum GuideActionTypes {
   FETCH_WORDS = 'FETCH_WORDS',
   FETCH_WORDS_SUCCESS = 'FETCH_WORDS_SUCCESS',
   FETCH_WORDS_ERROR = 'FETCH_WORDS_ERROR',
+  FETCH_HARD_WORDS = 'FETCH_HARD_WORDS',
+  FETCH_HARD_WORDS_SUCCESS = 'FETCH_HARD_WORDS_SUCCESS',
+  FETCH_HARD_WORDS_ERROR = 'FETCH_HARD_WORDS_ERROR',
   SET_WORDS_GROUP = 'SET_WORDS_GROUP',
   SET_GUIDE_PAGE = 'SET_GUIDE_PAGE',
   INC_DONE_COUNTER = 'INC_DONE_COUNTER',
@@ -31,6 +35,20 @@ interface FetchWordsSuccessAction {
 
 interface FetchWordsErrorAction {
   type: GuideActionTypes.FETCH_WORDS_ERROR;
+  payload: string;
+}
+
+interface FetchHardWordsAction {
+  type: GuideActionTypes.FETCH_HARD_WORDS;
+}
+
+interface FetchHardWordsSuccessAction {
+  type: GuideActionTypes.FETCH_HARD_WORDS_SUCCESS;
+  payload: AggregatedWordsResponse;
+}
+
+interface FetchHardWordsErrorAction {
+  type: GuideActionTypes.FETCH_HARD_WORDS_ERROR;
   payload: string;
 }
 
@@ -60,6 +78,9 @@ export type GuideAction =
   | FetchWordsAction
   | FetchWordsErrorAction
   | FetchWordsSuccessAction
+  | FetchHardWordsAction
+  | FetchHardWordsErrorAction
+  | FetchHardWordsSuccessAction
   | SetWordsGroup
   | SetGuidePage
   | IncDoneCounter

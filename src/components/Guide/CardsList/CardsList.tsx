@@ -34,7 +34,7 @@ const CardsList: FC = () => {
           .map(el => el.wordId),
       );
     }
-  }, []);
+  }, [words]);
 
   const getAlert = () => {
     const isDone = doneCounter > 19;

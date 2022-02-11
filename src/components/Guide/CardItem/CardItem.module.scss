@@ -18,6 +18,7 @@
   border-bottom-left-radius: 10px;
   background-repeat: no-repeat;
   background-size: cover;
+  transition: filter .3s;
 }
 
 .card-body {
@@ -155,4 +156,8 @@
   border: 1px solid #ebebeb;
   border-radius: 10px;
   margin-left: 15px;
+}
+
+.disabled {
+  filter: grayscale(100%);
 }

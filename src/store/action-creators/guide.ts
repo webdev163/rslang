@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { GuideAction, GuideActionTypes } from '../../types/guide';
-import { getWords } from '../../utils/API';
+import { getWords, getAggregatedWords } from '../../utils/API';
 
 export const fetchWords = (group = 0, page = 0) => {
   return async (dispatch: Dispatch<GuideAction>) => {
@@ -11,6 +11,21 @@ export const fetchWords = (group = 0, page = 0) => {
     } catch (e) {
       dispatch({
         type: GuideActionTypes.FETCH_WORDS_ERROR,
+        payload: 'При загрузке слов произошла ошибка',
+      });
+    }
+  };
+};
+
+export const fetchHardWords = (userId: string, token: string) => {
+  return async (dispatch: Dispatch<GuideAction>) => {
+    try {
+      dispatch({ type: GuideActionTypes.FETCH_HARD_WORDS });
+      const response = await getAggregatedWords(userId, token, undefined, [{ 'userWord.difficulty': 'hard' }]);
+      dispatch({ type: GuideActionTypes.FETCH_HARD_WORDS_SUCCESS, payload: response });
+    } catch (e) {
+      dispatch({
+        type: GuideActionTypes.FETCH_HARD_WORDS_ERROR,
         payload: 'При загрузке слов произошла ошибка',
       });
     }

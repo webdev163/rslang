@@ -9,7 +9,7 @@ const getAggregatedWords = async (
   group?: number,
   page?: number,
   wordsPerPage?: number,
-): Promise<AggregatedWordsResponse[]> => {
+): Promise<AggregatedWordsResponse> => {
   const params = [];
   if (group) params.push(`group=${group}`);
   if (page) params.push(`page=${page}`);
@@ -34,7 +34,7 @@ const getAggregatedWords = async (
     throw new Error('User not found');
   }
   if (resp.status === ResponseStatuses.NO_DATA) {
-    return [];
+    throw new Error('No data');
   }
   const data = await resp.json();
   return data;
