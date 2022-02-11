@@ -6,6 +6,7 @@ import Loader from '../../Loader';
 import Alert from '@mui/material/Alert';
 import { makeStyles } from '@mui/styles';
 import { useActions } from '../../../hooks/useActions';
+import { useParams } from 'react-router-dom';
 
 import styles from './CardsList.module.scss';
 
@@ -18,6 +19,7 @@ const CardsList: FC = () => {
   const [counter, setCounter] = useState(0);
   const [hardArr, setHardArr] = useState<string[]>([]);
   const [learntArr, setLearntArr] = useState<string[]>([]);
+  const { page: currentPage, group: currentGroup } = useParams();
 
   useEffect(() => {
     if (isAuthorized) {
@@ -34,7 +36,7 @@ const CardsList: FC = () => {
           .map(el => el.wordId),
       );
     }
-  }, []);
+  }, [words]);
 
   const getAlert = () => {
     const isDone = doneCounter > 19;
@@ -55,7 +57,7 @@ const CardsList: FC = () => {
 
   useEffect(() => {
     emptyDoneCounter();
-  }, [group, page]);
+  }, [currentPage, currentGroup]);
 
   const renderCards = wordsArr.map((word: WordResponse) => {
     return (

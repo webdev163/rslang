@@ -1,11 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import Button from '@mui/material/Button';
-
-import styles from './ButtonHard.module.scss';
+import { Link } from 'react-router-dom';
 
 const ButtonHard: FC = () => {
   return (
-    <Button variant="contained" sx={{ fontSize: 20, marginLeft: 1 }}>
+    <Button component={Link} to="/guide/hard/" variant="contained" sx={{ fontSize: 20, marginLeft: 1 }}>
       Сложные слова
     </Button>
   );

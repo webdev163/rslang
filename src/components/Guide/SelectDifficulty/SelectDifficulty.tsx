@@ -1,21 +1,32 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useActions } from '../../../hooks/useActions';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import styles from './SelectDifficulty.module.scss';
 
 const SelectDifficulty: FC = () => {
   const { setWordsGroup } = useActions();
   const [selectValue, setSelectValue] = useState('0');
+  const { group } = useParams();
+
+  const navigate = useNavigate();
 
   const handleChange = (event: SelectChangeEvent) => {
     const selected = event.target.value;
     setSelectValue(selected);
     setWordsGroup(+selected);
+    navigate(`/guide/group${selected}/page0`);
   };
+
+  useEffect(() => {
+    if (group) {
+      setSelectValue(group);
+    }
+  }, [group]);
 
   return (
     <div>

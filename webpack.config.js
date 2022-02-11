@@ -18,7 +18,7 @@ module.exports = {
     main: './index.tsx',
   },
   output: {
-    filename: isProd ? './js/[name].[contenthash].js' : './js/[name].js',
+    filename: isProd ? 'js/[name].[contenthash].js' : 'js/[name].js',
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
     clean: true,
@@ -157,7 +157,7 @@ module.exports = {
   plugins: [
     new ReactRefreshWebpackPlugin({ overlay: false }),
     new MiniCssExtractPlugin({
-      filename: isProd ? './css/style.[contenthash].css' : './css/style.css',
+      filename: isProd ? 'css/style.[contenthash].css' : 'css/style.css',
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',

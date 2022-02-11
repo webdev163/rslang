@@ -4,6 +4,7 @@ import { API_URL } from '../../../utils/constants';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { addUserWord, updateUserWord } from '../../../utils/API';
 import { useActions } from '../../../hooks/useActions';
+import { playSound, getColor } from '../../../utils/utils';
 import Button from '@mui/material/Button';
 
 import styles from './CardItem.module.scss';
@@ -26,7 +27,7 @@ const CardItem: FC<CardItemProps> = ({
   hardArr,
   learntArr,
 }) => {
-  const { group, page, doneCounter } = useTypedSelector(state => state.guide);
+  const { group } = useTypedSelector(state => state.guide);
   const { incDoneCounter, decDoneCounter } = useActions();
   const { words } = useTypedSelector(state => state.userWords);
 
@@ -45,30 +46,6 @@ const CardItem: FC<CardItemProps> = ({
       }
     }
   }, [hardArr, learntArr]);
-
-  const playSound = () => {
-    const audioElem = new Audio();
-    audioElem.src = `${API_URL}/${audio}`;
-    audioElem.play();
-    audioElem.addEventListener(
-      'ended',
-      () => {
-        audioElem.src = `${API_URL}/${audioExample}`;
-        audioElem.load();
-        audioElem.play();
-        audioElem.addEventListener(
-          'ended',
-          () => {
-            audioElem.src = `${API_URL}/${audioMeaning}`;
-            audioElem.load();
-            audioElem.play();
-          },
-          { once: true },
-        );
-      },
-      { once: true },
-    );
-  };
 
   const toggleHard = () => {
     setHard(isHard => !isHard);
@@ -130,25 +107,6 @@ const CardItem: FC<CardItemProps> = ({
     }
   }, [isLearnt]);
 
-  const getColor = () => {
-    switch (group) {
-      case 0:
-        return '#78ff56';
-      case 1:
-        return '#d2ff07';
-      case 2:
-        return '#fdee45';
-      case 3:
-        return '#ffb64f';
-      case 4:
-        return '#fd8d42';
-      case 5:
-        return '#fa2b2b';
-      default:
-        break;
-    }
-  };
-
   const generateCardButtons = () => {
     if (isAuthorized) {
       return (
@@ -180,10 +138,10 @@ const CardItem: FC<CardItemProps> = ({
       <div className={styles.cardBody}>
         <div className={styles.cardHeaderWrapper}>
           <div className={styles.cardNameWrapper}>
-            <div className={styles.label} style={{ backgroundColor: `${getColor()}` }}></div>
+            <div className={styles.label} style={{ backgroundColor: `${getColor(group)}` }}></div>
             <h2 className={styles.wordName}>{word}</h2>
             <p className={styles.transcription}>{transcription}</p>
-            <button className={styles.btnSound} onClick={() => playSound()}></button>
+            <button className={styles.btnSound} onClick={() => playSound(audio, audioExample, audioMeaning)}></button>
           </div>
           <div className={styles.cardLabelsWrapper}>
             {isHard ? <div className={styles.labelHard}>Сложное</div> : ''}

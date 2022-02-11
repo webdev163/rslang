@@ -1,17 +1,29 @@
 import React, { FC, useEffect } from 'react';
 import GuideHeader from '../../components/Guide/GuideHeader';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useActions } from '../../hooks/useActions';
 import CardsList from '../../components/Guide/CardsList';
+import { useParams } from 'react-router-dom';
 
 import styles from './GuidePage.module.scss';
 
 const GuidePage: FC = () => {
-  const { fetchWords } = useActions();
-  const { group, page } = useTypedSelector(state => state.guide);
+  const { fetchWords, setGuidePage, setWordsGroup } = useActions();
+  const { page: currentPage, group: currentGroup } = useParams();
+
   useEffect(() => {
-    fetchWords(group, page);
-  }, [group, page]);
+    currentGroup && currentPage ? fetchWords(+currentGroup, +currentPage) : fetchWords();
+  }, [currentGroup, currentPage]);
+
+  useEffect(() => {
+    if (currentPage) {
+      const targetPage = +currentPage;
+      setGuidePage(targetPage);
+    }
+    if (currentGroup) {
+      const targetGroup = +currentGroup;
+      setWordsGroup(targetGroup);
+    }
+  }, [currentPage, currentGroup]);
 
   return (
     <div className={styles.guideWrapper}>
