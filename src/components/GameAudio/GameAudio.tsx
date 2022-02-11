@@ -1,28 +1,50 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useActions } from './../../hooks/useActions';
 import { useTypedSelector } from './../../hooks/useTypedSelector';
 import { API_URL } from '../../utils/constants';
 import { shuffle } from '../../utils/arrays';
+import DifficultyDialog from './../DifficultyDialog/DifficultyDialog';
+import { RouterParams, RouterState } from '../../types/types';
 import { Button, Grid, Container, Dialog } from '@mui/material';
 
 import styles from './GameAudio.module.scss';
-import DifficultyDialog from './../DifficultyDialog/DifficultyDialog';
 
 const GameAudio: FC = () => {
+  const location = useLocation();
+  let from: RouterParams | undefined;
+  if (location.state) {
+    from = (location.state as RouterState).from;
+  }
+
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
   const [answerIsReceived, setAnswerIsReceived] = useState(false);
 
-  const { words, currentWord, isGameOn, options, score } = useTypedSelector(state => state.audio);
+  const { words, currentWord, isGameOn, isRouterParamsReceived, options, score } = useTypedSelector(
+    state => state.audio,
+  );
   const {
     setNextAudioWord,
     removeAudioCallWord,
     setAudioGroup,
     startAudioGame,
     stopAudioGame,
+    receiveRouterStateInAudiocall,
     incrementAudioScore,
     resetAudioState,
   } = useActions();
+
+  useEffect(() => {
+    if (from) {
+      receiveRouterStateInAudiocall();
+
+      const group = +from.group;
+      const page = +from.page;
+      setAudioGroup(group, page);
+    }
+  }, []);
+
   const audio = useRef(new Audio());
 
   useEffect(() => {
@@ -45,7 +67,7 @@ const GameAudio: FC = () => {
     [],
   );
 
-  if (!isGameOn) {
+  if (!isGameOn && !isRouterParamsReceived) {
     return (
       <Container>
         <DifficultyDialog
@@ -58,6 +80,23 @@ const GameAudio: FC = () => {
         />
         <Dialog open={showResult} onClose={() => resetAudioState()}>
           Result: {score}
+        </Dialog>
+      </Container>
+    );
+  }
+
+  if (!isGameOn && isRouterParamsReceived) {
+    return (
+      <Container>
+        <Dialog open={showDifficulty}>
+          <Button
+            onClick={() => {
+              startAudioGame();
+              setShowDifficulty(false);
+            }}
+          >
+            Начать
+          </Button>
         </Dialog>
       </Container>
     );

@@ -57,7 +57,7 @@ export const stopGame = (): SprintAction => ({
   type: SprintActionTypes.STOP_GAME,
 });
 
-export const receiveRouterStateAction = (): SprintAction => ({
+export const receiveRouterStateInSprint = (): SprintAction => ({
   type: SprintActionTypes.RECEIVE_ROUTER_STATE,
 });
 

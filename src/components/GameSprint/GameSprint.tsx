@@ -39,7 +39,7 @@ const GameSprint: FC = () => {
     setRandowWord,
     startGame,
     stopGame,
-    receiveRouterStateAction,
+    receiveRouterStateInSprint,
     incrementScore,
     incrementRightAnswers,
     resetRigthAnswers,
@@ -48,9 +48,8 @@ const GameSprint: FC = () => {
 
   useEffect(() => {
     if (from) {
-      receiveRouterStateAction();
+      receiveRouterStateInSprint();
 
-      console.log(from);
       const group = +from.group;
       const page = +from.page;
       setSprintGroup(group, page);

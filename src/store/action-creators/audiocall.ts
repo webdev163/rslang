@@ -47,17 +47,18 @@ export const setNextAudioWord =
     });
   };
 
-export const setAudioGroup = (group: number) => async (dispatch: Dispatch<AudioAction>) => {
-  const randomPage = Math.floor(Math.random() * 30);
-  const words = await getWords(group, randomPage);
-  dispatch({
-    type: AudioActionTypes.SET_GROUP,
-    payload: {
-      words,
-      group,
-    },
-  });
-};
+export const setAudioGroup =
+  (group: number, page = Math.floor(Math.random() * 30)) =>
+  async (dispatch: Dispatch<AudioAction>) => {
+    const words = await getWords(group, page);
+    dispatch({
+      type: AudioActionTypes.SET_GROUP,
+      payload: {
+        words,
+        group,
+      },
+    });
+  };
 
 export const removeAudioCallWord = (word: WordResponse): AudioAction => ({
   type: AudioActionTypes.REMOVE_WORD,
@@ -70,6 +71,10 @@ export const startAudioGame = (): AudioAction => ({
 
 export const stopAudioGame = (): AudioAction => ({
   type: AudioActionTypes.STOP_GAME,
+});
+
+export const receiveRouterStateInAudiocall = (): AudioAction => ({
+  type: AudioActionTypes.RECEIVE_ROUTER_STATE,
 });
 
 export const incrementAudioScore = (): AudioAction => ({
