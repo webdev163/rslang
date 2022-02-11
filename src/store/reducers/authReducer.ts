@@ -44,6 +44,15 @@ const authReducer = (state = initialState, action: AuthAction): AuthState => {
         loading: false,
         error: null,
       };
+    case SignInActionTypes.REFRESH_AUTH:
+      return {
+        ...state,
+        user: action.payload.token,
+        isAuthorized: true,
+        loading: false,
+        error: null,
+        email: action.payload.user.email,
+      };
     case RegistrationActionTypes.REGISTRATION:
       return {
         ...state,
@@ -53,7 +62,6 @@ const authReducer = (state = initialState, action: AuthAction): AuthState => {
         error: null,
         email: action.payload,
       };
-
     case RegistrationActionTypes.SUCCESS:
       return {
         ...state,

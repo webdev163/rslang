@@ -6,6 +6,7 @@ enum SignInActionTypes {
   SUCCESS = 'SIGN_IN_SUCCESS',
   ERROR = 'SIGN_IN_ERROR',
   SIGN_OUT = 'SIGN_OUT',
+  REFRESH_AUTH = 'REFRESH_AUTH',
 }
 
 enum RegistrationActionTypes {
@@ -36,9 +37,21 @@ interface SignInErrorAction {
   type: SignInActionTypes.ERROR;
   payload: string;
 }
+
 interface SignOutAction {
   type: SignInActionTypes.SIGN_OUT;
 }
+
+interface RefreshedUser{
+  token: TokenResponse;
+  user: UserResponse;
+}
+
+interface RefreshAuthAction {
+  type: SignInActionTypes.REFRESH_AUTH;
+  payload: RefreshedUser;
+}
+
 interface RegistrationAction {
   type: RegistrationActionTypes.REGISTRATION;
   payload: string;
@@ -59,6 +72,7 @@ type AuthAction =
   | SignInSuccessAction
   | SignInErrorAction
   | SignOutAction
+  | RefreshAuthAction
   | RegistrationAction
   | RegistrationErrorAction
   | RegistrationSuccessAction;
@@ -102,4 +116,5 @@ export type {
   AuthState,
   UserWordsState,
   UserWordsActions,
+  RefreshAuthAction,
 };
