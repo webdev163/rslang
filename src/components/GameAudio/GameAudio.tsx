@@ -54,13 +54,17 @@ const GameAudio: FC = () => {
     if (options.length) setShuffledOptions(shuffle(options));
   }, [options]);
 
+  const receiveAnswer = (option: AudioCallOption) => {
+    if (option.isTrue) {
+      incrementAudioScore();
+    }
+    setAnswerIsReceived(true);
+  };
+
   useEffect(() => {
     const funcs = shuffledOptions.map((option, i) => (e: KeyboardEvent) => {
       if (e.code === `Digit${i + 1}` || e.code === `Numpad${i + 1}`) {
-        if (option.isTrue) {
-          incrementAudioScore();
-        }
-        setAnswerIsReceived(true);
+        receiveAnswer(option);
       }
     });
     funcs.forEach(func => {
@@ -73,17 +77,21 @@ const GameAudio: FC = () => {
     };
   }, [shuffledOptions]);
 
+  const showNextQuestion = () => {
+    if (words.length === 1) {
+      setShowResult(true);
+      stopAudioGame();
+    }
+    if (currentWord) removeAudioCallWord(currentWord);
+    setAnswerIsReceived(false);
+  };
+
   useEffect(() => {
     if (answerIsReceived) {
       const func = (e: KeyboardEvent) => {
         if (e.code === 'Enter' || e.code === 'NumpadEnter') {
           e.preventDefault();
-          if (words.length === 1) {
-            setShowResult(true);
-            stopAudioGame();
-          }
-          if (currentWord) removeAudioCallWord(currentWord);
-          setAnswerIsReceived(false);
+          showNextQuestion();
         }
       };
       document.addEventListener('keydown', func);
@@ -165,10 +173,7 @@ const GameAudio: FC = () => {
                 variant="outlined"
                 disabled={answerIsReceived}
                 onClick={() => {
-                  if (option.isTrue) {
-                    incrementAudioScore();
-                  }
-                  setAnswerIsReceived(true);
+                  receiveAnswer(option);
                 }}
               >
                 {option.translate}
@@ -180,12 +185,7 @@ const GameAudio: FC = () => {
           {answerIsReceived && (
             <Button
               onClick={() => {
-                if (words.length === 1) {
-                  setShowResult(true);
-                  stopAudioGame();
-                }
-                if (currentWord) removeAudioCallWord(currentWord);
-                setAnswerIsReceived(false);
+                showNextQuestion();
               }}
             >
               NEXT
