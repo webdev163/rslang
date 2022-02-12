@@ -7,13 +7,16 @@ import { useTypedSelector } from '../../../hooks/useTypedSelector';
 
 const ButtonBack: FC = () => {
   const { getUserWordsAction } = useActions();
+  const { group, page } = useTypedSelector(state => state.guide);
   const { user } = useTypedSelector(state => state.auth);
   return (
     <div className={styles.wrapper}>
       <Button
         component={Link}
-        to="/guide/"
-        onClick={() => getUserWordsAction(user.userId, user.token)}
+        to={`/guide/group${group}/page${page}`}
+        onClick={() => {
+          getUserWordsAction(user.userId, user.token);
+        }}
         variant="contained"
         sx={{ fontSize: 20 }}
       >

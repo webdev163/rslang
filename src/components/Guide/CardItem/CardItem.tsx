@@ -62,10 +62,10 @@ const CardItem: FC<CardItemProps> = ({
       const current = words.filter(el => el.wordId === wordId)[0];
       if (isHard && current && 'optional' in current) {
         incDoneCounter();
-        updateUserWord(userData.userId, userData.token, wordId, 'hard', { ...current.optional });
+        updateUserWord(userData.userId, userData.token, wordId, 'hard', { ...current.optional, done: false });
       } else if (!isHard && current && 'optional' in current) {
         decDoneCounter();
-        updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional });
+        updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional, done: false });
       } else if (isHard && current && !('optional' in current)) {
         incDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'hard');
