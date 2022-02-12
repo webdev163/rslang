@@ -46,8 +46,8 @@ export const TryAuthAction = () => async (dispatch: Dispatch<AuthAction>) => {
 
   if (prevAuth) {
     const prevAuthObject = JSON.parse(prevAuth) as TokenResponse;
-    getUser(prevAuthObject.userId, prevAuthObject.token).then(data =>
-      dispatch({ type: SignInActionTypes.REFRESH_AUTH, payload: { token: prevAuthObject, user: data } }),
-    );
+    getUser(prevAuthObject.userId, prevAuthObject.token)
+      .then(data => dispatch({ type: SignInActionTypes.REFRESH_AUTH, payload: { token: prevAuthObject, user: data } }))
+      .catch();
   }
 };

@@ -42,7 +42,7 @@ interface SignOutAction {
   type: SignInActionTypes.SIGN_OUT;
 }
 
-interface RefreshedUser{
+interface RefreshedUser {
   token: TokenResponse;
   user: UserResponse;
 }
