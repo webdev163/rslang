@@ -1,3 +1,3 @@
-import LoginButton from './LoginButton';
+import { LoginButton, LoginListItem } from './LoginButton';
 
-export default LoginButton;
+export { LoginButton, LoginListItem };

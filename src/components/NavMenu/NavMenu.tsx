@@ -1,8 +1,6 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { useActions } from '../../hooks/useActions';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import LoginButton from '../LoginButton';
+import { LoginButton } from '../LoginButton/index';
 
 import styles from './NavMenu.module.scss';
 
