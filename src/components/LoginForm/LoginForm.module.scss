@@ -1,6 +1,4 @@
-@import '~/style/variables';
 @import '~/style/mixins';
-
 
 .button__primary{
   @include primary-button;
