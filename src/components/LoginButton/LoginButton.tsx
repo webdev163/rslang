@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { FC, useCallback, useState } from 'react';
 import RegistrationForm from '../RegistrationForm';
@@ -14,12 +13,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-import styles from './LoginButton.module.scss';
+import { LoginDialogProps } from './types';
 
-interface LoginDialogProps {
-  onClose: CallableFunction;
-  open: boolean;
-}
+import styles from './LoginButton.module.scss';
 
 const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
   const [signUp, setSignUp] = useState<boolean>(false);
@@ -51,40 +47,6 @@ const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
         </div>
       </div>
     </Dialog>
-  );
-};
-
-const LoginButton = () => {
-  const auth = useTypedSelector(state => state.auth);
-  const isAuthorized = auth.isAuthorized;
-  const { SignOutAction } = useActions();
-  const handleSignOut = useCallback(() => {
-    SignOutAction();
-  }, []);
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      {isAuthorized ? (
-        <Button variant="outlined" onClick={handleSignOut}>
-          <LogoutIcon /> Выйти
-        </Button>
-      ) : (
-        <Button variant="outlined" onClick={handleClickOpen}>
-          <LoginIcon /> Войти
-        </Button>
-      )}
-      <LoginDialog open={open} onClose={handleClose} />
-    </div>
   );
 };
 
@@ -122,4 +84,4 @@ const LoginListItem = () => {
   );
 };
 
-export { LoginButton, LoginListItem };
+export default LoginListItem;

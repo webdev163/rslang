@@ -22,11 +22,9 @@ import StatsPage from '../../pages/StatsPage';
 import GameAudio from '../../components/GameAudio';
 import GameSprint from '../../components/GameSprint';
 import { Routes, Route, Link } from 'react-router-dom';
+import LoginListItem from '../LoginButton';
 
 const drawerWidth = 280;
-
-import styles from './AppFrame.module.scss';
-import { LoginListItem } from '../LoginButton/index';
 
 const AppFrame: FC = () => {
   return (
