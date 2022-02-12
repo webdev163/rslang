@@ -93,6 +93,9 @@ const GameAudio: FC = () => {
             Начать
           </Button>
         </Dialog>
+        <Dialog open={showResult} onClose={() => resetAudioState()}>
+          Result: {score}
+        </Dialog>
       </Container>
     );
   }

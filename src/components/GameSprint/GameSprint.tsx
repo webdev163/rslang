@@ -5,7 +5,7 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useLocationFrom } from '../../hooks/useLocationFrom';
 
 import GameSprintTimer from '../GameSprintTimer';
-import { Container, Dialog } from '@mui/material';
+import { Button, Container, Dialog } from '@mui/material';
 import DifficultyDialog from '../DifficultyDialog';
 
 import styles from './GameSprint.module.scss';
@@ -133,11 +133,38 @@ const GameSprint: FC = () => {
     );
   }
 
+  if (!isGameOn && isRouterParamsReceived) {
+    return (
+      <Container>
+        <Dialog open={showDifficulty}>
+          <Button
+            onClick={() => {
+              startGame();
+              setShowDifficulty(false);
+            }}
+          >
+            Начать
+          </Button>
+        </Dialog>
+        <Dialog
+          open={showResult}
+          onClose={() => {
+            setShowResult(false);
+            setShowDifficulty(true);
+            resetSprintState();
+          }}
+        >
+          STOP. Result - {score}
+        </Dialog>
+      </Container>
+    );
+  }
+
   return (
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
       <GameSprintTimer
-        initialTime={30}
+        initialTime={10}
         onEnd={() => {
           stopGame();
           setShowResult(true);
