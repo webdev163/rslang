@@ -8,6 +8,7 @@ import DifficultyDialog from './../DifficultyDialog/DifficultyDialog';
 import { Button, Grid, Container, Dialog } from '@mui/material';
 
 import styles from './GameAudio.module.scss';
+import { AudioCallOption } from '../../types/audiocall';
 
 const GameAudio: FC = () => {
   const from = useLocationFrom();
@@ -15,6 +16,7 @@ const GameAudio: FC = () => {
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
   const [answerIsReceived, setAnswerIsReceived] = useState(false);
+  const [shuffledOptions, setShuffledOptions] = useState<AudioCallOption[]>([]);
 
   const { words, currentWord, isGameOn, isRouterParamsReceived, options, score } = useTypedSelector(
     state => state.audio,
@@ -47,6 +49,49 @@ const GameAudio: FC = () => {
       setNextAudioWord();
     }
   }, [words, isGameOn]);
+
+  useEffect(() => {
+    if (options.length) setShuffledOptions(shuffle(options));
+  }, [options]);
+
+  useEffect(() => {
+    const funcs = shuffledOptions.map((option, i) => (e: KeyboardEvent) => {
+      if (e.code === `Digit${i + 1}` || e.code === `Numpad${i + 1}`) {
+        if (option.isTrue) {
+          incrementAudioScore();
+        }
+        setAnswerIsReceived(true);
+      }
+    });
+    funcs.forEach(func => {
+      document.addEventListener('keydown', func);
+    });
+    return () => {
+      funcs.forEach(func => {
+        document.removeEventListener('keydown', func);
+      });
+    };
+  }, [shuffledOptions]);
+
+  useEffect(() => {
+    if (answerIsReceived) {
+      const func = (e: KeyboardEvent) => {
+        if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+          e.preventDefault();
+          if (words.length === 1) {
+            setShowResult(true);
+            stopAudioGame();
+          }
+          if (currentWord) removeAudioCallWord(currentWord);
+          setAnswerIsReceived(false);
+        }
+      };
+      document.addEventListener('keydown', func);
+      return () => {
+        document.removeEventListener('keydown', func);
+      };
+    }
+  }, [answerIsReceived]);
 
   useEffect(() => {
     if (currentWord) {
@@ -114,7 +159,7 @@ const GameAudio: FC = () => {
           </p>
         )}
         <Grid container spacing={1} justifyContent="center">
-          {shuffle(options).map(option => (
+          {shuffledOptions.map(option => (
             <Grid item key={option.translate}>
               <Button
                 variant="outlined"
