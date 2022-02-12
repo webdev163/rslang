@@ -1,28 +1,68 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { batch } from 'react-redux';
-import { useWordsPage } from '../../hooks/useWordsPage';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import Modal from '../Modal';
+import { useLocationFrom } from '../../hooks/useLocationFrom';
 
 import GameSprintTimer from '../GameSprintTimer';
+import { Button, Container, Dialog } from '@mui/material';
+import DifficultyDialog from '../DifficultyDialog';
 
 import styles from './GameSprint.module.scss';
 
 const GameSprint: FC = () => {
-  const words = useWordsPage();
+  const from = useLocationFrom();
 
-  const { currentWord, isGameOn, score, pointsForAnswer, rightAnswers, translate, isTrue } = useTypedSelector(
-    state => state.sprint,
-  );
-  const { setCurrentWord, setRandowWord, stopGame, incrementScore, incrementRightAnswers, resetRigthAnswers } =
-    useActions();
+  const [showDifficulty, setShowDifficulty] = useState(true);
+  const [showResult, setShowResult] = useState(false);
+
+  const {
+    words,
+    currentWord,
+    isGameOn,
+    isRouterParamsReceived,
+    score,
+    pointsForAnswer,
+    rightAnswers,
+    translate,
+    isTrue,
+  } = useTypedSelector(state => state.sprint);
+
+  const {
+    setSprintGroup,
+    setCurrentWord,
+    setRandowWord,
+    startGame,
+    stopGame,
+    receiveRouterStateInSprint,
+    incrementScore,
+    incrementRightAnswers,
+    resetRigthAnswers,
+    resetSprintState,
+  } = useActions();
+
+  useEffect(() => {
+    if (from) {
+      receiveRouterStateInSprint();
+
+      const group = +from.group;
+      const page = +from.page;
+      setSprintGroup(group, page);
+    }
+  }, []);
 
   useEffect(() => {
     if (words.length) {
       setCurrentWord(words[0], words);
     }
   }, [words]);
+
+  useEffect(
+    () => () => {
+      resetSprintState();
+    },
+    [],
+  );
 
   const receiveAnswer = (answer: boolean) => {
     if (!isGameOn) return;
@@ -66,10 +106,70 @@ const GameSprint: FC = () => {
 
   const answersCounterTemplate = pointsForAnswer < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
 
+  console.log(!isGameOn && !isRouterParamsReceived);
+
+  if (!isGameOn && !isRouterParamsReceived) {
+    return (
+      <Container>
+        <DifficultyDialog
+          open={showDifficulty}
+          onSelect={index => {
+            setSprintGroup(index);
+            startGame();
+            setShowDifficulty(false);
+          }}
+        />
+        <Dialog
+          open={showResult}
+          onClose={() => {
+            setShowResult(false);
+            setShowDifficulty(true);
+            resetSprintState();
+          }}
+        >
+          STOP. Result - {score}
+        </Dialog>
+      </Container>
+    );
+  }
+
+  if (!isGameOn && isRouterParamsReceived) {
+    return (
+      <Container>
+        <Dialog open={showDifficulty}>
+          <Button
+            onClick={() => {
+              startGame();
+              setShowDifficulty(false);
+            }}
+          >
+            Начать
+          </Button>
+        </Dialog>
+        <Dialog
+          open={showResult}
+          onClose={() => {
+            setShowResult(false);
+            setShowDifficulty(true);
+            resetSprintState();
+          }}
+        >
+          STOP. Result - {score}
+        </Dialog>
+      </Container>
+    );
+  }
+
   return (
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
-      <GameSprintTimer initialTime={30} onEnd={() => stopGame()} />
+      <GameSprintTimer
+        initialTime={10}
+        onEnd={() => {
+          stopGame();
+          setShowResult(true);
+        }}
+      />
       <div className={styles.points}>{score}</div>
       <div className={styles.game}>
         {(rightAnswers > 0 || pointsForAnswer > 10) && answersCounterTemplate}
@@ -89,7 +189,6 @@ const GameSprint: FC = () => {
           </div>
         )}
       </div>
-      {!isGameOn && <Modal>STOP. Result - {score}</Modal>}
     </div>
   );
 };

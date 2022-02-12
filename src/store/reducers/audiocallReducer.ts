@@ -5,6 +5,7 @@ const initialState: AudioState = {
   currentWord: null,
   options: [],
   isGameOn: false,
+  isRouterParamsReceived: false,
   group: 0,
   score: 0,
   pointsForAnswer: 10,
@@ -24,8 +25,12 @@ export const audioReducer = (state = initialState, action: AudioAction): AudioSt
       return { ...state, isGameOn: true };
     case AudioActionTypes.STOP_GAME:
       return { ...state, isGameOn: false };
+    case AudioActionTypes.RECEIVE_ROUTER_STATE:
+      return { ...state, isRouterParamsReceived: true };
     case AudioActionTypes.INCREMENT_SCORE:
       return { ...state, score: state.score + state.pointsForAnswer };
+    case AudioActionTypes.RESET_STATE:
+      return initialState;
     default:
       return state;
   }

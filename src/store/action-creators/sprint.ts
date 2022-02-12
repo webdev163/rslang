@@ -1,6 +1,17 @@
+import { Dispatch } from 'redux';
 import { WordResponse } from '../../types/requests';
 import { SprintAction, SprintActionTypes } from '../../types/sprint';
+import { getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
+
+export const setSprintWords = (words: WordResponse[]): SprintAction => ({
+  type: SprintActionTypes.SET_WORDS,
+  payload: words,
+});
+
+export const resetSprintState = (): SprintAction => ({
+  type: SprintActionTypes.RESET_STATE,
+});
 
 export const setCurrentWord = (word: WordResponse, words: WordResponse[]): SprintAction => {
   const randomNum = Math.random() - 0.5;
@@ -25,12 +36,29 @@ export const setRandowWord = (words: WordResponse[]): SprintAction => {
   return setCurrentWord(word, words);
 };
 
+export const setSprintGroup =
+  (group: number, page = Math.floor(Math.random() * 30)) =>
+  async (dispatch: Dispatch<SprintAction>) => {
+    const words = await getWords(group, page);
+    dispatch({
+      type: SprintActionTypes.SET_GROUP,
+      payload: {
+        words,
+        group,
+      },
+    });
+  };
+
 export const startGame = (): SprintAction => ({
   type: SprintActionTypes.START_GAME,
 });
 
 export const stopGame = (): SprintAction => ({
   type: SprintActionTypes.STOP_GAME,
+});
+
+export const receiveRouterStateInSprint = (): SprintAction => ({
+  type: SprintActionTypes.RECEIVE_ROUTER_STATE,
 });
 
 export const incrementScore = (): SprintAction => ({

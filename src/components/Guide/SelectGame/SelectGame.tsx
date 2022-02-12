@@ -4,11 +4,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { RouterParams } from '../../../types/types';
 
 import styles from './SelectGame.module.scss';
 
 const SelectGame: FC = () => {
+  const { group, page } = useParams<keyof RouterParams>();
   const { doneCounter } = useTypedSelector(state => state.guide);
   const { isAuthorized } = useTypedSelector(state => state.auth);
   const [isDisabled, setDisabled] = useState(false);
@@ -35,12 +37,30 @@ const SelectGame: FC = () => {
           </Button>
           <Menu {...bindMenu(popupState)}>
             <MenuItem onClick={popupState.close} sx={{ fontSize: 20 }}>
-              <Link to="/games/audio/" className={styles.link}>
+              <Link
+                to="/games/audio/"
+                state={{
+                  from: {
+                    group: group || '0',
+                    page: page || '0',
+                  },
+                }}
+                className={styles.link}
+              >
                 Игра &quot;Аудиовызов&quot;
               </Link>
             </MenuItem>
             <MenuItem onClick={popupState.close} sx={{ fontSize: 20 }}>
-              <Link to="/games/sprint/" className={styles.link}>
+              <Link
+                to="/games/sprint/"
+                state={{
+                  from: {
+                    group: group || '0',
+                    page: page || '0',
+                  },
+                }}
+                className={styles.link}
+              >
                 Игра &quot;Спринт&quot;
               </Link>
             </MenuItem>
