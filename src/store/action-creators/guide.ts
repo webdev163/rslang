@@ -21,7 +21,15 @@ export const fetchHardWords = (userId: string, token: string) => {
   return async (dispatch: Dispatch<GuideAction>) => {
     try {
       dispatch({ type: GuideActionTypes.FETCH_HARD_WORDS });
-      const response = await getAggregatedWords(userId, token, undefined, [{ 'userWord.difficulty': 'hard' }]);
+      const response = await getAggregatedWords(
+        userId,
+        token,
+        undefined,
+        [{ 'userWord.difficulty': 'hard' }],
+        undefined,
+        undefined,
+        999,
+      );
       dispatch({ type: GuideActionTypes.FETCH_HARD_WORDS_SUCCESS, payload: response });
     } catch (e) {
       dispatch({
