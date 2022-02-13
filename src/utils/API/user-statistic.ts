@@ -1,7 +1,7 @@
 import { API_URL } from '../constants';
-import { RequestPaths, ResponseStatuses, UserStatisticsResponse } from '../../types/requests';
+import { GameStatistic, RequestPaths, ResponseStatuses, UserStatisticsResponse } from '../../types/requests';
 
-const getUserStatistic = async (userId: string, token: string): Promise<UserStatisticsResponse[]> => {
+const getUserStatistic = async (userId: string, token: string): Promise<UserStatisticsResponse> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${userId}${RequestPaths.STATISTICS}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -47,4 +47,54 @@ const updateUserStatistic = async (
   return true;
 };
 
-export { getUserStatistic, updateUserStatistic };
+const changeStatistic = async (
+  userId: string,
+  token: string,
+  game: 'sprint' | 'audio',
+  statistic: GameStatistic,
+  date = new Date(),
+) => {
+  const prevStat = await getUserStatistic(userId, token);
+  const dateKey = date.toLocaleDateString();
+  // console.log(dateKey);
+  if (prevStat.optional && prevStat.optional[dateKey]) {
+    console.log(prevStat.optional[dateKey]);
+    updateUserStatistic(userId, token, prevStat.learnedWords + statistic.learnedWords, {
+      ...prevStat.optional,
+      [dateKey]: {
+        ...prevStat.optional[dateKey],
+        [game]: {
+          newWords:
+            prevStat.optional[dateKey][game] && prevStat.optional[dateKey][game].newWords
+              ? prevStat.optional[dateKey][game].newWords + statistic.newWords
+              : statistic.newWords,
+          learnedWords:
+            prevStat.optional[dateKey][game] && prevStat.optional[dateKey][game].learnedWords
+              ? prevStat.optional[dateKey][game].learnedWords + statistic.learnedWords
+              : statistic.learnedWords,
+          chainLength:
+            prevStat.optional[dateKey][game] &&
+            prevStat.optional[dateKey][game].chainLength &&
+            prevStat.optional[dateKey][game].chainLength > statistic.chainLength
+              ? prevStat.optional[dateKey][game].chainLength
+              : statistic.learnedWords,
+          wrongAnswers:
+            prevStat.optional[dateKey][game] && prevStat.optional[dateKey][game].wrongAnswers
+              ? prevStat.optional[dateKey][game].wrongAnswers + statistic.wrongAnswers
+              : statistic.wrongAnswers,
+          rightAnswers:
+            prevStat.optional[dateKey][game] && prevStat.optional[dateKey][game].rightAnswers
+              ? prevStat.optional[dateKey][game].rightAnswers + statistic.rightAnswers
+              : statistic.rightAnswers,
+        },
+      },
+    });
+  } else {
+    updateUserStatistic(userId, token, prevStat.learnedWords + statistic.learnedWords, {
+      ...prevStat.optional,
+      [dateKey]: { [game]: { options: statistic } },
+    });
+  }
+};
+
+export { getUserStatistic, updateUserStatistic, changeStatistic };
