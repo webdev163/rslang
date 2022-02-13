@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch } from 'redux';
-import { UserResponse, UserWordResponse } from '../../types/requests';
+import { TokenResponse, UserResponse, UserWordResponse } from '../../types/requests';
 import { AuthAction, RegistrationActionTypes, SignInActionTypes, UsersWordsActionTypes } from '../../types/user';
-import { addUser, getUserWords, signIn } from '../../utils/API';
+import { addUser, getUser, getUserWords, signIn } from '../../utils/API';
 import { LS_AUTH_KEY } from '../../utils/constants';
 
 export const signInAction = (email: string, password: string) => {
@@ -39,4 +39,15 @@ export const RegistrationAction =
 export const SignOutAction = () => async (dispatch: Dispatch<AuthAction>) => {
   dispatch({ type: SignInActionTypes.SIGN_OUT });
   window.localStorage.removeItem(LS_AUTH_KEY);
+};
+
+export const TryAuthAction = () => async (dispatch: Dispatch<AuthAction>) => {
+  const prevAuth = await window.localStorage.getItem(LS_AUTH_KEY);
+
+  if (prevAuth) {
+    const prevAuthObject = JSON.parse(prevAuth) as TokenResponse;
+    getUser(prevAuthObject.userId, prevAuthObject.token)
+      .then(data => dispatch({ type: SignInActionTypes.REFRESH_AUTH, payload: { token: prevAuthObject, user: data } }))
+      .catch();
+  }
 };

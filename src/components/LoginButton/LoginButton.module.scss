@@ -6,9 +6,8 @@
 
 .tabs-wrp{
   position: relative;
-  margin-top: 40px;
+  margin-top: 35px;
   border: 1px solid $base-color;
-  border-radius: 0 10px 10px 10px;
   min-width: 400px;
   width: min-content;
 }
@@ -26,7 +25,7 @@
   @include active;
 }
 .tabs button:first-child{
-  border-radius: 10px 0 0 0;
+  border-radius: 0;
 }
 .tabs button:last-child{
   border-radius: 0 10px 0 0;

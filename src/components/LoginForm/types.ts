@@ -8,4 +8,8 @@ interface LoginData {
   password: string;
 }
 
-export type { LoginChecks, LoginData };
+interface LoginFormProps {
+  onDone?: CallableFunction;
+}
+
+export type { LoginChecks, LoginData, LoginFormProps };

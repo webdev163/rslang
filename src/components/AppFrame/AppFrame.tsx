@@ -13,7 +13,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import MovingIcon from '@mui/icons-material/Moving';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MainPage from '../../pages/MainPage';
 import LoginPage from '../../pages/LoginPage';
 import GuidePage from '../../pages/GuidePage';
@@ -23,21 +22,11 @@ import StatsPage from '../../pages/StatsPage';
 import GameAudio from '../../components/GameAudio';
 import GameSprint from '../../components/GameSprint';
 import { Routes, Route, Link } from 'react-router-dom';
-import { useActions } from '../../hooks/useActions';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import LoginListItem from '../LoginButton';
 
 const drawerWidth = 280;
 
-import styles from './AppFrame.module.scss';
-
 const AppFrame: FC = () => {
-  const auth = useTypedSelector(state => state.auth);
-  const isAuthorized = auth.isAuthorized;
-  const { SignOutAction } = useActions();
-  const handleSignOut = useCallback(() => {
-    SignOutAction();
-  }, []);
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -65,19 +54,7 @@ const AppFrame: FC = () => {
               </ListItemIcon>
               <ListItemText primary="Главная" />
             </ListItem>
-            <ListItem
-              button
-              key="Логин"
-              component={Link}
-              to="/login"
-              style={{ textDecoration: 'none', color: 'inherit' }}
-              onClick={() => isAuthorized && handleSignOut()}
-            >
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary={!isAuthorized ? 'Войти' : 'Выйти'} />
-            </ListItem>
+            <LoginListItem />
             <ListItem
               button
               key="Учебник"

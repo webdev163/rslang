@@ -10,4 +10,7 @@ interface RegistrationChecks {
   password: boolean;
 }
 
-export type { RegistrationChecks, RegistrationData };
+interface RegistrationFormProps {
+  onDone?: CallableFunction;
+}
+export type { RegistrationChecks, RegistrationData, RegistrationFormProps };

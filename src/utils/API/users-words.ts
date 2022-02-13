@@ -62,7 +62,9 @@ const addUserWord = async (
   if (resp.status === ResponseStatuses.NOT_FOUND) {
     throw new Error('User not found');
   }
-
+  if (resp.status === ResponseStatuses.EXPECTATION_FAILED) {
+    return updateUserWord(userId, token, wordId, difficulty, optional);
+  }
   return true;
 };
 

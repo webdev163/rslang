@@ -21,10 +21,11 @@ const addUser = async (user: UserRequest): Promise<UserResponse> => {
   return data;
 };
 
-const getUser = async (id: string): Promise<UserResponse> => {
-  // TODO fix with token before use
+const getUser = async (id: string, token: string): Promise<UserResponse> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${id}`, {
     headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
   });
@@ -38,11 +39,12 @@ const getUser = async (id: string): Promise<UserResponse> => {
   return word;
 };
 
-const updateUser = async (id: string, user: Pick<User, 'email' | 'password'>) => {
-  // TODO fix with token before use
+const updateUser = async (id: string, token: string, user: Pick<User, 'email' | 'password'>) => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}`, {
     method: 'PUT',
     headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
@@ -57,11 +59,12 @@ const updateUser = async (id: string, user: Pick<User, 'email' | 'password'>) =>
   return data;
 };
 
-const deleteUser = async (id: string): Promise<boolean> => {
-  // TODO fix with token before use
+const deleteUser = async (id: string, token: string): Promise<boolean> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${id}`, {
     method: 'DELETE',
     headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
   });
