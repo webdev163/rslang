@@ -2,16 +2,22 @@ import React, { FC, useEffect } from 'react';
 import GuideHeader from '../../components/Guide/GuideHeader';
 import { useActions } from '../../hooks/useActions';
 import CardsList from '../../components/Guide/CardsList';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 import styles from './GuidePage.module.scss';
 
 const GuidePage: FC = () => {
   const { fetchWords, setGuidePage, setWordsGroup } = useActions();
+  const { group, page } = useTypedSelector(state => state.guide);
   const { page: currentPage, group: currentGroup } = useParams();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    currentGroup && currentPage ? fetchWords(+currentGroup, +currentPage) : fetchWords();
+    currentGroup && currentPage
+      ? fetchWords(+currentGroup, +currentPage)
+      : navigate(`/guide/group${group}/page${page}`, { replace: true });
   }, [currentGroup, currentPage]);
 
   useEffect(() => {
