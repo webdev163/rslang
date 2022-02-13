@@ -3,4 +3,4 @@ interface LoginDialogProps {
   open: boolean;
 }
 
-export type { LoginDialogProps }
+export type { LoginDialogProps };

@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import styles from './CardsList.module.scss';
 
 const CardsList: FC = () => {
-  const { emptyDoneCounter } = useActions();
+  const { emptyDoneCounter, getUserWordsAction } = useActions();
   const { wordsArr, isLoading, group, page, doneCounter } = useTypedSelector(state => state.guide);
   const { user, isAuthorized } = useTypedSelector(state => state.auth);
   const { words } = useTypedSelector(state => state.userWords);
@@ -58,6 +58,12 @@ const CardsList: FC = () => {
   useEffect(() => {
     emptyDoneCounter();
   }, [currentPage, currentGroup]);
+
+  useEffect(() => {
+    if (user.userId) {
+      getUserWordsAction(user.userId, user.token);
+    }
+  }, [user]);
 
   const renderCards = wordsArr.map((word: WordResponse) => {
     return (
