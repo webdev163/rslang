@@ -3,7 +3,7 @@ import Loader from '../../components/Loader';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { UserStatisticsResponse } from '../../types/requests';
 import { getUserStatistic } from '../../utils/API';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import styles from './StatsPage.module.scss';
 
@@ -12,7 +12,6 @@ const StatsPage: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useTypedSelector(state => state.auth);
   useEffect(() => {
-    // console.log(user);
     if (user.userId) {
       getUserStatistic(user.userId, user.token)
         .then(data => {
@@ -23,25 +22,10 @@ const StatsPage: FC = () => {
     }
   }, [user.userId]);
 
-  const testResp: UserStatisticsResponse = {
-    learnedWords: 8,
-    optional: {
-      '2/13/2022': {
-        audio: { newWords: 1, learnedWords: 1, chainLength: 1, wrongAnswers: 1, rightAnswers: 1 },
-        sprint: { newWords: 4, learnedWords: 4, chainLength: 2, wrongAnswers: 4, rightAnswers: 4 },
-      },
-      '2/14/2022': {
-        sprint: { newWords: 2, learnedWords: 2, chainLength: 2, wrongAnswers: 2, rightAnswers: 2 },
-        audio: { newWords: 2, learnedWords: 2, chainLength: 2, wrongAnswers: 2, rightAnswers: 2 },
-      },
-    },
-  };
-
   const getGameArray = (game: 'sprint' | 'audio'): Record<string, string | number>[] => {
     const statArr = [];
     if (stat?.optional) {
       for (const key in stat.optional) {
-        console.log(key);
         if (stat.optional[key][game]) {
           statArr.push({
             id: key,
@@ -58,7 +42,6 @@ const StatsPage: FC = () => {
           });
         }
       }
-      console.log(statArr);
     }
     return statArr;
   };

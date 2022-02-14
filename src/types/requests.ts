@@ -111,9 +111,7 @@ interface DayStatistic {
   audio: GameStatistic;
 }
 
-// type StatisticOptions = Record<string, DayStatistic>[];
-
-interface StatisticOptions{
+interface StatisticOptions {
   [date: string]: DayStatistic;
 }
 
