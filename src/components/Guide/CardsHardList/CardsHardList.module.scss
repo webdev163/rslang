@@ -5,3 +5,16 @@
   flex-wrap: wrap;
   padding-left: 0;
 }
+
+.buttons-wrapper {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 450px;
+}
+
+.link {
+  text-decoration: none;
+  color: #000;
+}

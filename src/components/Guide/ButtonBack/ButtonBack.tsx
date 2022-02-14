@@ -18,7 +18,7 @@ const ButtonBack: FC = () => {
           getUserWordsAction(user.userId, user.token);
         }}
         variant="contained"
-        sx={{ fontSize: 20 }}
+        sx={{ fontSize: 20, marginLeft: 1 }}
       >
         Назад
       </Button>
