@@ -2,6 +2,7 @@ import { API_URL } from '../constants';
 import { GameStatistic, RequestPaths, ResponseStatuses, UserStatisticsResponse } from '../../types/requests';
 
 const getUserStatistic = async (userId: string, token: string): Promise<UserStatisticsResponse> => {
+  // console.log(userId, token);
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${userId}${RequestPaths.STATISTICS}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -55,10 +56,10 @@ const changeStatistic = async (
   date = new Date(),
 ) => {
   const prevStat = await getUserStatistic(userId, token);
-  const dateKey = date.toLocaleDateString();
+  const dateKey = date.toLocaleDateString('ru-RU');
   // console.log(dateKey);
   if (prevStat.optional && prevStat.optional[dateKey]) {
-    console.log(prevStat.optional[dateKey]);
+    // console.log(prevStat.optional[dateKey]);
     updateUserStatistic(userId, token, prevStat.learnedWords + statistic.learnedWords, {
       ...prevStat.optional,
       [dateKey]: {
@@ -92,7 +93,7 @@ const changeStatistic = async (
   } else {
     updateUserStatistic(userId, token, prevStat.learnedWords + statistic.learnedWords, {
       ...prevStat.optional,
-      [dateKey]: { [game]: { options: statistic } },
+      [dateKey]: { [game]: statistic },
     });
   }
 };
