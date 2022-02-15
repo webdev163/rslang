@@ -1,7 +1,7 @@
 import { API_URL } from '../constants';
-import { RequestPaths, ResponseStatuses, UserStatisticsResponse } from '../../types/requests';
+import { GameStatistic, RequestPaths, ResponseStatuses, UserStatisticsResponse } from '../../types/requests';
 
-const getUserStatistic = async (userId: string, token: string): Promise<UserStatisticsResponse[]> => {
+const getUserStatistic = async (userId: string, token: string): Promise<UserStatisticsResponse> => {
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${userId}${RequestPaths.STATISTICS}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -47,4 +47,51 @@ const updateUserStatistic = async (
   return true;
 };
 
-export { getUserStatistic, updateUserStatistic };
+const changeStatistic = async (
+  userId: string,
+  token: string,
+  game: 'sprint' | 'audio',
+  statistic: GameStatistic,
+  date = new Date(),
+) => {
+  const prevStat = await getUserStatistic(userId, token);
+  const dateKey = date.toLocaleDateString('ru-RU');
+  if (prevStat.optional && prevStat.optional[dateKey]) {
+    const dayPrevStat = prevStat.optional[dateKey];
+    updateUserStatistic(userId, token, prevStat.learnedWords + statistic.learnedWords, {
+      ...prevStat.optional,
+      [dateKey]: {
+        ...dayPrevStat,
+        [game]: {
+          newWords:
+            dayPrevStat[game] && dayPrevStat[game].newWords
+              ? dayPrevStat[game].newWords + statistic.newWords
+              : statistic.newWords,
+          learnedWords:
+            dayPrevStat[game] && dayPrevStat[game].learnedWords
+              ? dayPrevStat[game].learnedWords + statistic.learnedWords
+              : statistic.learnedWords,
+          chainLength:
+            dayPrevStat[game] && dayPrevStat[game].chainLength && dayPrevStat[game].chainLength > statistic.chainLength
+              ? dayPrevStat[game].chainLength
+              : statistic.learnedWords,
+          wrongAnswers:
+            dayPrevStat[game] && dayPrevStat[game].wrongAnswers
+              ? dayPrevStat[game].wrongAnswers + statistic.wrongAnswers
+              : statistic.wrongAnswers,
+          rightAnswers:
+            dayPrevStat[game] && dayPrevStat[game].rightAnswers
+              ? dayPrevStat[game].rightAnswers + statistic.rightAnswers
+              : statistic.rightAnswers,
+        },
+      },
+    });
+  } else {
+    updateUserStatistic(userId, token, prevStat.learnedWords + statistic.learnedWords, {
+      ...prevStat.optional,
+      [dateKey]: { [game]: statistic },
+    });
+  }
+};
+
+export { getUserStatistic, updateUserStatistic, changeStatistic };

@@ -1,6 +1,6 @@
 import { getAggregatedWords } from './aggregated-words';
 import { signIn, getUserToken } from './signIn';
-import { getUserStatistic, updateUserStatistic } from './user-statistic';
+import { changeStatistic, getUserStatistic, updateUserStatistic } from './user-statistic';
 import { addUser, getUser, updateUser, deleteUser } from './users';
 import { addUserWord, deleteUserWord, getUserWord, getUserWords, updateUserWord } from './users-words';
 import { getWords, getWord } from './words';
@@ -22,4 +22,5 @@ export {
   getUserStatistic,
   updateUserStatistic,
   getAggregatedWords,
+  changeStatistic,
 };

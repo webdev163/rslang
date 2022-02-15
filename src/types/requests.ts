@@ -86,11 +86,6 @@ interface UserWordOptions {
   done?: boolean;
 }
 
-interface UserStatisticOptions {
-  // TODO what is word options?
-  option1?: string;
-}
-
 interface UserWordResponse {
   id: string;
   wordId: string;
@@ -98,14 +93,31 @@ interface UserWordResponse {
   optional: UserWordOptions;
 }
 
-interface UserStatisticsResponse {
-  learnedWords: number;
-  optional: UserStatisticOptions;
-}
-
 interface AggregatedWordsResponse {
   paginatedResults: AggregatedWordResponse[];
   totalCount: Record<'count', number>;
+}
+
+interface GameStatistic {
+  newWords: number;
+  learnedWords: number;
+  chainLength: number;
+  wrongAnswers: number;
+  rightAnswers: number;
+}
+
+interface DayStatistic {
+  sprint: GameStatistic;
+  audio: GameStatistic;
+}
+
+interface StatisticOptions {
+  [date: string]: DayStatistic;
+}
+
+interface UserStatisticsResponse {
+  learnedWords: number;
+  optional: StatisticOptions;
 }
 
 export { RequestPaths, ResponseStatuses };
@@ -119,4 +131,5 @@ export type {
   UserStatisticsResponse,
   AggregatedWordsResponse,
   AggregatedWordResponse,
+  GameStatistic,
 };
