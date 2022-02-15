@@ -4,6 +4,7 @@ import { PASSWORD_RULES } from '../../../utils/constants';
 import { PasswordInputProps } from './types';
 
 import styles from './PasswordInput.module.scss';
+import TextField from '@mui/material/TextField';
 
 const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInput }) => {
   const [passwordChecks, setPasswordChecks] = useState<PasswordChecks>({
@@ -14,7 +15,9 @@ const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInp
   const [isShown, setIsShown] = useState<boolean>(false);
 
   const handleInput = useCallback((e: FormEvent<HTMLInputElement>) => {
-    const input = e.currentTarget.value;
+    const inputTarget = e.nativeEvent.target as HTMLInputElement; //.currentTarget.value;
+    const input = inputTarget.value;
+    // console.log(e)
     const curPasswordChecks = {
       numbers: /\d/.test(input),
       differentCase: /[a-z]/.test(input) && /[A-Z]/.test(input),
@@ -35,13 +38,16 @@ const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInp
   return (
     <>
       <label htmlFor="auth-password" className={styles['password__label']}>
-        {label}
-        <input
+        <TextField
+          label={label}
+          variant="standard"
           type={`${isShown ? 'text' : 'password'}`}
           name="auth-password"
           id="auth-password"
           className={styles['password__input']}
-          onInput={handleInput}
+          inputProps={{
+            onInput: handleInput,
+          }}
         />
         <label htmlFor="show-password" className={styles['password__show-btn-wrp']}>
           <span className={isShown ? styles['password__show-btn'] : styles['password__hide-btn']} />

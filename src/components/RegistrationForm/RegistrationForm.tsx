@@ -8,8 +8,9 @@ import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 import styles from './RegistrationForm.module.scss';
+import { Button } from '@mui/material';
 
-const RegistrationForm: FC<RegistrationFormProps> = () => {
+const RegistrationForm: FC = () => {
   const { auth } = useTypedSelector(state => state);
   const [checks, setChecks] = useState<RegistrationChecks>({ name: false, email: false, password: false });
   const [data, setData] = useState<RegistrationData>({ name: '', email: auth.email, password: '' });
@@ -61,16 +62,17 @@ const RegistrationForm: FC<RegistrationFormProps> = () => {
         onInput={handleInput('password')}
       />
       <div className={styles.buttons}>
-        <button
+        <Button
+          variant="contained"
           type="submit"
           className={styles.button__primary}
           disabled={!(checks.name && checks.email && checks.password)}
         >
           Регистрация
-        </button>
-        <button type="reset" className={styles.button__secondary}>
+        </Button>
+        <Button variant="outlined" type="reset" className={styles.button__secondary}>
           Сброс
-        </button>
+        </Button>
       </div>
     </form>
   );

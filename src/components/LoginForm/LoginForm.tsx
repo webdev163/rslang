@@ -6,8 +6,9 @@ import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 import styles from './LoginForm.module.scss';
+import Button from '@mui/material/Button';
 
-const LoginForm: FC<LoginFormProps> = ({ onDone }) => {
+const LoginForm: FC = () => {
   const { auth } = useTypedSelector(state => state);
 
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
@@ -27,7 +28,6 @@ const LoginForm: FC<LoginFormProps> = ({ onDone }) => {
       e.preventDefault();
       if (checks.email && checks.password) {
         signInAction(data.email, data.password);
-        if (onDone) onDone();
       }
     },
     [checks],
@@ -54,12 +54,17 @@ const LoginForm: FC<LoginFormProps> = ({ onDone }) => {
       />
       <PasswordInput label={'Пароль'} onFulfilled={handleFulfilled('password')} onInput={handleInput('password')} />
       <div className={styles.buttons}>
-        <button type="submit" className={styles.button__primary} disabled={!(checks.email && checks.password)}>
+        <Button
+          variant="contained"
+          type="submit"
+          className={styles.button__primary}
+          disabled={!(checks.email && checks.password)}
+        >
           Войти
-        </button>
-        <button type="reset" className={styles.button__secondary}>
+        </Button>
+        <Button variant="outlined" type="reset" className={styles.button__secondary}>
           Сброс
-        </button>
+        </Button>
       </div>
     </form>
   );
