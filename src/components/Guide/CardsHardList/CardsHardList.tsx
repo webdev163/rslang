@@ -5,6 +5,11 @@ import CardHardItem from '../CardHardItem';
 import Loader from '../../Loader';
 import { useActions } from '../../../hooks/useActions';
 import ButtonBack from '../ButtonBack';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { Link } from 'react-router-dom';
 
 import styles from './CardsHardList.module.scss';
 
@@ -54,7 +59,30 @@ const CardsHardList: FC = () => {
 
   return (
     <div>
-      <ButtonBack />
+      <div className={styles.buttonsWrapper}>
+        <PopupState variant="popover">
+          {popupState => (
+            <React.Fragment>
+              <Button variant="contained" {...bindTrigger(popupState)} sx={{ fontSize: 20 }}>
+                Мини-игры
+              </Button>
+              <Menu {...bindMenu(popupState)}>
+                <MenuItem onClick={popupState.close} sx={{ fontSize: 20 }}>
+                  <Link to="/games/audio/" state={{ from: 'difficult' }} className={styles.link}>
+                    Игра &quot;Аудиовызов&quot;
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={popupState.close} sx={{ fontSize: 20 }}>
+                  <Link to="/games/sprint/" state={{ from: 'difficult' }} className={styles.link}>
+                    Игра &quot;Спринт&quot;
+                  </Link>
+                </MenuItem>
+              </Menu>
+            </React.Fragment>
+          )}
+        </PopupState>
+        <ButtonBack />
+      </div>
       <ul className={styles.cardsWrapper}>{isLoading || !isDataFetched ? <Loader /> : getCards()}</ul>
     </div>
   );
