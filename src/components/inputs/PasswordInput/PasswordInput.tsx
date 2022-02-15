@@ -15,9 +15,8 @@ const PasswordInput: FC<PasswordInputProps> = ({ label, onFulfilled, tips, onInp
   const [isShown, setIsShown] = useState<boolean>(false);
 
   const handleInput = useCallback((e: FormEvent<HTMLInputElement>) => {
-    const inputTarget = e.nativeEvent.target as HTMLInputElement; //.currentTarget.value;
+    const inputTarget = e.nativeEvent.target as HTMLInputElement;
     const input = inputTarget.value;
-    // console.log(e)
     const curPasswordChecks = {
       numbers: /\d/.test(input),
       differentCase: /[a-z]/.test(input) && /[A-Z]/.test(input),

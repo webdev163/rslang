@@ -32,7 +32,6 @@ const TextInput: FC<TextInputProps> = ({ label, length, onFulfilled, onInput }) 
           }}
           helperText={`Не более ${length} символов`}
         />
-        {/* {!isTextLengthValid && <span className={styles['text__warning']}>Не более {length} символов</span>} */}
       </label>
     </>
   );
