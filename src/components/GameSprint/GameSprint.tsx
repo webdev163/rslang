@@ -63,17 +63,17 @@ const GameSprint: FC = () => {
     }
   }, [words]);
 
-  useEffect(
-    () => () => {
-      resetSprintState();
+  useEffect(() => {
+    const gameStatistic = statistic;
+    return () => {
       if (!statisticIsSended) {
         if (userId && token) {
-          changeStatistic(userId, token, 'sprint', statistic);
+          changeStatistic(userId, token, 'sprint', gameStatistic);
         }
       }
-    },
-    [],
-  );
+      resetSprintState();
+    };
+  }, []);
 
   const receiveAnswer = (answer: boolean) => {
     if (!isGameOn || !currentWord) return;

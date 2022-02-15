@@ -123,17 +123,17 @@ const GameAudio: FC = () => {
     }
   }, [currentWord]);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    const gameStatistic = statistic;
+    return () => {
       resetAudioState();
       if (!statisticIsSended) {
         if (userId && token) {
-          changeStatistic(userId, token, 'audio', statistic);
+          changeStatistic(userId, token, 'audio', gameStatistic);
         }
       }
-    },
-    [],
-  );
+    };
+  }, []);
 
   if (!isGameOn && !isRouterParamsReceived) {
     return (

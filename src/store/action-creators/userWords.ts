@@ -80,6 +80,7 @@ export const receiveUserAnswerAction =
       await addUserWord(userId, token, word.id, 'weak', optionals);
     }
     if (game === 'sprint') {
+      console.log(statistic);
       dispatch(updateSprintStatistic(statistic));
     } else {
       dispatch(updateAudioStatistic(statistic));
