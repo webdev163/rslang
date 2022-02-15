@@ -9,12 +9,16 @@ import { Button, Container, Dialog } from '@mui/material';
 import DifficultyDialog from '../DifficultyDialog';
 
 import styles from './GameSprint.module.scss';
+import { changeStatistic } from '../../utils/API/user-statistic';
 
 const GameSprint: FC = () => {
   const from = useLocationFrom();
 
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
+  const [statisticIsSended, setStatisticIsSended] = useState(false);
+
+  const { userId, token } = useTypedSelector(state => state.auth.user);
 
   const {
     words,
@@ -26,6 +30,7 @@ const GameSprint: FC = () => {
     rightAnswers,
     translate,
     isTrue,
+    statistic,
   } = useTypedSelector(state => state.sprint);
 
   const {
@@ -37,7 +42,7 @@ const GameSprint: FC = () => {
     receiveRouterStateInSprint,
     incrementScore,
     incrementRightAnswers,
-    resetRigthAnswers,
+    resetSprintRigthAnswers,
     resetSprintState,
     receiveUserAnswerAction,
   } = useActions();
@@ -61,6 +66,11 @@ const GameSprint: FC = () => {
   useEffect(
     () => () => {
       resetSprintState();
+      if (!statisticIsSended) {
+        if (userId && token) {
+          changeStatistic(userId, token, 'sprint', statistic);
+        }
+      }
     },
     [],
   );
@@ -70,16 +80,16 @@ const GameSprint: FC = () => {
     if (isTrue === answer) {
       batch(() => {
         incrementScore();
-        incrementRightAnswers(pointsForAnswer, rightAnswers);
+        incrementRightAnswers();
         setRandowWord(words);
       });
-      receiveUserAnswerAction(true, currentWord);
+      receiveUserAnswerAction(true, currentWord, 'sprint');
     } else {
       batch(() => {
-        resetRigthAnswers();
+        resetSprintRigthAnswers();
         setRandowWord(words);
       });
-      receiveUserAnswerAction(false, currentWord);
+      receiveUserAnswerAction(false, currentWord, 'sprint');
     }
   };
 
@@ -169,6 +179,10 @@ const GameSprint: FC = () => {
         onEnd={() => {
           stopGame();
           setShowResult(true);
+          if (userId && token) {
+            changeStatistic(userId, token, 'sprint', statistic);
+            setStatisticIsSended(true);
+          }
         }}
       />
       <div className={styles.points}>{score}</div>

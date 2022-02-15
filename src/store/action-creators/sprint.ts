@@ -1,8 +1,10 @@
 import { Dispatch } from 'redux';
-import { WordResponse } from '../../types/requests';
+import { ThunkAction } from 'redux-thunk';
+import { GameStatistic, WordResponse } from '../../types/requests';
 import { SprintAction, SprintActionTypes } from '../../types/sprint';
 import { getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
+import { RootState } from '../reducers';
 
 export const setSprintWords = (words: WordResponse[]): SprintAction => ({
   type: SprintActionTypes.SET_WORDS,
@@ -65,19 +67,27 @@ export const incrementScore = (): SprintAction => ({
   type: SprintActionTypes.INCREMENT_SCORE,
 });
 
-export const incrementRightAnswers = (prevPoints: number, prevRightAnswers: number): SprintAction => {
-  let rightAnswers = prevRightAnswers + 1;
-  let points = prevPoints;
-  if (rightAnswers === 3) {
-    points = points < 80 ? points * 2 : points;
-    rightAnswers = 0;
-  }
-  return {
-    type: SprintActionTypes.INCREMENT_RIGHT_ANSWERS,
-    payload: { points, rightAnswers },
+export const incrementRightAnswers =
+  (): ThunkAction<void, RootState, unknown, SprintAction> => (dispatch, getState) => {
+    const state = getState();
+    const { rightAnswers, pointsForAnswer } = state.sprint;
+    let newRightAnswers = rightAnswers + 1;
+    let points = pointsForAnswer;
+    if (rightAnswers === 3) {
+      points = points < 80 ? points * 2 : points;
+      newRightAnswers = 0;
+    }
+    dispatch({
+      type: SprintActionTypes.INCREMENT_RIGHT_ANSWERS,
+      payload: { points, rightAnswers: newRightAnswers },
+    });
   };
-};
 
-export const resetRigthAnswers = (): SprintAction => ({
+export const resetSprintRigthAnswers = (): SprintAction => ({
   type: SprintActionTypes.RESET_RIGHT_ANSWERS,
+});
+
+export const updateSprintStatistic = (statistic: GameStatistic): SprintAction => ({
+  type: SprintActionTypes.UPDATE_STATISTIC,
+  payload: statistic,
 });

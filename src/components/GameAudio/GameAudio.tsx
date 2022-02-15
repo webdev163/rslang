@@ -9,16 +9,20 @@ import { Button, Grid, Container, Dialog } from '@mui/material';
 
 import styles from './GameAudio.module.scss';
 import { AudioCallOption } from '../../types/audiocall';
+import { changeStatistic } from '../../utils/API/user-statistic';
 
 const GameAudio: FC = () => {
   const from = useLocationFrom();
 
+  const { userId, token } = useTypedSelector(state => state.auth.user);
+
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
   const [answerIsReceived, setAnswerIsReceived] = useState(false);
+  const [statisticIsSended, setStatisticIsSended] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<AudioCallOption[]>([]);
 
-  const { words, currentWord, isGameOn, isRouterParamsReceived, options, score } = useTypedSelector(
+  const { words, currentWord, isGameOn, isRouterParamsReceived, options, score, statistic } = useTypedSelector(
     state => state.audio,
   );
   const {
@@ -31,6 +35,7 @@ const GameAudio: FC = () => {
     incrementAudioScore,
     resetAudioState,
     receiveUserAnswerAction,
+    resetAudioRigthAnswers,
   } = useActions();
 
   useEffect(() => {
@@ -59,9 +64,11 @@ const GameAudio: FC = () => {
     if (!currentWord) return;
     if (option.isTrue) {
       incrementAudioScore();
-      receiveUserAnswerAction(true, currentWord);
+      receiveUserAnswerAction(true, currentWord, 'audio');
+    } else {
+      receiveUserAnswerAction(false, currentWord, 'audio');
+      resetAudioRigthAnswers();
     }
-    receiveUserAnswerAction(false, currentWord);
     setAnswerIsReceived(true);
   };
 
@@ -85,6 +92,10 @@ const GameAudio: FC = () => {
     if (words.length === 1) {
       setShowResult(true);
       stopAudioGame();
+      if (userId && token) {
+        changeStatistic(userId, token, 'audio', statistic);
+        setStatisticIsSended(true);
+      }
     }
     if (currentWord) removeAudioCallWord(currentWord);
     setAnswerIsReceived(false);
@@ -115,6 +126,11 @@ const GameAudio: FC = () => {
   useEffect(
     () => () => {
       resetAudioState();
+      if (!statisticIsSended) {
+        if (userId && token) {
+          changeStatistic(userId, token, 'audio', statistic);
+        }
+      }
     },
     [],
   );
