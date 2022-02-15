@@ -17,6 +17,7 @@ import { LoginDialogProps } from './types';
 
 import styles from './LoginButton.module.scss';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router';
 
 const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
   const [signUp, setSignUp] = useState<boolean>(false);
@@ -55,11 +56,14 @@ const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
 };
 
 const LoginListItem = () => {
+  const navigate = useNavigate();
   const auth = useTypedSelector(state => state.auth);
   const isAuthorized = auth.isAuthorized;
-  const { SignOutAction } = useActions();
+  const { SignOutAction, emptyDoneCounter } = useActions();
   const handleSignOut = useCallback(() => {
     SignOutAction();
+    emptyDoneCounter();
+    navigate(`/`);
   }, []);
 
   const [open, setOpen] = React.useState(false);
