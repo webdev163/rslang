@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch } from 'redux';
 import { TokenResponse, UserResponse, UserWordResponse } from '../../types/requests';
 import { AuthAction, RegistrationActionTypes, SignInActionTypes, UsersWordsActionTypes } from '../../types/user';
-import { addUser, getUser, getUserWords, signIn } from '../../utils/API';
+import { addUser, getUser, getUserToken, getUserWords, signIn } from '../../utils/API';
 import { LS_AUTH_KEY } from '../../utils/constants';
 
 export const signInAction = (email: string, password: string) => {
@@ -52,5 +52,22 @@ export const TryAuthAction = () => async (dispatch: Dispatch<AuthAction>) => {
         dispatch({ type: SignInActionTypes.SUCCESS, payload: prevAuthObject });
       })
       .catch();
+  }
+};
+
+export const TryRefreshToken = () => async (dispatch: Dispatch<AuthAction>) => {
+  const prevAuth = await window.localStorage.getItem(LS_AUTH_KEY);
+
+  if (prevAuth) {
+    const prevAuthObject = JSON.parse(prevAuth) as TokenResponse;
+    getUserToken(prevAuthObject.userId, prevAuthObject.refreshToken)
+      .then(data => {
+        dispatch({ type: SignInActionTypes.SUCCESS, payload: data });
+        window.localStorage.setItem(LS_AUTH_KEY, JSON.stringify(data));
+      })
+      .catch(() => {
+        dispatch({ type: SignInActionTypes.SIGN_OUT });
+        window.localStorage.removeItem(LS_AUTH_KEY);
+      });
   }
 };
