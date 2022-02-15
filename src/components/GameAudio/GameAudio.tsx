@@ -30,6 +30,7 @@ const GameAudio: FC = () => {
     receiveRouterStateInAudiocall,
     incrementAudioScore,
     resetAudioState,
+    receiveUserAnswerAction,
   } = useActions();
 
   useEffect(() => {
@@ -55,9 +56,12 @@ const GameAudio: FC = () => {
   }, [options]);
 
   const receiveAnswer = (option: AudioCallOption) => {
+    if (!currentWord) return;
     if (option.isTrue) {
       incrementAudioScore();
+      receiveUserAnswerAction(true, currentWord);
     }
+    receiveUserAnswerAction(false, currentWord);
     setAnswerIsReceived(true);
   };
 

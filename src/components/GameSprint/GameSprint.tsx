@@ -39,6 +39,7 @@ const GameSprint: FC = () => {
     incrementRightAnswers,
     resetRigthAnswers,
     resetSprintState,
+    receiveUserAnswerAction,
   } = useActions();
 
   useEffect(() => {
@@ -65,18 +66,20 @@ const GameSprint: FC = () => {
   );
 
   const receiveAnswer = (answer: boolean) => {
-    if (!isGameOn) return;
+    if (!isGameOn || !currentWord) return;
     if (isTrue === answer) {
       batch(() => {
         incrementScore();
         incrementRightAnswers(pointsForAnswer, rightAnswers);
         setRandowWord(words);
       });
+      receiveUserAnswerAction(true, currentWord);
     } else {
       batch(() => {
         resetRigthAnswers();
         setRandowWord(words);
       });
+      receiveUserAnswerAction(false, currentWord);
     }
   };
 
@@ -105,8 +108,6 @@ const GameSprint: FC = () => {
   }, [currentWord]);
 
   const answersCounterTemplate = pointsForAnswer < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
-
-  console.log(!isGameOn && !isRouterParamsReceived);
 
   if (!isGameOn && !isRouterParamsReceived) {
     return (
@@ -164,7 +165,7 @@ const GameSprint: FC = () => {
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
       <GameSprintTimer
-        initialTime={10}
+        initialTime={60}
         onEnd={() => {
           stopGame();
           setShowResult(true);
