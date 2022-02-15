@@ -57,32 +57,31 @@ const changeStatistic = async (
   const prevStat = await getUserStatistic(userId, token);
   const dateKey = date.toLocaleDateString('ru-RU');
   if (prevStat.optional && prevStat.optional[dateKey]) {
+    const dayPrevStat = prevStat.optional[dateKey];
     updateUserStatistic(userId, token, prevStat.learnedWords + statistic.learnedWords, {
       ...prevStat.optional,
       [dateKey]: {
-        ...prevStat.optional[dateKey],
+        ...dayPrevStat,
         [game]: {
           newWords:
-            prevStat.optional[dateKey][game] && prevStat.optional[dateKey][game].newWords
-              ? prevStat.optional[dateKey][game].newWords + statistic.newWords
+            dayPrevStat[game] && dayPrevStat[game].newWords
+              ? dayPrevStat[game].newWords + statistic.newWords
               : statistic.newWords,
           learnedWords:
-            prevStat.optional[dateKey][game] && prevStat.optional[dateKey][game].learnedWords
-              ? prevStat.optional[dateKey][game].learnedWords + statistic.learnedWords
+            dayPrevStat[game] && dayPrevStat[game].learnedWords
+              ? dayPrevStat[game].learnedWords + statistic.learnedWords
               : statistic.learnedWords,
           chainLength:
-            prevStat.optional[dateKey][game] &&
-            prevStat.optional[dateKey][game].chainLength &&
-            prevStat.optional[dateKey][game].chainLength > statistic.chainLength
-              ? prevStat.optional[dateKey][game].chainLength
+            dayPrevStat[game] && dayPrevStat[game].chainLength && dayPrevStat[game].chainLength > statistic.chainLength
+              ? dayPrevStat[game].chainLength
               : statistic.learnedWords,
           wrongAnswers:
-            prevStat.optional[dateKey][game] && prevStat.optional[dateKey][game].wrongAnswers
-              ? prevStat.optional[dateKey][game].wrongAnswers + statistic.wrongAnswers
+            dayPrevStat[game] && dayPrevStat[game].wrongAnswers
+              ? dayPrevStat[game].wrongAnswers + statistic.wrongAnswers
               : statistic.wrongAnswers,
           rightAnswers:
-            prevStat.optional[dateKey][game] && prevStat.optional[dateKey][game].rightAnswers
-              ? prevStat.optional[dateKey][game].rightAnswers + statistic.rightAnswers
+            dayPrevStat[game] && dayPrevStat[game].rightAnswers
+              ? dayPrevStat[game].rightAnswers + statistic.rightAnswers
               : statistic.rightAnswers,
         },
       },

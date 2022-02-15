@@ -6,6 +6,7 @@ import { getUserStatistic } from '../../utils/API';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import styles from './StatsPage.module.scss';
+import { spacing } from '@mui/system';
 
 const StatsPage: FC = () => {
   const [stat, setStat] = useState<UserStatisticsResponse>();
@@ -18,7 +19,7 @@ const StatsPage: FC = () => {
           setStat(data);
           setIsLoading(false);
         })
-        .catch(err => console.log('error', err));
+        .catch(err => setIsLoading(false));
     }
   }, [user.userId]);
 
@@ -27,17 +28,17 @@ const StatsPage: FC = () => {
     if (stat?.optional) {
       for (const key in stat.optional) {
         if (stat.optional[key][game]) {
+          const dayGameStat = stat.optional[key][game];
           statArr.push({
             id: key,
             date: key,
-            learnedWords: stat.optional[key][game].learnedWords,
-            newWords: stat.optional[key][game].newWords,
-            chainLength: stat.optional[key][game].chainLength,
-            wrongAnswers: stat.optional[key][game].wrongAnswers,
-            rightAnswers: stat.optional[key][game].rightAnswers,
+            learnedWords: dayGameStat.learnedWords,
+            newWords: dayGameStat.newWords,
+            chainLength: dayGameStat.chainLength,
+            wrongAnswers: dayGameStat.wrongAnswers,
+            rightAnswers: dayGameStat.rightAnswers,
             percent: Math.ceil(
-              (100 * stat.optional[key][game].rightAnswers) /
-                (stat.optional[key][game].rightAnswers + stat.optional[key][game].wrongAnswers),
+              (100 * dayGameStat.rightAnswers) / (dayGameStat.rightAnswers + dayGameStat.wrongAnswers),
             ),
           });
         }
@@ -66,8 +67,9 @@ const StatsPage: FC = () => {
   return (
     <div>
       <h1 className={styles.title}>Stats Page</h1>
+      {!user.token && <span>Для доступа к статистике необходимо авторизоваться</span>}
       {isLoading ? (
-        <Loader />
+        user.token && <Loader />
       ) : (
         <>
           <h2>Аудиовызов</h2>
