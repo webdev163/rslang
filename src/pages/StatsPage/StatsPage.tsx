@@ -4,6 +4,8 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { UserStatisticsResponse } from '../../types/requests';
 import { getUserStatistic } from '../../utils/API';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import NewWordsChart from '../../components/Charts/NewWordsChart';
+import LearntWordsChart from '../../components/Charts/LearntWordsChart';
 
 import styles from './StatsPage.module.scss';
 import { spacing } from '@mui/system';
@@ -66,10 +68,14 @@ const StatsPage: FC = () => {
 
   return (
     <div>
-      <h1 className={styles.title}>Stats Page</h1>
+      <h1 className={styles.title}>Статистика</h1>
       {!user.token && <span>Для доступа к статистике необходимо авторизоваться</span>}
       {isLoading ? (
-        user.token && <Loader />
+        user.token && (
+          <div className={styles.loader}>
+            <Loader />
+          </div>
+        )
       ) : (
         <>
           <h2>Аудиовызов</h2>
@@ -80,6 +86,16 @@ const StatsPage: FC = () => {
           <h2>Спринт</h2>
           <div style={{ height: '400px' }}>
             <DataGrid rows={sprintStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} />
+          </div>
+          <h2 className={styles.subtitle}>Количество новых слов за каждый день изучения</h2>
+          <div style={{ height: '400px' }}>
+            <NewWordsChart stat={stat} />
+          </div>
+          <h2 className={styles.subtitle}>
+            Увеличение общего количества изученных слов за весь период обучения по дням
+          </h2>
+          <div style={{ height: '400px' }}>
+            <LearntWordsChart stat={stat} />
           </div>
         </>
       )}

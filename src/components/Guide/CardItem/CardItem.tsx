@@ -6,6 +6,7 @@ import { addUserWord, updateUserWord } from '../../../utils/API';
 import { useActions } from '../../../hooks/useActions';
 import { playSound, getColor } from '../../../utils/utils';
 import Button from '@mui/material/Button';
+import { getUserStatistic, updateUserStatistic } from '../../../utils/API';
 
 import styles from './CardItem.module.scss';
 
@@ -28,6 +29,7 @@ const CardItem: FC<CardItemProps> = ({
   learntArr,
 }) => {
   const { group } = useTypedSelector(state => state.guide);
+  const { user } = useTypedSelector(state => state.auth);
   const { incDoneCounter, decDoneCounter } = useActions();
   const { words } = useTypedSelector(state => state.userWords);
 
@@ -88,24 +90,56 @@ const CardItem: FC<CardItemProps> = ({
       if (isLearnt && current && 'optional' in current) {
         incDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional, done: true });
+        updateStats('inc');
       } else if (!isLearnt && current && 'optional' in current) {
         decDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'weak', { ...current.optional, done: false });
+        updateStats('dec');
       } else if (isLearnt && current && !('optional' in current)) {
         incDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'weak', { done: true });
+        updateStats('inc');
       } else if (!isLearnt && current && !('optional' in current)) {
         decDoneCounter();
         updateUserWord(userData.userId, userData.token, wordId, 'weak', { done: false });
+        updateStats('dec');
       } else if (isLearnt) {
         incDoneCounter();
         addUserWord(userData.userId, userData.token, wordId, 'weak', { done: true });
+        updateStats('inc');
       } else if (!isLearnt) {
         decDoneCounter();
         addUserWord(userData.userId, userData.token, wordId, 'weak', { done: false });
+        updateStats('dec');
       }
     }
   }, [isLearnt]);
+
+  const updateStats = async (type: string) => {
+    const prevStats = await getUserStatistic(user.userId, user.token);
+    const date = new Date().toLocaleDateString('ru-RU');
+    let currentNum: number;
+    try {
+      currentNum = prevStats.optional[date].guide.learnedWords;
+    } catch {
+      currentNum = 0;
+    }
+    currentNum = type === 'inc' ? currentNum + 1 : currentNum - 1;
+    if (currentNum < 0) currentNum = 0;
+    let totalLearned = prevStats.learnedWords;
+    totalLearned = type === 'inc' ? totalLearned + 1 : totalLearned - 1;
+
+    updateUserStatistic(user.userId, user.token, totalLearned, {
+      ...prevStats.optional,
+      [date]: {
+        ...prevStats.optional[date],
+        // eslint-disable-next-line prettier/prettier
+        'guide': {
+          learnedWords: currentNum,
+        },
+      },
+    });
+  };
 
   const generateCardButtons = () => {
     if (isAuthorized) {
