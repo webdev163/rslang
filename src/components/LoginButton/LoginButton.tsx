@@ -21,7 +21,6 @@ import { useNavigate } from 'react-router';
 
 const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
   const [signUp, setSignUp] = useState<boolean>(false);
-  const { isAuthorized } = useTypedSelector(state => state.auth);
 
   const handleSignIn = useCallback(() => {
     setSignUp(false);
@@ -33,8 +32,6 @@ const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
   const handleClose = () => {
     onClose();
   };
-
-  if (isAuthorized) onClose();
 
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -48,7 +45,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
               Регистрация
             </Button>
           </div>
-          {signUp ? <RegistrationForm /> : <LoginForm />}
+          {signUp ? <RegistrationForm /> : <LoginForm onClose={handleClose} />}
         </div>
       </div>
     </Dialog>

@@ -1,20 +1,24 @@
-import React, { FC, FormEvent, useCallback, useMemo, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
-import { LoginChecks, LoginData } from './types';
+import { LoginChecks, LoginData, LoginFormProps } from './types';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 import styles from './LoginForm.module.scss';
 import Button from '@mui/material/Button';
 
-const LoginForm: FC = () => {
+const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
   const { auth } = useTypedSelector(state => state);
 
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
   const [data, setData] = useState<LoginData>({ email: auth.email, password: '' });
 
   const { signInAction } = useActions();
+
+  useEffect(() => {
+    if (auth.isAuthorized && onClose) onClose();
+  }, [auth.isAuthorized]);
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {
