@@ -109,6 +109,7 @@ interface GameStatistic {
 interface DayStatistic {
   sprint: GameStatistic;
   audio: GameStatistic;
+  guide: GameStatistic;
 }
 
 interface StatisticOptions {
