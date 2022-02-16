@@ -9,12 +9,16 @@ import { Button, Container, Dialog } from '@mui/material';
 import DifficultyDialog from '../DifficultyDialog';
 
 import styles from './GameSprint.module.scss';
+import { changeStatistic } from '../../utils/API/user-statistic';
 
 const GameSprint: FC = () => {
   const from = useLocationFrom();
 
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
+  const [statisticIsSended, setStatisticIsSended] = useState(false);
+
+  const { userId, token } = useTypedSelector(state => state.auth.user);
 
   const {
     words,
@@ -26,6 +30,7 @@ const GameSprint: FC = () => {
     rightAnswers,
     translate,
     isTrue,
+    statistic,
   } = useTypedSelector(state => state.sprint);
 
   const {
@@ -37,8 +42,9 @@ const GameSprint: FC = () => {
     receiveRouterStateInSprint,
     incrementScore,
     incrementRightAnswers,
-    resetRigthAnswers,
+    resetSprintRigthAnswers,
     resetSprintState,
+    receiveUserAnswerAction,
   } = useActions();
 
   useEffect(() => {
@@ -57,26 +63,33 @@ const GameSprint: FC = () => {
     }
   }, [words]);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    const gameStatistic = statistic;
+    return () => {
+      if (!statisticIsSended) {
+        if (userId && token) {
+          changeStatistic(userId, token, 'sprint', gameStatistic);
+        }
+      }
       resetSprintState();
-    },
-    [],
-  );
+    };
+  }, []);
 
   const receiveAnswer = (answer: boolean) => {
-    if (!isGameOn) return;
+    if (!isGameOn || !currentWord) return;
     if (isTrue === answer) {
       batch(() => {
         incrementScore();
-        incrementRightAnswers(pointsForAnswer, rightAnswers);
+        incrementRightAnswers();
         setRandowWord(words);
       });
+      receiveUserAnswerAction(true, currentWord, 'sprint');
     } else {
       batch(() => {
-        resetRigthAnswers();
+        resetSprintRigthAnswers();
         setRandowWord(words);
       });
+      receiveUserAnswerAction(false, currentWord, 'sprint');
     }
   };
 
@@ -105,8 +118,6 @@ const GameSprint: FC = () => {
   }, [currentWord]);
 
   const answersCounterTemplate = pointsForAnswer < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
-
-  console.log(!isGameOn && !isRouterParamsReceived);
 
   if (!isGameOn && !isRouterParamsReceived) {
     return (
@@ -164,10 +175,14 @@ const GameSprint: FC = () => {
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
       <GameSprintTimer
-        initialTime={10}
+        initialTime={60}
         onEnd={() => {
           stopGame();
           setShowResult(true);
+          if (userId && token) {
+            changeStatistic(userId, token, 'sprint', statistic);
+            setStatisticIsSended(true);
+          }
         }}
       />
       <div className={styles.points}>{score}</div>

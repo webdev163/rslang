@@ -1,4 +1,4 @@
-import { WordResponse } from './requests';
+import { GameStatistic, WordResponse } from './requests';
 
 export interface AudioCallOption {
   translate: string;
@@ -14,6 +14,8 @@ export interface AudioState {
   group: number;
   score: number;
   pointsForAnswer: number;
+  chainLength: number;
+  statistic: GameStatistic;
 }
 
 export enum AudioActionTypes {
@@ -26,6 +28,8 @@ export enum AudioActionTypes {
   STOP_GAME = 'STOP_GAME',
   RECEIVE_ROUTER_STATE = 'RECEIVE_ROUTER_STATE',
   INCREMENT_SCORE = 'INCREMENT_SCORE',
+  RESET_RIGHT_ANSWERS = 'RESET_RIGHT_ANSWERS',
+  UPDATE_STATISTIC = 'UPDATE_STATISTIC',
 }
 
 interface ResetStateAction {
@@ -74,6 +78,15 @@ interface IncrementScoreAction {
   type: AudioActionTypes.INCREMENT_SCORE;
 }
 
+interface ResetRightAnswersAction {
+  type: AudioActionTypes.RESET_RIGHT_ANSWERS;
+}
+
+interface UpdateStaticticAction {
+  type: AudioActionTypes.UPDATE_STATISTIC;
+  payload: GameStatistic;
+}
+
 export type AudioAction =
   | ResetStateAction
   | SetWordsAction
@@ -83,4 +96,6 @@ export type AudioAction =
   | StartGameAction
   | StopGameAction
   | ReceiveRouterStateAction
-  | IncrementScoreAction;
+  | IncrementScoreAction
+  | ResetRightAnswersAction
+  | UpdateStaticticAction;

@@ -9,6 +9,14 @@ const initialState: AudioState = {
   group: 0,
   score: 0,
   pointsForAnswer: 10,
+  chainLength: 0,
+  statistic: {
+    newWords: 0,
+    learnedWords: 0,
+    chainLength: 0,
+    wrongAnswers: 0,
+    rightAnswers: 0,
+  },
 };
 
 export const audioReducer = (state = initialState, action: AudioAction): AudioState => {
@@ -28,7 +36,11 @@ export const audioReducer = (state = initialState, action: AudioAction): AudioSt
     case AudioActionTypes.RECEIVE_ROUTER_STATE:
       return { ...state, isRouterParamsReceived: true };
     case AudioActionTypes.INCREMENT_SCORE:
-      return { ...state, score: state.score + state.pointsForAnswer };
+      return { ...state, score: state.score + state.pointsForAnswer, chainLength: state.chainLength + 1 };
+    case AudioActionTypes.RESET_RIGHT_ANSWERS:
+      return { ...state, chainLength: 0 };
+    case AudioActionTypes.UPDATE_STATISTIC:
+      return { ...state, statistic: action.payload };
     case AudioActionTypes.RESET_STATE:
       return initialState;
     default:
