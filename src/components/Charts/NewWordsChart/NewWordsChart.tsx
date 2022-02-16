@@ -50,10 +50,10 @@ const NewWordsChart: FC<NewWordsChartProps> = ({ stat }) => {
       setLabels(keys);
       const wordsCounterArr = keys.map(el => {
         let num = 0;
-        if (stat.optional[el]['audio']) {
+        if (stat.optional[el] && stat.optional[el]['audio']) {
           num += stat.optional[el]['audio'].newWords;
         }
-        if (stat.optional[el]['sprint']) {
+        if (stat.optional[el] && stat.optional[el]['sprint']) {
           num += stat.optional[el]['sprint'].newWords;
         }
         return num;

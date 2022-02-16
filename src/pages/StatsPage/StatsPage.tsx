@@ -145,8 +145,6 @@ const StatsPage: FC = () => {
     return statArr;
   }, [audioStats, sprintStats, stat]);
 
-  console.log(guideStats);
-
   const dateComparator: GridComparatorFn = (date1, date2) => {
     return (date1 as string) > (date2 as string) ? -1 : 1;
   };
@@ -198,7 +196,7 @@ const StatsPage: FC = () => {
           <div className={styles.table}>
             <DataGrid rows={sprintStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
           </div>
-          {/* <h2 className={styles.subtitle}>Количество новых слов за каждый день изучения</h2>
+          <h2 className={styles.subtitle}>Количество новых слов за каждый день изучения</h2>
           <div style={{ height: '400px' }}>
             <NewWordsChart stat={stat} />
           </div>
@@ -207,7 +205,7 @@ const StatsPage: FC = () => {
           </h2>
           <div style={{ height: '400px' }}>
             <LearntWordsChart stat={stat} />
-          </div> */}
+          </div>
         </>
       )}
     </div>

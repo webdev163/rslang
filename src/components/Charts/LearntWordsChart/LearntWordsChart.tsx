@@ -50,13 +50,13 @@ const LearntWordsChart: FC<LearntWordsChartProps> = ({ stat }) => {
       setLabels(keys);
       const wordsCounterArr = keys.map(el => {
         let num = 0;
-        if (stat.optional[el]['audio']) {
+        if (stat.optional[el] && stat.optional[el]['audio']) {
           num += stat.optional[el]['audio'].learnedWords;
         }
-        if (stat.optional[el]['sprint']) {
+        if (stat.optional[el] && stat.optional[el]['sprint']) {
           num += stat.optional[el]['sprint'].learnedWords;
         }
-        if (stat.optional[el]['guide']) {
+        if (stat.optional[el] && stat.optional[el]['guide']) {
           num += stat.optional[el]['guide'].learnedWords;
         }
         return num;
