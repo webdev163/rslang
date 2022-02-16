@@ -8,6 +8,7 @@ import LearntWordsChart from '../../components/Charts/LearntWordsChart';
 import { DataGrid, GridColDef, GridComparatorFn } from '@mui/x-data-grid';
 
 import styles from './StatsPage.module.scss';
+import { gameStatistics } from './types';
 
 const StatsPage: FC = () => {
   const [stat, setStat] = useState<UserStatisticsResponse>();
@@ -24,8 +25,8 @@ const StatsPage: FC = () => {
     }
   }, [user.userId]);
 
-  const getGameArray = (game: 'sprint' | 'audio'): Record<string, string | number>[] => {
-    const statArr = [];
+  const getGameArray = (game: 'sprint' | 'audio'): gameStatistics[] => {
+    const statArr: gameStatistics[] = [];
     if (stat?.optional) {
       for (const key in stat.optional) {
         if (stat.optional[key][game]) {
@@ -52,6 +53,99 @@ const StatsPage: FC = () => {
   const audioStats = useMemo(() => getGameArray('audio'), [stat]);
 
   const sprintStats = useMemo(() => getGameArray('sprint'), [stat]);
+
+  const guideStats = useMemo((): gameStatistics[] => {
+    const statArr: gameStatistics[] = [];
+    if (stat?.optional) {
+      for (const key in stat.optional) {
+        if (stat.optional[key]) {
+          const dayGuideStat = stat.optional[key].guide;
+          const dayAudioStat = stat.optional[key].audio;
+          const daySprintStat = stat.optional[key].sprint;
+          if (dayAudioStat && daySprintStat) {
+            statArr.push({
+              id: key,
+              date: key,
+              learnedWords: dayGuideStat
+                ? dayGuideStat.learnedWords + daySprintStat.learnedWords + dayAudioStat.learnedWords
+                : daySprintStat.learnedWords + dayAudioStat.learnedWords,
+              chainLength:
+                dayAudioStat.chainLength > daySprintStat.chainLength
+                  ? dayAudioStat.chainLength
+                  : daySprintStat.chainLength,
+              newWords: daySprintStat.newWords + dayAudioStat.newWords,
+              wrongAnswers: daySprintStat.wrongAnswers + dayAudioStat.wrongAnswers,
+              rightAnswers: daySprintStat.rightAnswers + dayAudioStat.rightAnswers,
+              percent:
+                dayAudioStat.rightAnswers +
+                  daySprintStat.rightAnswers +
+                  dayAudioStat.wrongAnswers +
+                  daySprintStat.wrongAnswers >
+                0
+                  ? Math.ceil(
+                      (100 * dayAudioStat.rightAnswers + daySprintStat.rightAnswers) /
+                        (dayAudioStat.rightAnswers +
+                          daySprintStat.rightAnswers +
+                          dayAudioStat.wrongAnswers +
+                          daySprintStat.wrongAnswers),
+                    )
+                  : 0,
+            });
+          } else if (dayAudioStat) {
+            statArr.push({
+              id: key,
+              date: key,
+              learnedWords: dayGuideStat
+                ? dayGuideStat.learnedWords + dayAudioStat.learnedWords
+                : dayAudioStat.learnedWords,
+              chainLength: dayAudioStat.chainLength,
+              newWords: dayAudioStat.newWords,
+              wrongAnswers: dayAudioStat.wrongAnswers,
+              rightAnswers: dayAudioStat.rightAnswers,
+              percent:
+                dayAudioStat.rightAnswers + dayAudioStat.wrongAnswers > 0
+                  ? Math.ceil(
+                      (100 * dayAudioStat.rightAnswers) / (dayAudioStat.rightAnswers + dayAudioStat.wrongAnswers),
+                    )
+                  : 0,
+            });
+          } else if (daySprintStat) {
+            statArr.push({
+              id: key,
+              date: key,
+              learnedWords: dayGuideStat
+                ? dayGuideStat.learnedWords + daySprintStat.learnedWords
+                : daySprintStat.learnedWords,
+              chainLength: daySprintStat.chainLength,
+              newWords: daySprintStat.newWords,
+              wrongAnswers: daySprintStat.wrongAnswers,
+              rightAnswers: daySprintStat.rightAnswers,
+              percent:
+                daySprintStat.rightAnswers + daySprintStat.wrongAnswers > 0
+                  ? Math.ceil(
+                      (100 * daySprintStat.rightAnswers) / (daySprintStat.rightAnswers + daySprintStat.wrongAnswers),
+                    )
+                  : 0,
+            });
+          } else {
+            statArr.push({
+              id: key,
+              date: key,
+              learnedWords: dayGuideStat ? dayGuideStat.learnedWords : 0,
+              chainLength: 0,
+              newWords: 0,
+              wrongAnswers: 0,
+              rightAnswers: 0,
+              percent: 0,
+            });
+          }
+        }
+      }
+    }
+    return statArr;
+  }, [audioStats, sprintStats, stat]);
+
+  console.log(guideStats);
 
   const dateComparator: GridComparatorFn = (date1, date2) => {
     return (date1 as string) > (date2 as string) ? -1 : 1;
@@ -91,6 +185,10 @@ const StatsPage: FC = () => {
         )
       ) : (
         <>
+          <h2>Общая статистика</h2>
+          <div className={styles.table}>
+            <DataGrid rows={guideStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
+          </div>
           <h2>Аудиовызов</h2>
           <div className={styles.table}>
             <DataGrid rows={audioStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
@@ -100,7 +198,7 @@ const StatsPage: FC = () => {
           <div className={styles.table}>
             <DataGrid rows={sprintStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
           </div>
-          <h2 className={styles.subtitle}>Количество новых слов за каждый день изучения</h2>
+          {/* <h2 className={styles.subtitle}>Количество новых слов за каждый день изучения</h2>
           <div style={{ height: '400px' }}>
             <NewWordsChart stat={stat} />
           </div>
@@ -109,7 +207,7 @@ const StatsPage: FC = () => {
           </h2>
           <div style={{ height: '400px' }}>
             <LearntWordsChart stat={stat} />
-          </div>
+          </div> */}
         </>
       )}
     </div>
