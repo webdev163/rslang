@@ -37,8 +37,8 @@ const options = {
 };
 
 const NewWordsChart: FC<NewWordsChartProps> = ({ stat }) => {
-  const [labels, setLabels] = useState<string[] | never[]>([]);
-  const [newWordsArr, setNewWordsArr] = useState<number[] | never[]>([]);
+  const [labels, setLabels] = useState<string[]>([]);
+  const [newWordsArr, setNewWordsArr] = useState<number[]>([]);
 
   useEffect(() => {
     if (stat && stat.optional) {
