@@ -1,13 +1,14 @@
-import React, { FC, FormEvent, useCallback, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useMemo, useState } from 'react';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
-import { LoginChecks, LoginData, LoginFormProps } from './types';
+import { LoginChecks, LoginData } from './types';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 import styles from './LoginForm.module.scss';
+import Button from '@mui/material/Button';
 
-const LoginForm: FC<LoginFormProps> = ({ onDone }) => {
+const LoginForm: FC = () => {
   const { auth } = useTypedSelector(state => state);
 
   const [checks, setChecks] = useState<LoginChecks>({ email: false, password: false });
@@ -27,7 +28,6 @@ const LoginForm: FC<LoginFormProps> = ({ onDone }) => {
       e.preventDefault();
       if (checks.email && checks.password) {
         signInAction(data.email, data.password);
-        if (onDone) onDone();
       }
     },
     [checks],
@@ -39,27 +39,34 @@ const LoginForm: FC<LoginFormProps> = ({ onDone }) => {
     },
     [],
   );
+
+  const isDisabledLogin = useMemo(() => !(checks.email && checks.password), [checks]);
+
+  const errorMsg = useMemo(() => {
+    return auth.error && auth.error.includes('Incorrect e-mail or password')
+      ? 'Неверный адрес или пароль'
+      : 'Адрес не найден';
+  }, [auth]);
+
   return (
     <form className={styles['login-form']} onSubmit={handleSubmit}>
-      <div className={`${styles['login-form-message']} ${(auth.loading || !auth.error) && styles.hidden}`}>{`${
-        auth.error && auth.error.includes('Incorrect e-mail or password')
-          ? 'Неверный адрес или пароль'
-          : 'Адрес не найден'
-      }`}</div>
+      <div className={`${styles['login-form-message']} ${(auth.loading || !auth.error) && styles.hidden}`}>
+        {errorMsg}
+      </div>
       <EmailInput
-        label={'Почта'}
+        label="Почта"
         onFulfilled={handleFulfilled('email')}
         onInput={handleInput('email')}
         value={auth.email}
       />
-      <PasswordInput label={'Пароль'} onFulfilled={handleFulfilled('password')} onInput={handleInput('password')} />
+      <PasswordInput label="Пароль" onFulfilled={handleFulfilled('password')} onInput={handleInput('password')} />
       <div className={styles.buttons}>
-        <button type="submit" className={styles.button__primary} disabled={!(checks.email && checks.password)}>
+        <Button variant="contained" type="submit" className={styles.button__primary} disabled={isDisabledLogin}>
           Войти
-        </button>
-        <button type="reset" className={styles.button__secondary}>
+        </Button>
+        <Button variant="outlined" type="reset" className={styles.button__secondary}>
           Сброс
-        </button>
+        </Button>
       </div>
     </form>
   );

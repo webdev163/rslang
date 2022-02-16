@@ -5,28 +5,11 @@
 }
 
 .tabs-wrp{
-  position: relative;
-  margin-top: 35px;
-  border: 1px solid $base-color;
+  padding: 20px;
   min-width: 400px;
   width: min-content;
-}
-.tabs{
-  position: absolute;
-  top:-35px;
-}
-.tab{
-  @include secondary-button;
-  @include active;
-}
+  text-align: center;
 
-.tab__selected{
-  @include primary-button;
-  @include active;
-}
-.tabs button:first-child{
-  border-radius: 0;
-}
-.tabs button:last-child{
-  border-radius: 0 10px 0 0;
+
+
 }

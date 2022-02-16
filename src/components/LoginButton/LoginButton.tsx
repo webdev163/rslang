@@ -16,9 +16,12 @@ import ListItemText from '@mui/material/ListItemText';
 import { LoginDialogProps } from './types';
 
 import styles from './LoginButton.module.scss';
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router';
 
 const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
   const [signUp, setSignUp] = useState<boolean>(false);
+  const { isAuthorized } = useTypedSelector(state => state.auth);
 
   const handleSignIn = useCallback(() => {
     setSignUp(false);
@@ -31,19 +34,21 @@ const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
     onClose();
   };
 
+  if (isAuthorized) onClose();
+
   return (
     <Dialog onClose={handleClose} open={open}>
       <div className={styles.login__wrp}>
         <div className={styles['tabs-wrp']}>
           <div className={styles.tabs}>
-            <button type="button" onClick={handleSignIn} className={signUp ? styles.tab : styles.tab__selected}>
+            <Button variant={signUp ? 'outlined' : 'contained'} type="button" onClick={handleSignIn}>
               Вход
-            </button>
-            <button type="button" onClick={handleSignUp} className={!signUp ? styles.tab : styles.tab__selected}>
+            </Button>
+            <Button variant={signUp ? 'contained' : 'outlined'} type="button" onClick={handleSignUp}>
               Регистрация
-            </button>
+            </Button>
           </div>
-          {signUp ? <RegistrationForm onDone={handleClose} /> : <LoginForm onDone={handleClose} />}
+          {signUp ? <RegistrationForm /> : <LoginForm />}
         </div>
       </div>
     </Dialog>
@@ -51,11 +56,14 @@ const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
 };
 
 const LoginListItem = () => {
+  const navigate = useNavigate();
   const auth = useTypedSelector(state => state.auth);
   const isAuthorized = auth.isAuthorized;
-  const { SignOutAction } = useActions();
+  const { SignOutAction, emptyDoneCounter } = useActions();
   const handleSignOut = useCallback(() => {
     SignOutAction();
+    emptyDoneCounter();
+    navigate(`/`);
   }, []);
 
   const [open, setOpen] = React.useState(false);
