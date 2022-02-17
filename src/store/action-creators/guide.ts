@@ -24,8 +24,7 @@ export const fetchHardWords = (userId: string, token: string) => {
       const response = await getAggregatedWords(
         userId,
         token,
-        undefined,
-        [{ 'userWord.difficulty': 'hard' }],
+        { 'userWord.difficulty': 'hard' },
         undefined,
         undefined,
         999,
