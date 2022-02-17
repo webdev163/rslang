@@ -35,6 +35,7 @@ const GameSprint: FC = () => {
 
   const {
     setSprintGroup,
+    setSprintGroupWithoutLearned,
     setCurrentWord,
     setRandowWord,
     startGame,
@@ -53,7 +54,7 @@ const GameSprint: FC = () => {
 
       const group = +from.group;
       const page = +from.page;
-      setSprintGroup(group, page);
+      setSprintGroupWithoutLearned(group, page);
     }
   }, []);
 

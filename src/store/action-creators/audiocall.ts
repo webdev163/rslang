@@ -1,8 +1,8 @@
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../reducers';
-import { GameStatistic, WordResponse } from '../../types/requests';
+import { AggregatedWordsResponse, GameStatistic, WordResponse } from '../../types/requests';
 import { AudioAction, AudioActionTypes, AudioCallOption } from '../../types/audiocall';
-import { getWords } from '../../utils/API';
+import { getAggregatedWords, getWord, getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
 import { Dispatch } from 'redux';
 
@@ -51,6 +51,40 @@ export const setAudioGroup =
   (group: number, page = Math.floor(Math.random() * 30)) =>
   async (dispatch: Dispatch<AudioAction>) => {
     const words = await getWords(group, page);
+    dispatch({
+      type: AudioActionTypes.SET_GROUP,
+      payload: {
+        words,
+        group,
+      },
+    });
+  };
+
+export const setAudioGroupWithoutLearned =
+  (group: number, page = Math.floor(Math.random() * 30)): ThunkAction<void, RootState, unknown, AudioAction> =>
+  async (dispatch, getState) => {
+    const state = getState();
+    const { userId, token } = state.auth.user;
+    const aggregatedWordsResponse = (
+      await getAggregatedWords(
+        userId,
+        token,
+        {
+          $and: [
+            { page, group },
+            {
+              $or: [{ userWord: null }, { 'userWord.optional': null }, { 'userWord.optional.done': { $ne: true } }],
+            },
+          ],
+        },
+        group,
+        page,
+        999,
+      )
+    )[0] as AggregatedWordsResponse;
+    const aggregatedWords = aggregatedWordsResponse.paginatedResults;
+    const promises = aggregatedWords.map(word => getWord(word._id));
+    const words = await Promise.all(promises);
     dispatch({
       type: AudioActionTypes.SET_GROUP,
       payload: {

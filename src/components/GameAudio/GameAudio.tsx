@@ -29,6 +29,7 @@ const GameAudio: FC = () => {
     setNextAudioWord,
     removeAudioCallWord,
     setAudioGroup,
+    setAudioGroupWithoutLearned,
     startAudioGame,
     stopAudioGame,
     receiveRouterStateInAudiocall,
@@ -44,7 +45,7 @@ const GameAudio: FC = () => {
 
       const group = +from.group;
       const page = +from.page;
-      setAudioGroup(group, page);
+      setAudioGroupWithoutLearned(group, page);
     }
   }, []);
 
