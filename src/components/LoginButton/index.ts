@@ -1,3 +1,3 @@
-import LoginListItem from './LoginButton';
+import LoginListItem from './LoginListItem';
 
 export default LoginListItem;

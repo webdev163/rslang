@@ -9,7 +9,7 @@ interface LoginData {
 }
 
 interface LoginFormProps {
-  onDone?: CallableFunction;
+  onClose?: CallableFunction;
 }
 
 export type { LoginChecks, LoginData, LoginFormProps };

@@ -1,59 +1,14 @@
 import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
-import { FC, useCallback, useState } from 'react';
-import RegistrationForm from '../RegistrationForm';
-import LoginForm from '../LoginForm';
+import { useCallback } from 'react';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useActions } from '../../hooks/useActions';
-
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-
-import { LoginDialogProps } from './types';
-
-import styles from './LoginButton.module.scss';
-import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
-
-const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
-  const [signUp, setSignUp] = useState<boolean>(false);
-  const { isAuthorized } = useTypedSelector(state => state.auth);
-
-  const handleSignIn = useCallback(() => {
-    setSignUp(false);
-  }, []);
-  const handleSignUp = useCallback(() => {
-    setSignUp(true);
-  }, []);
-
-  const handleClose = () => {
-    onClose();
-  };
-
-  if (isAuthorized) onClose();
-
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <div className={styles.login__wrp}>
-        <div className={styles['tabs-wrp']}>
-          <div className={styles.tabs}>
-            <Button variant={signUp ? 'outlined' : 'contained'} type="button" onClick={handleSignIn}>
-              Вход
-            </Button>
-            <Button variant={signUp ? 'contained' : 'outlined'} type="button" onClick={handleSignUp}>
-              Регистрация
-            </Button>
-          </div>
-          {signUp ? <RegistrationForm /> : <LoginForm />}
-        </div>
-      </div>
-    </Dialog>
-  );
-};
+import LoginDialog from './LoginDialog';
 
 const LoginListItem = () => {
   const navigate = useNavigate();
