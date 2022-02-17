@@ -6,6 +6,7 @@ import { getUserStatistic } from '../../utils/API';
 import NewWordsChart from '../../components/Charts/NewWordsChart';
 import LearntWordsChart from '../../components/Charts/LearntWordsChart';
 import { DataGrid, GridColDef, GridComparatorFn } from '@mui/x-data-grid';
+import Footer from '../../components/Footer';
 
 import styles from './StatsPage.module.scss';
 import { gameStatistics } from './types';
@@ -172,42 +173,45 @@ const StatsPage: FC = () => {
   ];
 
   return (
-    <div>
-      <h1 className={styles.title}>Статистика</h1>
-      {!user.token && <span>Для доступа к статистике необходимо авторизоваться</span>}
-      {isLoading ? (
-        user.token && (
-          <div className={styles.loader}>
-            <Loader />
-          </div>
-        )
-      ) : (
-        <>
-          <h2>Общая статистика</h2>
-          <div className={styles.table}>
-            <DataGrid rows={guideStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
-          </div>
-          <h2>Аудиовызов</h2>
-          <div className={styles.table}>
-            <DataGrid rows={audioStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
-          </div>
+    <div className={styles.wrapper}>
+      <div className={styles.bodyWrapper}>
+        <h1 className={styles.title}>Статистика</h1>
+        {!user.token && <span>Для доступа к статистике необходимо авторизоваться</span>}
+        {isLoading ? (
+          user.token && (
+            <div className={styles.loader}>
+              <Loader />
+            </div>
+          )
+        ) : (
+          <>
+            <h2>Общая статистика</h2>
+            <div className={styles.table}>
+              <DataGrid rows={guideStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
+            </div>
+            <h2>Аудиовызов</h2>
+            <div className={styles.table}>
+              <DataGrid rows={audioStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
+            </div>
 
-          <h2>Спринт</h2>
-          <div className={styles.table}>
-            <DataGrid rows={sprintStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
-          </div>
-          <h2 className={styles.subtitle}>Количество новых слов за каждый день изучения</h2>
-          <div style={{ height: '400px' }}>
-            <NewWordsChart stat={stat} />
-          </div>
-          <h2 className={styles.subtitle}>
-            Увеличение общего количества изученных слов за весь период обучения по дням
-          </h2>
-          <div style={{ height: '400px' }}>
-            <LearntWordsChart stat={stat} />
-          </div>
-        </>
-      )}
+            <h2>Спринт</h2>
+            <div className={styles.table}>
+              <DataGrid rows={sprintStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
+            </div>
+            <h2 className={styles.subtitle}>Количество новых слов за каждый день изучения</h2>
+            <div style={{ height: '400px' }}>
+              <NewWordsChart stat={stat} />
+            </div>
+            <h2 className={styles.subtitle}>
+              Увеличение общего количества изученных слов за весь период обучения по дням
+            </h2>
+            <div style={{ height: '400px' }}>
+              <LearntWordsChart stat={stat} />
+            </div>
+          </>
+        )}
+      </div>
+      <Footer />
     </div>
   );
 };
