@@ -94,6 +94,25 @@ export const setAudioGroupWithoutLearned =
     });
   };
 
+export const setAudioDifficultWords =
+  (): ThunkAction<void, RootState, unknown, AudioAction> => async (dispatch, getState) => {
+    const state = getState();
+    const { userId, token } = state.auth.user;
+    const aggregatedWordsResponse = (
+      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, undefined, undefined, 20)
+    )[0] as AggregatedWordsResponse;
+    const aggregatedWords = aggregatedWordsResponse.paginatedResults;
+    const promises = aggregatedWords.map(word => getWord(word._id));
+    const words = await Promise.all(promises);
+    dispatch({
+      type: AudioActionTypes.SET_GROUP,
+      payload: {
+        words,
+        group: 0,
+      },
+    });
+  };
+
 export const removeAudioCallWord = (word: WordResponse): AudioAction => ({
   type: AudioActionTypes.REMOVE_WORD,
   payload: word,

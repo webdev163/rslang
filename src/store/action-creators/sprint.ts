@@ -85,6 +85,26 @@ export const setSprintGroupWithoutLearned =
     });
   };
 
+export const setSprintDifficultWords =
+  (): ThunkAction<void, RootState, unknown, SprintAction> => async (dispatch, getState) => {
+    const state = getState();
+    const { userId, token } = state.auth.user;
+    const aggregatedWordsResponse = (
+      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, undefined, undefined, 999)
+    )[0] as AggregatedWordsResponse;
+    const aggregatedWords = aggregatedWordsResponse.paginatedResults;
+    const promises = aggregatedWords.map(word => getWord(word._id));
+    const words = await Promise.all(promises);
+    console.log(words);
+    dispatch({
+      type: SprintActionTypes.SET_GROUP,
+      payload: {
+        words,
+        group: 0,
+      },
+    });
+  };
+
 export const startGame = (): SprintAction => ({
   type: SprintActionTypes.START_GAME,
 });
