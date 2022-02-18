@@ -16,8 +16,10 @@ interface RouterParams {
   page: string;
 }
 
+type RouterFrom = RouterParams | 'difficult';
+
 interface RouterState {
-  from: RouterParams;
+  from: RouterFrom;
 }
 
-export type { User, PasswordChecks, RouterParams, RouterState };
+export type { User, PasswordChecks, RouterParams, RouterFrom, RouterState };

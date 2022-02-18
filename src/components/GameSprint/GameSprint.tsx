@@ -35,6 +35,8 @@ const GameSprint: FC = () => {
 
   const {
     setSprintGroup,
+    setSprintGroupWithoutLearned,
+    setSprintDifficultWords,
     setCurrentWord,
     setRandowWord,
     startGame,
@@ -48,12 +50,17 @@ const GameSprint: FC = () => {
   } = useActions();
 
   useEffect(() => {
+    console.log(from);
     if (from) {
+      console.log(from);
       receiveRouterStateInSprint();
-
-      const group = +from.group;
-      const page = +from.page;
-      setSprintGroup(group, page);
+      if (from === 'difficult') {
+        setSprintDifficultWords();
+      } else {
+        const group = +from.group;
+        const page = +from.page;
+        setSprintGroupWithoutLearned(group, page);
+      }
     }
   }, []);
 

@@ -9,4 +9,4 @@ interface gameStatistics {
   percent: number;
 }
 
-export type {gameStatistics}
+export type { gameStatistics };

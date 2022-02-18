@@ -29,6 +29,8 @@ const GameAudio: FC = () => {
     setNextAudioWord,
     removeAudioCallWord,
     setAudioGroup,
+    setAudioGroupWithoutLearned,
+    setAudioDifficultWords,
     startAudioGame,
     stopAudioGame,
     receiveRouterStateInAudiocall,
@@ -39,12 +41,17 @@ const GameAudio: FC = () => {
   } = useActions();
 
   useEffect(() => {
+    console.log(from);
     if (from) {
       receiveRouterStateInAudiocall();
-
-      const group = +from.group;
-      const page = +from.page;
-      setAudioGroup(group, page);
+      console.log(from);
+      if (from === 'difficult') {
+        setAudioDifficultWords();
+      } else {
+        const group = +from.group;
+        const page = +from.page;
+        setAudioGroupWithoutLearned(group, page);
+      }
     }
   }, []);
 

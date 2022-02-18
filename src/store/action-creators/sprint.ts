@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { GameStatistic, WordResponse } from '../../types/requests';
+import { AggregatedWordsResponse, GameStatistic, WordResponse } from '../../types/requests';
 import { SprintAction, SprintActionTypes } from '../../types/sprint';
-import { getWords } from '../../utils/API';
+import { getAggregatedWords, getWord, getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
 import { RootState } from '../reducers';
 
@@ -47,6 +47,60 @@ export const setSprintGroup =
       payload: {
         words,
         group,
+      },
+    });
+  };
+
+export const setSprintGroupWithoutLearned =
+  (group: number, page = Math.floor(Math.random() * 30)): ThunkAction<void, RootState, unknown, SprintAction> =>
+  async (dispatch, getState) => {
+    const state = getState();
+    const { userId, token } = state.auth.user;
+    const aggregatedWordsResponse = (
+      await getAggregatedWords(
+        userId,
+        token,
+        {
+          $and: [
+            { page, group },
+            {
+              $or: [{ userWord: null }, { 'userWord.optional': null }, { 'userWord.optional.done': { $ne: true } }],
+            },
+          ],
+        },
+        group,
+        page,
+        999,
+      )
+    )[0] as AggregatedWordsResponse;
+    const aggregatedWords = aggregatedWordsResponse.paginatedResults;
+    const promises = aggregatedWords.map(word => getWord(word._id));
+    const words = await Promise.all(promises);
+    dispatch({
+      type: SprintActionTypes.SET_GROUP,
+      payload: {
+        words,
+        group,
+      },
+    });
+  };
+
+export const setSprintDifficultWords =
+  (): ThunkAction<void, RootState, unknown, SprintAction> => async (dispatch, getState) => {
+    const state = getState();
+    const { userId, token } = state.auth.user;
+    const aggregatedWordsResponse = (
+      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, undefined, undefined, 999)
+    )[0] as AggregatedWordsResponse;
+    const aggregatedWords = aggregatedWordsResponse.paginatedResults;
+    const promises = aggregatedWords.map(word => getWord(word._id));
+    const words = await Promise.all(promises);
+    console.log(words);
+    dispatch({
+      type: SprintActionTypes.SET_GROUP,
+      payload: {
+        words,
+        group: 0,
       },
     });
   };

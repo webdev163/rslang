@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RouterParams, RouterState } from '../types/types';
+import { RouterFrom, RouterState } from '../types/types';
 
 export const useLocationFrom = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  let from: RouterParams | undefined;
+  let from: RouterFrom | undefined;
   if (location.state) {
     from = (location.state as RouterState).from;
   }

@@ -4,8 +4,7 @@ import { AggregatedWordsResponse, RequestPaths, ResponseStatuses } from '../../t
 const getAggregatedWords = async (
   userId: string,
   token: string,
-  filter: 'and' | 'or' | undefined,
-  filterValues: Record<string, string>[],
+  filter: Record<string, unknown>,
   group?: number,
   page?: number,
   wordsPerPage?: number,
@@ -14,8 +13,7 @@ const getAggregatedWords = async (
   if (group) params.push(`group=${group}`);
   if (page) params.push(`page=${page}`);
   if (wordsPerPage) params.push(`wordsPerPage=${wordsPerPage}`);
-  params.push(`filter=${filterValues.map(value => JSON.stringify(value)).join(filter)}`);
-
+  params.push(`filter=${JSON.stringify(filter)}`);
   const resp = await fetch(
     `${API_URL}${RequestPaths.USERS}/${userId}${RequestPaths.AGGREGATED_WORDS}?${params.join('&')}`,
     {
