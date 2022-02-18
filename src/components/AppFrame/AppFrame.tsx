@@ -23,6 +23,9 @@ import GameAudio from '../../components/GameAudio';
 import GameSprint from '../../components/GameSprint';
 import { Routes, Route, Link } from 'react-router-dom';
 import LoginListItem from '../LoginButton';
+import SchoolIcon from '@mui/icons-material/School';
+
+import styles from './AppFrame.module.scss';
 
 const drawerWidth = 280;
 
@@ -33,7 +36,10 @@ const AppFrame: FC = () => {
       <AppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            RSLang
+            <div className={styles.headerWrapper}>
+              <SchoolIcon />
+              <h1 className={styles.title}>English Academy</h1>
+            </div>
           </Typography>
         </Toolbar>
       </AppBar>

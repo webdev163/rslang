@@ -4,6 +4,7 @@ import { useActions } from '../../hooks/useActions';
 import CardsList from '../../components/Guide/CardsList';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import Footer from '../../components/Footer';
 
 import styles from './GuidePage.module.scss';
 
@@ -33,9 +34,12 @@ const GuidePage: FC = () => {
 
   return (
     <div className={styles.guideWrapper}>
-      <h1 className={styles.title}>Учебник</h1>
-      <GuideHeader />
-      <CardsList />
+      <div className={styles.wrapperInner}>
+        <h1 className={styles.title}>Учебник</h1>
+        <GuideHeader />
+        <CardsList />
+      </div>
+      <Footer />
     </div>
   );
 };
