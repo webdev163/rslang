@@ -100,7 +100,7 @@ const AppFrame: FC = () => {
           <Route path="/" element={<MainPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="guide/" element={<GuidePage />} />
-          <Route path="guide/group:group/page:page" element={<GuidePage />} />
+          <Route path="guide/group:group/page:page" element={<GuidePage key={Date.now()} />} />
           <Route path="guide/hard" element={<HardWordsPage />} />
           <Route path="games" element={<GamesPage />} />
           <Route path="games/audio" element={<GameAudio />} />

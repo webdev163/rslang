@@ -8,11 +8,15 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import styles from './GuidePage.module.scss';
 
 const GuidePage: FC = () => {
-  const { fetchWords, setGuidePage, setWordsGroup } = useActions();
+  const { fetchWords, setGuidePage, setWordsGroup, emptyDoneCounter } = useActions();
   const { group, page } = useTypedSelector(state => state.guide);
   const { page: currentPage, group: currentGroup } = useParams();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    emptyDoneCounter();
+  }, []);
 
   useEffect(() => {
     currentGroup && currentPage
