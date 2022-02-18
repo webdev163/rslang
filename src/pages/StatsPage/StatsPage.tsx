@@ -41,9 +41,7 @@ const StatsPage: FC = () => {
             wrongAnswers: dayGameStat.wrongAnswers,
             rightAnswers: dayGameStat.rightAnswers,
             percent:
-              dayGameStat.rightAnswers + dayGameStat.wrongAnswers > 0
-                ? Math.ceil((100 * dayGameStat.rightAnswers) / (dayGameStat.rightAnswers + dayGameStat.wrongAnswers))
-                : 0,
+              Math.round((100 * dayGameStat.rightAnswers) / (dayGameStat.rightAnswers + dayGameStat.wrongAnswers)) || 0,
           });
         }
       }
@@ -64,6 +62,13 @@ const StatsPage: FC = () => {
           const dayAudioStat = stat.optional[key].audio;
           const daySprintStat = stat.optional[key].sprint;
           if (dayAudioStat && daySprintStat) {
+            const percent = Math.round(
+              (100 * (dayAudioStat.rightAnswers + daySprintStat.rightAnswers)) /
+                (dayAudioStat.rightAnswers +
+                  daySprintStat.rightAnswers +
+                  dayAudioStat.wrongAnswers +
+                  daySprintStat.wrongAnswers),
+            );
             statArr.push({
               id: key,
               date: key,
@@ -77,20 +82,7 @@ const StatsPage: FC = () => {
               newWords: daySprintStat.newWords + dayAudioStat.newWords,
               wrongAnswers: daySprintStat.wrongAnswers + dayAudioStat.wrongAnswers,
               rightAnswers: daySprintStat.rightAnswers + dayAudioStat.rightAnswers,
-              percent:
-                dayAudioStat.rightAnswers +
-                  daySprintStat.rightAnswers +
-                  dayAudioStat.wrongAnswers +
-                  daySprintStat.wrongAnswers >
-                0
-                  ? Math.ceil(
-                      (100 * dayAudioStat.rightAnswers + daySprintStat.rightAnswers) /
-                        (dayAudioStat.rightAnswers +
-                          daySprintStat.rightAnswers +
-                          dayAudioStat.wrongAnswers +
-                          daySprintStat.wrongAnswers),
-                    )
-                  : 0,
+              percent: percent || 0,
             });
           } else if (dayAudioStat) {
             statArr.push({
@@ -104,11 +96,9 @@ const StatsPage: FC = () => {
               wrongAnswers: dayAudioStat.wrongAnswers,
               rightAnswers: dayAudioStat.rightAnswers,
               percent:
-                dayAudioStat.rightAnswers + dayAudioStat.wrongAnswers > 0
-                  ? Math.ceil(
-                      (100 * dayAudioStat.rightAnswers) / (dayAudioStat.rightAnswers + dayAudioStat.wrongAnswers),
-                    )
-                  : 0,
+                Math.round(
+                  (100 * dayAudioStat.rightAnswers) / (dayAudioStat.rightAnswers + dayAudioStat.wrongAnswers),
+                ) || 0,
             });
           } else if (daySprintStat) {
             statArr.push({
@@ -122,11 +112,9 @@ const StatsPage: FC = () => {
               wrongAnswers: daySprintStat.wrongAnswers,
               rightAnswers: daySprintStat.rightAnswers,
               percent:
-                daySprintStat.rightAnswers + daySprintStat.wrongAnswers > 0
-                  ? Math.ceil(
-                      (100 * daySprintStat.rightAnswers) / (daySprintStat.rightAnswers + daySprintStat.wrongAnswers),
-                    )
-                  : 0,
+                Math.round(
+                  (100 * daySprintStat.rightAnswers) / (daySprintStat.rightAnswers + daySprintStat.wrongAnswers),
+                ) || 0,
             });
           } else {
             statArr.push({
@@ -146,6 +134,8 @@ const StatsPage: FC = () => {
     return statArr;
   }, [audioStats, sprintStats, stat]);
 
+  console.log(guideStats, audioStats, sprintStats);
+
   const dateComparator: GridComparatorFn = (date1, date2) => {
     return (date1 as string) > (date2 as string) ? -1 : 1;
   };
@@ -155,19 +145,49 @@ const StatsPage: FC = () => {
       field: 'id',
       headerName: 'Дата',
       type: 'string',
-      minWidth: 70,
-      flex: 1,
+      width: 100,
       hideable: false,
       sortComparator: dateComparator,
+      description: 'Дата',
     },
-    { field: 'newWords', headerName: 'Новые слова', type: 'number', minWidth: 70, flex: 1 },
-    { field: 'learnedWords', headerName: 'Изучено', type: 'number', minWidth: 70, flex: 1 },
-    { field: 'percent', headerName: 'Процент правильных ответов', type: 'number', minWidth: 70, flex: 1 },
     {
-      field: 'chainLength',
-      headerName: 'Цепь',
+      field: 'newWords',
+      headerName: 'Новые слова',
+      type: 'number',
+      width: 150,
+      description: 'Слова, попавшие в игру впервые',
+      flex: 1,
+    },
+    {
+      field: 'learnedWords',
+      headerName: 'Изучено',
       type: 'number',
       minWidth: 70,
+      description: 'Изученные слова',
+      flex: 1,
+    },
+    {
+      field: 'rightAnswers',
+      headerName: 'Правильные ответы',
+      type: 'number',
+      minWidth: 200,
+      description: 'Количество правильных ответов',
+      flex: 1,
+    },
+    {
+      field: 'percent',
+      headerName: 'Правильные ответы, %',
+      type: 'number',
+      width: 200,
+      description: 'Процент правильных ответов в играх',
+      flex: 1,
+    },
+    {
+      field: 'chainLength',
+      headerName: 'Максимальная серия',
+      type: 'number',
+      width: 200,
+      description: 'Максимальная серия правильных ответов в играх',
       flex: 1,
     },
   ];
@@ -185,16 +205,17 @@ const StatsPage: FC = () => {
           )
         ) : (
           <>
-            <h2>Общая статистика</h2>
+            <h2>Общая статистика по словам</h2>
             <div className={styles.table}>
               <DataGrid rows={guideStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
             </div>
-            <h2>Аудиовызов</h2>
+            <h2>Статистика по играм</h2>
+            <h3>Аудиовызов</h3>
             <div className={styles.table}>
               <DataGrid rows={audioStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
             </div>
 
-            <h2>Спринт</h2>
+            <h3>Спринт</h3>
             <div className={styles.table}>
               <DataGrid rows={sprintStats} columns={columns} pageSize={5} rowsPerPageOptions={[5]} disableColumnMenu />
             </div>

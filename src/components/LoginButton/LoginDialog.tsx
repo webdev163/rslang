@@ -34,7 +34,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ onClose, open }) => {
               Регистрация
             </Button>
           </div>
-          {signUp ? <RegistrationForm /> : <LoginForm onClose={handleClose} />}
+          {signUp ? <RegistrationForm onClose={handleClose} /> : <LoginForm onClose={handleClose} />}
         </div>
       </div>
     </Dialog>

@@ -129,16 +129,27 @@ const CardItem: FC<CardItemProps> = ({
     let totalLearned = prevStats.learnedWords;
     totalLearned = type === 'inc' ? totalLearned + 1 : totalLearned - 1;
 
-    updateUserStatistic(user.userId, user.token, totalLearned, {
-      ...prevStats.optional,
-      [date]: {
-        ...prevStats.optional[date],
-        // eslint-disable-next-line prettier/prettier
-        'guide': {
-          learnedWords: currentNum,
+    if (prevStats.optional) {
+      updateUserStatistic(user.userId, user.token, totalLearned, {
+        ...prevStats.optional,
+        [date]: {
+          ...prevStats.optional[date],
+          // eslint-disable-next-line prettier/prettier
+          guide: {
+            learnedWords: currentNum,
+          },
         },
-      },
-    });
+      });
+    } else {
+      updateUserStatistic(user.userId, user.token, totalLearned, {
+        [date]: {
+          // eslint-disable-next-line prettier/prettier
+          guide: {
+            learnedWords: currentNum,
+          },
+        },
+      });
+    }
   };
 
   const generateCardButtons = () => {
