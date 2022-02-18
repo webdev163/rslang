@@ -5,6 +5,7 @@
 .github-names {
   display: flex;
   align-items: center;
+  margin-left: 150px;
 }
 
 .github-item {
@@ -33,4 +34,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.notification {
+  font-size: 12px;
+  color: inherit;
+  text-decoration: none;
+  transition: color .3s;
+  &:hover {
+    color: #fab54d;
+  }
 }
