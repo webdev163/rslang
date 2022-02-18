@@ -1,20 +1,24 @@
-import React, { FC, FormEvent, useCallback, useMemo, useState } from 'react';
+import React, { FC, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { MAX_USER_NAME_LENGTH } from '../../utils/constants';
 import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
 import TextInput from '../inputs/TextInput';
-import { RegistrationChecks, RegistrationData } from './types';
+import { RegistrationChecks, RegistrationData, RegistrationFormProps } from './types';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 import styles from './RegistrationForm.module.scss';
 import { Button } from '@mui/material';
 
-const RegistrationForm: FC = () => {
+const RegistrationForm: FC<RegistrationFormProps> = ({ onClose }) => {
   const { auth } = useTypedSelector(state => state);
   const [checks, setChecks] = useState<RegistrationChecks>({ name: false, email: false, password: false });
   const [data, setData] = useState<RegistrationData>({ name: '', email: auth.email, password: '' });
   const { RegistrationAction } = useActions();
+
+  useEffect(() => {
+    if (auth.isAuthorized && onClose) onClose();
+  }, [auth.isAuthorized]);
 
   const handleFulfilled = useCallback(
     (key: string) => (isFulfilled: boolean) => {

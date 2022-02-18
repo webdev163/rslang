@@ -11,6 +11,6 @@ interface RegistrationChecks {
 }
 
 interface RegistrationFormProps {
-  onDone?: CallableFunction;
+  onClose?: CallableFunction;
 }
 export type { RegistrationChecks, RegistrationData, RegistrationFormProps };
