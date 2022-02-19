@@ -1,6 +1,5 @@
-export interface DifficultyDialogProps {
-  open: boolean;
-  onSelect: (index: number) => void;
+export interface ResultsDialogProps {
+  showResult: boolean;
 }
 
 export interface DialogTitleProps {

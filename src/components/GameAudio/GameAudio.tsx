@@ -10,6 +10,7 @@ import { Button, Grid, Container, Dialog } from '@mui/material';
 import styles from './GameAudio.module.scss';
 import { AudioCallOption } from '../../types/audiocall';
 import { changeStatistic } from '../../utils/API/user-statistic';
+import ResultsDialog from '../ResultsDialog';
 
 const GameAudio: FC = () => {
   const from = useLocationFrom();
@@ -38,6 +39,8 @@ const GameAudio: FC = () => {
     resetAudioState,
     receiveUserAnswerAction,
     resetAudioRigthAnswers,
+    updateRightAnswersArr,
+    updateWrongAnswersArr,
   } = useActions();
 
   useEffect(() => {
@@ -72,9 +75,11 @@ const GameAudio: FC = () => {
     if (option.isTrue) {
       incrementAudioScore();
       receiveUserAnswerAction(true, currentWord, 'audio');
+      updateRightAnswersArr(currentWord);
     } else {
       receiveUserAnswerAction(false, currentWord, 'audio');
       resetAudioRigthAnswers();
+      updateWrongAnswersArr(currentWord);
     }
     setAnswerIsReceived(true);
   };
@@ -153,9 +158,7 @@ const GameAudio: FC = () => {
             setShowDifficulty(false);
           }}
         />
-        <Dialog open={showResult} onClose={() => resetAudioState()}>
-          Result: {score}
-        </Dialog>
+        <ResultsDialog showResult={showResult} />
       </Container>
     );
   }
@@ -173,9 +176,7 @@ const GameAudio: FC = () => {
             Начать
           </Button>
         </Dialog>
-        <Dialog open={showResult} onClose={() => resetAudioState()}>
-          Result: {score}
-        </Dialog>
+        <ResultsDialog showResult={showResult} />
       </Container>
     );
   }
