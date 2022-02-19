@@ -11,14 +11,9 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
+import { DialogTitleProps } from './types';
 
 import styles from './ResultsDialog.module.scss';
-
-export interface DialogTitleProps {
-  id: string;
-  children?: React.ReactNode;
-  onClose: () => void;
-}
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -107,9 +102,7 @@ const ResultsDialog: FC<ResultsDialogProps> = ({ showResult }) => {
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <div className={styles.resultsWrapper}>
-            <p style={{ fontSize: 18 }}>
-              <b>Результат</b>: {score} баллов
-            </p>
+            <p className={styles.resultsSubtitle}>Результат: {score} баллов</p>
             {generateResults()}
           </div>
         </DialogContent>
