@@ -44,16 +44,18 @@ const GameAudio: FC = () => {
   } = useActions();
 
   useEffect(() => {
-    console.log(from);
     if (from) {
       receiveRouterStateInAudiocall();
-      console.log(from);
       if (from === 'difficult') {
         setAudioDifficultWords();
       } else {
         const group = +from.group;
         const page = +from.page;
-        setAudioGroupWithoutLearned(group, page);
+        if (userId) {
+          setAudioGroupWithoutLearned(group, page);
+        } else {
+          setAudioGroup(group, page);
+        }
       }
     }
   }, []);

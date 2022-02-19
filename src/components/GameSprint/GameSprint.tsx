@@ -59,7 +59,11 @@ const GameSprint: FC = () => {
       } else {
         const group = +from.group;
         const page = +from.page;
-        setSprintGroupWithoutLearned(group, page);
+        if (userId) {
+          setSprintGroupWithoutLearned(group, page);
+        } else {
+          setSprintGroup(group, page);
+        }
       }
     }
   }, []);
