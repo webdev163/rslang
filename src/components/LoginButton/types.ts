@@ -3,4 +3,8 @@ interface LoginDialogProps {
   open: boolean;
 }
 
-export type { LoginDialogProps };
+interface LoginListItemProps {
+  withText: boolean;
+}
+
+export type { LoginDialogProps, LoginListItemProps };

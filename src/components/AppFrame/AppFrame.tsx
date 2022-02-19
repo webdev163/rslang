@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -24,10 +24,11 @@ import GameSprint from '../../components/GameSprint';
 import { Routes, Route, Link } from 'react-router-dom';
 import LoginListItem from '../LoginButton';
 import SchoolIcon from '@mui/icons-material/School';
+import { SCREEN_WIDTH_FULL } from '../../utils/constants';
 
 import styles from './AppFrame.module.scss';
 
-const drawerWidth = 280;
+const drawerWidth = SCREEN_WIDTH_FULL ? 280 : 75;
 
 const AppFrame: FC = () => {
   return (
@@ -48,7 +49,7 @@ const AppFrame: FC = () => {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box', padding: '10px 0 0 0' },
         }}
       >
         <Toolbar />
@@ -58,9 +59,9 @@ const AppFrame: FC = () => {
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Главная" />
+              {SCREEN_WIDTH_FULL && <ListItemText primary="Главная" />}
             </ListItem>
-            <LoginListItem />
+            <LoginListItem withText={SCREEN_WIDTH_FULL} />
             <ListItem
               button
               key="Учебник"
@@ -71,7 +72,7 @@ const AppFrame: FC = () => {
               <ListItemIcon>
                 <MenuBookIcon />
               </ListItemIcon>
-              <ListItemText primary="Учебник" />
+              {SCREEN_WIDTH_FULL && <ListItemText primary="Учебник" />}
             </ListItem>
             <ListItem
               button
@@ -83,7 +84,7 @@ const AppFrame: FC = () => {
               <ListItemIcon>
                 <ExtensionIcon />
               </ListItemIcon>
-              <ListItemText primary="Мини-игры" />
+              {SCREEN_WIDTH_FULL && <ListItemText primary="Мини-игры" />}
             </ListItem>
             <ListItem
               button
@@ -95,7 +96,7 @@ const AppFrame: FC = () => {
               <ListItemIcon>
                 <MovingIcon />
               </ListItemIcon>
-              <ListItemText primary="Статистика" />
+              {SCREEN_WIDTH_FULL && <ListItemText primary="Статистика" />}
             </ListItem>
           </List>
         </Box>

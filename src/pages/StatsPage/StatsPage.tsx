@@ -7,9 +7,10 @@ import NewWordsChart from '../../components/Charts/NewWordsChart';
 import LearntWordsChart from '../../components/Charts/LearntWordsChart';
 import { DataGrid, GridColDef, GridComparatorFn } from '@mui/x-data-grid';
 import Footer from '../../components/Footer';
+import { gameStatistics } from './types';
+import { SCREEN_WIDTH_FULL } from '../../utils/constants';
 
 import styles from './StatsPage.module.scss';
-import { gameStatistics } from './types';
 
 const StatsPage: FC = () => {
   const [stat, setStat] = useState<UserStatisticsResponse>();
@@ -140,57 +141,101 @@ const StatsPage: FC = () => {
     return (date1 as string) > (date2 as string) ? -1 : 1;
   };
 
-  const columns: GridColDef[] = [
-    {
-      field: 'id',
-      headerName: 'Дата',
-      type: 'string',
-      width: 100,
-      hideable: false,
-      sortComparator: dateComparator,
-      description: 'Дата',
-    },
-    {
-      field: 'newWords',
-      headerName: 'Новые слова',
-      type: 'number',
-      width: 150,
-      description: 'Слова, попавшие в игру впервые',
-      flex: 1,
-    },
-    {
-      field: 'learnedWords',
-      headerName: 'Изучено',
-      type: 'number',
-      minWidth: 70,
-      description: 'Изученные слова',
-      flex: 1,
-    },
-    {
-      field: 'rightAnswers',
-      headerName: 'Правильные ответы',
-      type: 'number',
-      minWidth: 200,
-      description: 'Количество правильных ответов',
-      flex: 1,
-    },
-    {
-      field: 'percent',
-      headerName: 'Правильные ответы, %',
-      type: 'number',
-      width: 200,
-      description: 'Процент правильных ответов в играх',
-      flex: 1,
-    },
-    {
-      field: 'chainLength',
-      headerName: 'Максимальная серия',
-      type: 'number',
-      width: 200,
-      description: 'Максимальная серия правильных ответов в играх',
-      flex: 1,
-    },
-  ];
+  const columns: GridColDef[] = SCREEN_WIDTH_FULL
+    ? [
+        {
+          field: 'id',
+          headerName: 'Дата',
+          type: 'string',
+          width: 100,
+          hideable: false,
+          sortComparator: dateComparator,
+          description: 'Дата',
+        },
+        {
+          field: 'newWords',
+          headerName: 'Новые слова',
+          type: 'number',
+          width: 150,
+          description: 'Слова, попавшие в игру впервые',
+          flex: 1,
+        },
+        {
+          field: 'learnedWords',
+          headerName: 'Изучено',
+          type: 'number',
+          minWidth: 70,
+          description: 'Изученные слова',
+          flex: 1,
+        },
+        {
+          field: 'rightAnswers',
+          headerName: 'Правильные ответы',
+          type: 'number',
+          minWidth: 200,
+          description: 'Количество правильных ответов',
+          flex: 1,
+        },
+        {
+          field: 'percent',
+          headerName: 'Правильные ответы, %',
+          type: 'number',
+          width: 200,
+          description: 'Процент правильных ответов в играх',
+          flex: 1,
+        },
+        {
+          field: 'chainLength',
+          headerName: 'Максимальная серия',
+          type: 'number',
+          width: 200,
+          description: 'Максимальная серия правильных ответов в играх',
+          flex: 1,
+        },
+      ]
+    : [
+        {
+          field: 'id',
+          headerName: 'Дата',
+          type: 'string',
+          width: 100,
+          hideable: false,
+          sortComparator: dateComparator,
+          description: 'Дата',
+        },
+        {
+          field: 'newWords',
+          headerName: 'Новые слова',
+          type: 'number',
+          width: 150,
+          description: 'Слова, попавшие в игру впервые',
+          flex: 1,
+        },
+        {
+          field: 'learnedWords',
+          headerName: 'Изучено',
+          type: 'number',
+          minWidth: 70,
+          description: 'Изученные слова',
+          flex: 1,
+        },
+        {
+          field: 'percent',
+          headerName: 'Правильные ответы, %',
+          type: 'number',
+          width: 200,
+          description: 'Процент правильных ответов в играх',
+          flex: 1,
+        },
+        {
+          field: 'chainLength',
+          headerName: 'Максимальная серия',
+          type: 'number',
+          width: 200,
+          description: 'Максимальная серия правильных ответов в играх',
+          flex: 1,
+        },
+      ];
 
   return (
     <div className={styles.wrapper}>
