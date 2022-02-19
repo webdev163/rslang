@@ -42,7 +42,7 @@ export const receiveUserAnswerAction =
     const userWord = words.find(w => w.wordId === word.id);
     if (userWord) {
       let optionals = userWord.optional || {};
-      const difficulty = userWord.difficulty;
+      let difficulty = userWord.difficulty;
       if (isRightAnswer) {
         const chain = optionals.rightChain || 0;
         const newChain = chain + 1;
@@ -50,6 +50,7 @@ export const receiveUserAnswerAction =
         if (difficulty === 'hard') limit = DIFFICULT_WORD_LEARNING_CHAIN;
         if (newChain === limit) {
           optionals = { ...optionals, done: true };
+          difficulty = 'weak';
           statistic = { ...statistic, learnedWords: statistic.learnedWords + 1 };
         }
         optionals = { ...optionals, rightAnswers: (optionals.rightAnswers || 0) + 1, rightChain: newChain };
