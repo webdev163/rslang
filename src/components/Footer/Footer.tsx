@@ -32,7 +32,7 @@ const Footer: FC = () => {
           </div>
         </div>
         <div>
-          <div style={{ textAlign: 'right' }}>© {new Date().getFullYear()}</div>
+          <div className={styles.copy}>© {new Date().getFullYear()}</div>
           <a className={styles.notification} href="https://www.freepik.com/" target="__blank">
             illustrations - www.freepik.com
           </a>
