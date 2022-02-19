@@ -71,10 +71,7 @@ const changeStatistic = async (
             dayPrevStat[game] && dayPrevStat[game].learnedWords
               ? dayPrevStat[game].learnedWords + statistic.learnedWords
               : statistic.learnedWords,
-          chainLength:
-            dayPrevStat[game] && dayPrevStat[game].chainLength && dayPrevStat[game].chainLength > statistic.chainLength
-              ? dayPrevStat[game].chainLength
-              : statistic.learnedWords,
+          chainLength: Math.max(dayPrevStat[game] && dayPrevStat[game].chainLength, statistic.chainLength),
           wrongAnswers:
             dayPrevStat[game] && dayPrevStat[game].wrongAnswers
               ? dayPrevStat[game].wrongAnswers + statistic.wrongAnswers

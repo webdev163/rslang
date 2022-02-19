@@ -12,13 +12,8 @@ const initialState: SprintState = {
   pointsForAnswer: 10,
   rightAnswers: 0,
   chainLength: 0,
-  statistic: {
-    newWords: 0,
-    learnedWords: 0,
-    chainLength: 0,
-    wrongAnswers: 0,
-    rightAnswers: 0,
-  },
+  rightAnswersArr: [],
+  wrongAnswersArr: [],
 };
 
 export const sprintReducer = (state = initialState, action: SprintAction): SprintState => {
@@ -51,8 +46,10 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
       };
     case SprintActionTypes.RESET_RIGHT_ANSWERS:
       return { ...state, pointsForAnswer: 10, rightAnswers: 0, chainLength: 0 };
-    case SprintActionTypes.UPDATE_STATISTIC:
-      return { ...state, statistic: action.payload };
+    case SprintActionTypes.UPDATE_RIGHT_ANSWERS_ARR:
+      return { ...state, rightAnswersArr: [...state.rightAnswersArr, action.payload] };
+    case SprintActionTypes.UPDATE_WRONG_ANSWERS_ARR:
+      return { ...state, wrongAnswersArr: [...state.wrongAnswersArr, action.payload] };
     case SprintActionTypes.RESET_STATE:
       return initialState;
     default:

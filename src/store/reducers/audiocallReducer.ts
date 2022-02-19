@@ -10,13 +10,6 @@ const initialState: AudioState = {
   score: 0,
   pointsForAnswer: 10,
   chainLength: 0,
-  statistic: {
-    newWords: 0,
-    learnedWords: 0,
-    chainLength: 0,
-    wrongAnswers: 0,
-    rightAnswers: 0,
-  },
   rightAnswersArr: [],
   wrongAnswersArr: [],
 };
@@ -41,8 +34,6 @@ export const audioReducer = (state = initialState, action: AudioAction): AudioSt
       return { ...state, score: state.score + state.pointsForAnswer, chainLength: state.chainLength + 1 };
     case AudioActionTypes.RESET_RIGHT_ANSWERS:
       return { ...state, chainLength: 0 };
-    case AudioActionTypes.UPDATE_STATISTIC:
-      return { ...state, statistic: action.payload };
     case AudioActionTypes.UPDATE_RIGHT_ANSWERS_ARR:
       return { ...state, rightAnswersArr: [...state.rightAnswersArr, action.payload] };
     case AudioActionTypes.UPDATE_WRONG_ANSWERS_ARR:

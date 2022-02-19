@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { batch } from 'react-redux';
 import { useActions } from './../../hooks/useActions';
 import { useTypedSelector } from './../../hooks/useTypedSelector';
 import { useLocationFrom } from '../../hooks/useLocationFrom';
@@ -9,21 +10,25 @@ import { Button, Grid, Container, Dialog } from '@mui/material';
 
 import styles from './GameAudio.module.scss';
 import { AudioCallOption } from '../../types/audiocall';
-import { changeStatistic } from '../../utils/API/user-statistic';
 import ResultsDialog from '../ResultsDialog';
 
 const GameAudio: FC = () => {
   const from = useLocationFrom();
 
-  const { userId, token } = useTypedSelector(state => state.auth.user);
+  const { userId } = useTypedSelector(state => state.auth.user);
 
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
   const [answerIsReceived, setAnswerIsReceived] = useState(false);
-  const [statisticIsSended, setStatisticIsSended] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<AudioCallOption[]>([]);
+  const [totalWords, setTotalWords] = useState(0);
+  const [isTotalWordsCounted, setIsTotalWordsCounted] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  const { words, currentWord, isGameOn, isRouterParamsReceived, options, score, statistic } = useTypedSelector(
+  const [btnIndex, setBtnIndex] = useState(0);
+  const [lastAnswerIsRight, setLastAnswerIsRight] = useState(false);
+
+  const { words, currentWord, isGameOn, isRouterParamsReceived, options, score } = useTypedSelector(
     state => state.audio,
   );
   const {
@@ -44,16 +49,25 @@ const GameAudio: FC = () => {
   } = useActions();
 
   useEffect(() => {
-    console.log(from);
+    if (words.length && !isTotalWordsCounted) {
+      setTotalWords(words.length);
+      setIsTotalWordsCounted(true);
+    }
+  }, [words]);
+
+  useEffect(() => {
     if (from) {
       receiveRouterStateInAudiocall();
-      console.log(from);
       if (from === 'difficult') {
         setAudioDifficultWords();
       } else {
         const group = +from.group;
         const page = +from.page;
-        setAudioGroupWithoutLearned(group, page);
+        if (userId) {
+          setAudioGroupWithoutLearned(group, page);
+        } else {
+          setAudioGroup(group, page);
+        }
       }
     }
   }, []);
@@ -70,24 +84,31 @@ const GameAudio: FC = () => {
     if (options.length) setShuffledOptions(shuffle(options));
   }, [options]);
 
-  const receiveAnswer = (option: AudioCallOption) => {
+  const receiveAnswer = (option: AudioCallOption, index: number) => {
     if (!currentWord) return;
     if (option.isTrue) {
-      incrementAudioScore();
-      receiveUserAnswerAction(true, currentWord, 'audio');
-      updateRightAnswersArr(currentWord);
+      batch(() => {
+        incrementAudioScore();
+        receiveUserAnswerAction(true, currentWord, 'audio');
+        updateRightAnswersArr(currentWord);
+      });
+      setLastAnswerIsRight(true);
     } else {
-      receiveUserAnswerAction(false, currentWord, 'audio');
-      resetAudioRigthAnswers();
-      updateWrongAnswersArr(currentWord);
+      batch(() => {
+        resetAudioRigthAnswers();
+        receiveUserAnswerAction(false, currentWord, 'audio');
+        updateWrongAnswersArr(currentWord);
+      });
+      setLastAnswerIsRight(false);
     }
     setAnswerIsReceived(true);
+    setBtnIndex(index);
   };
 
   useEffect(() => {
     const funcs = shuffledOptions.map((option, i) => (e: KeyboardEvent) => {
       if (e.code === `Digit${i + 1}` || e.code === `Numpad${i + 1}`) {
-        receiveAnswer(option);
+        receiveAnswer(option, i);
       }
     });
     funcs.forEach(func => {
@@ -104,13 +125,10 @@ const GameAudio: FC = () => {
     if (words.length === 1) {
       setShowResult(true);
       stopAudioGame();
-      if (userId && token) {
-        changeStatistic(userId, token, 'audio', statistic);
-        setStatisticIsSended(true);
-      }
     }
     if (currentWord) removeAudioCallWord(currentWord);
     setAnswerIsReceived(false);
+    setCurrentQuestion(prevQuestion => prevQuestion + 1);
   };
 
   useEffect(() => {
@@ -135,17 +153,12 @@ const GameAudio: FC = () => {
     }
   }, [currentWord]);
 
-  useEffect(() => {
-    const gameStatistic = statistic;
-    return () => {
+  useEffect(
+    () => () => {
       resetAudioState();
-      if (!statisticIsSended) {
-        if (userId && token) {
-          changeStatistic(userId, token, 'audio', gameStatistic);
-        }
-      }
-    };
-  }, []);
+    },
+    [],
+  );
 
   if (!isGameOn && !isRouterParamsReceived) {
     return (
@@ -184,7 +197,10 @@ const GameAudio: FC = () => {
   return (
     <div className={styles.page}>
       <Container>
-        <div>Score: {score}</div>
+        <div>
+          Вопрос: {currentQuestion} / {totalWords}
+        </div>
+        <div>Счет: {score}</div>
         {answerIsReceived ? (
           <p>{currentWord?.word}</p>
         ) : (
@@ -195,19 +211,33 @@ const GameAudio: FC = () => {
           </p>
         )}
         <Grid container spacing={1} justifyContent="center">
-          {shuffledOptions.map(option => (
-            <Grid item key={option.translate}>
-              <Button
-                variant="outlined"
-                disabled={answerIsReceived}
-                onClick={() => {
-                  receiveAnswer(option);
-                }}
-              >
-                {option.translate}
-              </Button>
-            </Grid>
-          ))}
+          {shuffledOptions.map((option, i) => {
+            const isAnsweredOptions = btnIndex === i;
+            const showStyle = answerIsReceived && isAnsweredOptions;
+            const style =
+              showStyle &&
+              (lastAnswerIsRight
+                ? {
+                    background: 'green',
+                  }
+                : {
+                    background: 'red',
+                  });
+            return (
+              <Grid item key={option.translate}>
+                <Button
+                  sx={style || {}}
+                  variant="outlined"
+                  disabled={answerIsReceived}
+                  onClick={() => {
+                    receiveAnswer(option, i);
+                  }}
+                >
+                  {option.translate}
+                </Button>
+              </Grid>
+            );
+          })}
         </Grid>
         <div>
           {answerIsReceived && (
