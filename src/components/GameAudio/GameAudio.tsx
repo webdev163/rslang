@@ -10,8 +10,7 @@ import { Button, Grid, Container, Dialog } from '@mui/material';
 import styles from './GameAudio.module.scss';
 import { AudioCallOption } from '../../types/audiocall';
 import { changeStatistic } from '../../utils/API/user-statistic';
-import { WordResponse } from '../../types/requests';
-import { playSound } from '../../utils/utils';
+import ResultsDialog from '../ResultsDialog';
 
 const GameAudio: FC = () => {
   const from = useLocationFrom();
@@ -24,17 +23,9 @@ const GameAudio: FC = () => {
   const [statisticIsSended, setStatisticIsSended] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<AudioCallOption[]>([]);
 
-  const {
-    words,
-    currentWord,
-    isGameOn,
-    isRouterParamsReceived,
-    options,
-    score,
-    statistic,
-    rightAnswersArr,
-    wrongAnswersArr,
-  } = useTypedSelector(state => state.audio);
+  const { words, currentWord, isGameOn, isRouterParamsReceived, options, score, statistic } = useTypedSelector(
+    state => state.audio,
+  );
   const {
     setNextAudioWord,
     removeAudioCallWord,
@@ -156,37 +147,6 @@ const GameAudio: FC = () => {
     };
   }, []);
 
-  const generateResults = () => {
-    const resultsRight = rightAnswersArr.map((word: WordResponse) => {
-      return (
-        <div key={word.id} className={styles.resultsItem}>
-          <button className={styles.btnSound} onClick={() => playSound(word.audio, null, null)}></button>
-          <p>
-            <b>{word.word}</b> - {word.wordTranslate}
-          </p>
-        </div>
-      );
-    });
-    const resultsWrong = wrongAnswersArr.map((word: WordResponse) => {
-      return (
-        <div key={word.id} className={styles.resultsItem}>
-          <button className={styles.btnSound} onClick={() => playSound(word.audio, null, null)}></button>
-          <p>
-            <b>{word.word}</b> - {word.wordTranslate}
-          </p>
-        </div>
-      );
-    });
-    return (
-      <div>
-        <p className={styles.resultsSubtitle}>Правильные ответы ({resultsRight.length ? resultsRight.length : 0}):</p>
-        <div>{resultsRight}</div>
-        <p className={styles.resultsSubtitle}>Неправильные ответы ({resultsWrong.length ? resultsWrong.length : 0}):</p>
-        <div>{resultsWrong}</div>
-      </div>
-    );
-  };
-
   if (!isGameOn && !isRouterParamsReceived) {
     return (
       <Container>
@@ -198,14 +158,7 @@ const GameAudio: FC = () => {
             setShowDifficulty(false);
           }}
         />
-        <Dialog open={showResult} onClose={() => resetAudioState()}>
-          <div className={styles.resultsWrapper}>
-            <p style={{ fontSize: 18 }}>
-              <b>Результат</b>: {score} баллов
-            </p>
-            {generateResults()}
-          </div>
-        </Dialog>
+        <ResultsDialog showResult={showResult} />
       </Container>
     );
   }
@@ -223,14 +176,7 @@ const GameAudio: FC = () => {
             Начать
           </Button>
         </Dialog>
-        <Dialog open={showResult} onClose={() => resetAudioState()}>
-          <div className={styles.resultsWrapper}>
-            <p style={{ fontSize: 18 }}>
-              <b>Результат</b>: {score} баллов
-            </p>
-            {generateResults()}
-          </div>
-        </Dialog>
+        <ResultsDialog showResult={showResult} />
       </Container>
     );
   }
