@@ -142,3 +142,13 @@ export const updateAudioStatistic = (statistic: GameStatistic): AudioAction => (
   type: AudioActionTypes.UPDATE_STATISTIC,
   payload: statistic,
 });
+
+export const updateRightAnswersArr = (word: WordResponse): AudioAction => ({
+  type: AudioActionTypes.UPDATE_RIGHT_ANSWERS_ARR,
+  payload: word,
+});
+
+export const updateWrongAnswersArr = (word: WordResponse): AudioAction => ({
+  type: AudioActionTypes.UPDATE_WRONG_ANSWERS_ARR,
+  payload: word,
+});
