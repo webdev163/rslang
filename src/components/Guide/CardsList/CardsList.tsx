@@ -12,7 +12,7 @@ import styles from './CardsList.module.scss';
 
 const CardsList: FC = () => {
   const { emptyDoneCounter, getUserWordsAction } = useActions();
-  const { wordsArr, isLoading, group, page, doneCounter } = useTypedSelector(state => state.guide);
+  const { wordsArr, isLoading, doneCounter } = useTypedSelector(state => state.guide);
   const { user, isAuthorized } = useTypedSelector(state => state.auth);
   const { words } = useTypedSelector(state => state.userWords);
 

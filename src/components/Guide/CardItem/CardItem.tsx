@@ -36,16 +36,17 @@ const CardItem: FC<CardItemProps> = ({
   const [isHard, setHard] = useState(false);
   const [isLearnt, setLearnt] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [countOnce, setCountOnce] = useState(0);
 
   useEffect(() => {
-    if (isAuthorized) {
-      if (hardArr.includes(wordId)) {
-        setHard(true);
-        incDoneCounter();
-      } else if (learntArr.includes(wordId)) {
-        setLearnt(true);
-        incDoneCounter();
-      }
+    if (isAuthorized && hardArr.includes(wordId) && !countOnce) {
+      setCountOnce(1);
+      setHard(true);
+      incDoneCounter();
+    } else if (isAuthorized && learntArr.includes(wordId) && !countOnce) {
+      setCountOnce(1);
+      setLearnt(true);
+      incDoneCounter();
     }
   }, [hardArr, learntArr]);
 
@@ -60,7 +61,7 @@ const CardItem: FC<CardItemProps> = ({
   };
 
   useEffect(() => {
-    if (isAuthorized && counter > 0) {
+    if (isAuthorized && counter) {
       const current = words.filter(el => el.wordId === wordId)[0];
       if (isHard && current && 'optional' in current) {
         incDoneCounter();
@@ -85,7 +86,7 @@ const CardItem: FC<CardItemProps> = ({
   }, [isHard]);
 
   useEffect(() => {
-    if (isAuthorized && counter > 0) {
+    if (isAuthorized && counter) {
       const current = words.filter(el => el.wordId === wordId)[0];
       if (isLearnt && current && 'optional' in current) {
         incDoneCounter();
