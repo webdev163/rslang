@@ -25,6 +25,9 @@ const GameAudio: FC = () => {
   const [isTotalWordsCounted, setIsTotalWordsCounted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
+  const [btnIndex, setBtnIndex] = useState(0);
+  const [lastAnswerIsRight, setLastAnswerIsRight] = useState(false);
+
   const { words, currentWord, isGameOn, isRouterParamsReceived, options, score } = useTypedSelector(
     state => state.audio,
   );
@@ -81,7 +84,7 @@ const GameAudio: FC = () => {
     if (options.length) setShuffledOptions(shuffle(options));
   }, [options]);
 
-  const receiveAnswer = (option: AudioCallOption) => {
+  const receiveAnswer = (option: AudioCallOption, index: number) => {
     if (!currentWord) return;
     if (option.isTrue) {
       batch(() => {
@@ -89,20 +92,23 @@ const GameAudio: FC = () => {
         receiveUserAnswerAction(true, currentWord, 'audio');
         updateRightAnswersArr(currentWord);
       });
+      setLastAnswerIsRight(true);
     } else {
       batch(() => {
         resetAudioRigthAnswers();
         receiveUserAnswerAction(false, currentWord, 'audio');
         updateWrongAnswersArr(currentWord);
       });
+      setLastAnswerIsRight(false);
     }
     setAnswerIsReceived(true);
+    setBtnIndex(index);
   };
 
   useEffect(() => {
     const funcs = shuffledOptions.map((option, i) => (e: KeyboardEvent) => {
       if (e.code === `Digit${i + 1}` || e.code === `Numpad${i + 1}`) {
-        receiveAnswer(option);
+        receiveAnswer(option, i);
       }
     });
     funcs.forEach(func => {
@@ -205,19 +211,33 @@ const GameAudio: FC = () => {
           </p>
         )}
         <Grid container spacing={1} justifyContent="center">
-          {shuffledOptions.map(option => (
-            <Grid item key={option.translate}>
-              <Button
-                variant="outlined"
-                disabled={answerIsReceived}
-                onClick={() => {
-                  receiveAnswer(option);
-                }}
-              >
-                {option.translate}
-              </Button>
-            </Grid>
-          ))}
+          {shuffledOptions.map((option, i) => {
+            const isAnsweredOptions = btnIndex === i;
+            const showStyle = answerIsReceived && isAnsweredOptions;
+            const style =
+              showStyle &&
+              (lastAnswerIsRight
+                ? {
+                    background: 'green',
+                  }
+                : {
+                    background: 'red',
+                  });
+            return (
+              <Grid item key={option.translate}>
+                <Button
+                  sx={style || {}}
+                  variant="outlined"
+                  disabled={answerIsReceived}
+                  onClick={() => {
+                    receiveAnswer(option, i);
+                  }}
+                >
+                  {option.translate}
+                </Button>
+              </Grid>
+            );
+          })}
         </Grid>
         <div>
           {answerIsReceived && (
