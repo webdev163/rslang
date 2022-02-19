@@ -7,6 +7,7 @@ import { useLocationFrom } from '../../hooks/useLocationFrom';
 import GameSprintTimer from '../GameSprintTimer';
 import { Button, Container, Dialog } from '@mui/material';
 import DifficultyDialog from '../DifficultyDialog';
+import ResultsDialog from '../ResultsDialog';
 
 import styles from './GameSprint.module.scss';
 
@@ -44,6 +45,8 @@ const GameSprint: FC = () => {
     resetSprintRigthAnswers,
     resetSprintState,
     receiveUserAnswerAction,
+    updateSprintRightAnswersArr,
+    updateSprintWrongAnswersArr,
   } = useActions();
 
   useEffect(() => {
@@ -82,11 +85,13 @@ const GameSprint: FC = () => {
       batch(() => {
         incrementScore();
         incrementRightAnswers();
-        setRandowWord(words);
+        updateSprintRightAnswersArr(currentWord);
         receiveUserAnswerAction(true, currentWord, 'sprint');
+        setRandowWord(words);
       });
     } else {
       batch(() => {
+        updateSprintWrongAnswersArr(currentWord);
         resetSprintRigthAnswers();
         setRandowWord(words);
         receiveUserAnswerAction(false, currentWord, 'sprint');
@@ -131,16 +136,7 @@ const GameSprint: FC = () => {
             setShowDifficulty(false);
           }}
         />
-        <Dialog
-          open={showResult}
-          onClose={() => {
-            setShowResult(false);
-            setShowDifficulty(true);
-            resetSprintState();
-          }}
-        >
-          STOP. Result - {score}
-        </Dialog>
+        <ResultsDialog showResult={showResult} />
       </Container>
     );
   }
@@ -158,16 +154,7 @@ const GameSprint: FC = () => {
             Начать
           </Button>
         </Dialog>
-        <Dialog
-          open={showResult}
-          onClose={() => {
-            setShowResult(false);
-            setShowDifficulty(true);
-            resetSprintState();
-          }}
-        >
-          STOP. Result - {score}
-        </Dialog>
+        <ResultsDialog showResult={showResult} />
       </Container>
     );
   }

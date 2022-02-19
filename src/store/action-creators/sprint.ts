@@ -139,3 +139,13 @@ export const incrementRightAnswers =
 export const resetSprintRigthAnswers = (): SprintAction => ({
   type: SprintActionTypes.RESET_RIGHT_ANSWERS,
 });
+
+export const updateSprintRightAnswersArr = (word: WordResponse): SprintAction => ({
+  type: SprintActionTypes.UPDATE_RIGHT_ANSWERS_ARR,
+  payload: word,
+});
+
+export const updateSprintWrongAnswersArr = (word: WordResponse): SprintAction => ({
+  type: SprintActionTypes.UPDATE_WRONG_ANSWERS_ARR,
+  payload: word,
+});
