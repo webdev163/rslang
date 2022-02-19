@@ -1,4 +1,4 @@
-import { GameStatistic, WordResponse } from './requests';
+import { WordResponse } from './requests';
 
 export interface SprintState {
   words: WordResponse[];
@@ -12,7 +12,6 @@ export interface SprintState {
   pointsForAnswer: number;
   rightAnswers: number;
   chainLength: number;
-  statistic: GameStatistic;
 }
 
 export enum SprintActionTypes {
@@ -26,7 +25,6 @@ export enum SprintActionTypes {
   INCREMENT_SCORE = 'INCREMENT_SCORE',
   INCREMENT_RIGHT_ANSWERS = 'INCREMENT_RIGHT_ANSWERS',
   RESET_RIGHT_ANSWERS = 'RESET_RIGHT_ANSWERS',
-  UPDATE_STATISTIC = 'UPDATE_STATISTIC',
 }
 
 interface ResetStateAction {
@@ -83,11 +81,6 @@ interface ResetRightAnswersAction {
   type: SprintActionTypes.RESET_RIGHT_ANSWERS;
 }
 
-interface UpdateStaticticAction {
-  type: SprintActionTypes.UPDATE_STATISTIC;
-  payload: GameStatistic;
-}
-
 export type SprintAction =
   | ResetStateAction
   | SetWordsAction
@@ -98,5 +91,4 @@ export type SprintAction =
   | ReceiveRouterStateAction
   | IncrementScoreAction
   | IncrementRightAnswersAction
-  | ResetRightAnswersAction
-  | UpdateStaticticAction;
+  | ResetRightAnswersAction;

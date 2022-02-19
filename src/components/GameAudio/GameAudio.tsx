@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { batch } from 'react-redux';
 import { useActions } from './../../hooks/useActions';
 import { useTypedSelector } from './../../hooks/useTypedSelector';
 import { useLocationFrom } from '../../hooks/useLocationFrom';
@@ -9,21 +10,19 @@ import { Button, Grid, Container, Dialog } from '@mui/material';
 
 import styles from './GameAudio.module.scss';
 import { AudioCallOption } from '../../types/audiocall';
-import { changeStatistic } from '../../utils/API/user-statistic';
 import ResultsDialog from '../ResultsDialog';
 
 const GameAudio: FC = () => {
   const from = useLocationFrom();
 
-  const { userId, token } = useTypedSelector(state => state.auth.user);
+  const { userId } = useTypedSelector(state => state.auth.user);
 
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
   const [answerIsReceived, setAnswerIsReceived] = useState(false);
-  const [statisticIsSended, setStatisticIsSended] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<AudioCallOption[]>([]);
 
-  const { words, currentWord, isGameOn, isRouterParamsReceived, options, score, statistic } = useTypedSelector(
+  const { words, currentWord, isGameOn, isRouterParamsReceived, options, score } = useTypedSelector(
     state => state.audio,
   );
   const {
@@ -75,13 +74,17 @@ const GameAudio: FC = () => {
   const receiveAnswer = (option: AudioCallOption) => {
     if (!currentWord) return;
     if (option.isTrue) {
-      incrementAudioScore();
-      receiveUserAnswerAction(true, currentWord, 'audio');
-      updateRightAnswersArr(currentWord);
+      batch(() => {
+        incrementAudioScore();
+        receiveUserAnswerAction(true, currentWord, 'audio');
+        updateRightAnswersArr(currentWord);
+      });
     } else {
-      receiveUserAnswerAction(false, currentWord, 'audio');
-      resetAudioRigthAnswers();
-      updateWrongAnswersArr(currentWord);
+      batch(() => {
+        resetAudioRigthAnswers();
+        receiveUserAnswerAction(false, currentWord, 'audio');
+        updateWrongAnswersArr(currentWord);
+      });
     }
     setAnswerIsReceived(true);
   };
@@ -106,10 +109,6 @@ const GameAudio: FC = () => {
     if (words.length === 1) {
       setShowResult(true);
       stopAudioGame();
-      if (userId && token) {
-        changeStatistic(userId, token, 'audio', statistic);
-        setStatisticIsSended(true);
-      }
     }
     if (currentWord) removeAudioCallWord(currentWord);
     setAnswerIsReceived(false);
@@ -137,17 +136,12 @@ const GameAudio: FC = () => {
     }
   }, [currentWord]);
 
-  useEffect(() => {
-    const gameStatistic = statistic;
-    return () => {
+  useEffect(
+    () => () => {
       resetAudioState();
-      if (!statisticIsSended) {
-        if (userId && token) {
-          changeStatistic(userId, token, 'audio', gameStatistic);
-        }
-      }
-    };
-  }, []);
+    },
+    [],
+  );
 
   if (!isGameOn && !isRouterParamsReceived) {
     return (

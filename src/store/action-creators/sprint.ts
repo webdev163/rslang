@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { AggregatedWordsResponse, GameStatistic, WordResponse } from '../../types/requests';
+import { AggregatedWordsResponse, WordResponse } from '../../types/requests';
 import { SprintAction, SprintActionTypes } from '../../types/sprint';
 import { getAggregatedWords, getWord, getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
@@ -95,7 +95,6 @@ export const setSprintDifficultWords =
     const aggregatedWords = aggregatedWordsResponse.paginatedResults;
     const promises = aggregatedWords.map(word => getWord(word._id));
     const words = await Promise.all(promises);
-    console.log(words);
     dispatch({
       type: SprintActionTypes.SET_GROUP,
       payload: {
@@ -139,9 +138,4 @@ export const incrementRightAnswers =
 
 export const resetSprintRigthAnswers = (): SprintAction => ({
   type: SprintActionTypes.RESET_RIGHT_ANSWERS,
-});
-
-export const updateSprintStatistic = (statistic: GameStatistic): SprintAction => ({
-  type: SprintActionTypes.UPDATE_STATISTIC,
-  payload: statistic,
 });

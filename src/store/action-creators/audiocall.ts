@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../reducers';
-import { AggregatedWordsResponse, GameStatistic, WordResponse } from '../../types/requests';
+import { AggregatedWordsResponse, WordResponse } from '../../types/requests';
 import { AudioAction, AudioActionTypes, AudioCallOption } from '../../types/audiocall';
 import { getAggregatedWords, getWord, getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
@@ -136,11 +136,6 @@ export const incrementAudioScore = (): AudioAction => ({
 
 export const resetAudioRigthAnswers = (): AudioAction => ({
   type: AudioActionTypes.RESET_RIGHT_ANSWERS,
-});
-
-export const updateAudioStatistic = (statistic: GameStatistic): AudioAction => ({
-  type: AudioActionTypes.UPDATE_STATISTIC,
-  payload: statistic,
 });
 
 export const updateRightAnswersArr = (word: WordResponse): AudioAction => ({
