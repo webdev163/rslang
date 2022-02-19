@@ -21,6 +21,9 @@ const GameAudio: FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [answerIsReceived, setAnswerIsReceived] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<AudioCallOption[]>([]);
+  const [totalWords, setTotalWords] = useState(0);
+  const [isTotalWordsCounted, setIsTotalWordsCounted] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
 
   const { words, currentWord, isGameOn, isRouterParamsReceived, options, score } = useTypedSelector(
     state => state.audio,
@@ -41,6 +44,13 @@ const GameAudio: FC = () => {
     updateRightAnswersArr,
     updateWrongAnswersArr,
   } = useActions();
+
+  useEffect(() => {
+    if (words.length && !isTotalWordsCounted) {
+      setTotalWords(words.length);
+      setIsTotalWordsCounted(true);
+    }
+  }, [words]);
 
   useEffect(() => {
     if (from) {
@@ -112,6 +122,7 @@ const GameAudio: FC = () => {
     }
     if (currentWord) removeAudioCallWord(currentWord);
     setAnswerIsReceived(false);
+    setCurrentQuestion(prevQuestion => prevQuestion + 1);
   };
 
   useEffect(() => {
@@ -180,7 +191,10 @@ const GameAudio: FC = () => {
   return (
     <div className={styles.page}>
       <Container>
-        <div>Score: {score}</div>
+        <div>
+          Вопрос: {currentQuestion} / {totalWords}
+        </div>
+        <div>Счет: {score}</div>
         {answerIsReceived ? (
           <p>{currentWord?.word}</p>
         ) : (
