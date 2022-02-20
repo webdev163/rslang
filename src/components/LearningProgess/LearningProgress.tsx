@@ -5,26 +5,39 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 import styles from './LearningProgress.module.scss';
 
-const LearningProgress: FC<LearningProgressProps> = ({ isLearned, wordId }) => {
+const LearningProgress: FC<LearningProgressProps> = ({ isLearned, wordId, isHard }) => {
   if (isLearned) return <CheckCircleOutlineIcon sx={{ fontSize: 30, color: '#f3c139' }} />;
 
   const { words } = useTypedSelector(state => state.userWords);
 
   const curUserWord = words.find(word => word.wordId === wordId);
-  if (!curUserWord) return null;
+  if (!curUserWord) return <span className={styles.new}>new</span>;
 
-  const progress = curUserWord.optional && curUserWord.optional.rightChain;
-  const difficulty = curUserWord.difficulty;
+  // const progress = curUserWord.optional && curUserWord.optional.rightChain;
+  const difficulty = isHard ? 'hard' : 'weak';
 
   const chain =
     curUserWord.optional &&
     curUserWord.optional.answersChain &&
     curUserWord.optional.answersChain.split(',').map(a => +a);
 
-  if (chain) chain.shift(); // TODO findout why there is always first zero element
+  let progress = 0;
 
+  if (chain) {
+    chain.shift(); // first element zero - means viewed
+
+    for (let i = chain.length - 1; i >= 0; i -= 1) {
+      if (chain[i] === 1) {
+        progress++;
+        console.log(i, progress);
+      } else {
+        break;
+      }
+    }
+  }
+  console.log(chain, progress);
   const styleVariable = {
-    '--progress': ` ${(100 * (progress || 0)) / (difficulty === 'hard' ? 5 : 3)}%`,
+    '--progress': ` ${(100 * progress) / (difficulty === 'hard' ? 5 : 3)}%`,
   } as React.CSSProperties;
 
   const answersEls = chain

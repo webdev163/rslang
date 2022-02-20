@@ -189,7 +189,7 @@ const CardItem: FC<CardItemProps> = ({
             <h2 className={styles.wordName}>{word}</h2>
             <p className={styles.transcription}>{transcription}</p>
             <button className={styles.btnSound} onClick={() => playSound(audio, audioExample, audioMeaning)}></button>
-            <LearningProgress isLearned={isLearnt} wordId={wordId} />
+            <LearningProgress isLearned={isLearnt} wordId={wordId} isHard={isHard}/>
           </div>
           <div className={styles.cardLabelsWrapper}>
             {isHard ? <div className={styles.labelHard}>Сложное</div> : ''}
