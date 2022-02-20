@@ -6,7 +6,7 @@ import styles from './GamesPage.module.scss';
 
 const GamesPage: FC = () => {
   return (
-    <div>
+    <div className={styles.pageWrapper}>
       <div className={styles.wrapperInner}>
         <h1 className={styles.title}>Мини-игры</h1>
         <div className={styles.gamesWrapper}>

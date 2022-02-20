@@ -6,7 +6,7 @@ import { useLocationFrom } from '../../hooks/useLocationFrom';
 import { API_URL } from '../../utils/constants';
 import { shuffle } from '../../utils/arrays';
 import DifficultyDialog from './../DifficultyDialog/DifficultyDialog';
-import { Button, Grid, Container, Dialog } from '@mui/material';
+import { Button, Container, Dialog } from '@mui/material';
 
 import styles from './GameAudio.module.scss';
 import { AudioCallOption } from '../../types/audiocall';
@@ -24,6 +24,8 @@ const GameAudio: FC = () => {
   const [totalWords, setTotalWords] = useState(0);
   const [isTotalWordsCounted, setIsTotalWordsCounted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [rightIndex, setRightIndex] = useState(0);
+  const [isSoundOn, setSoundOn] = useState(true);
 
   const [btnIndex, setBtnIndex] = useState(0);
   const [lastAnswerIsRight, setLastAnswerIsRight] = useState(false);
@@ -81,7 +83,24 @@ const GameAudio: FC = () => {
   }, [words, isGameOn]);
 
   useEffect(() => {
-    if (options.length) setShuffledOptions(shuffle(options));
+    if (lastAnswerIsRight && answerIsReceived && isSoundOn) {
+      const audio = new Audio();
+      audio.src = '/assets/sound/correct.mp3';
+      audio.play();
+    } else if (!lastAnswerIsRight && answerIsReceived && isSoundOn) {
+      const audio = new Audio();
+      audio.src = '/assets/sound/wrong.mp3';
+      audio.play();
+    }
+  }, [answerIsReceived]);
+
+  useEffect(() => {
+    if (options.length) {
+      const arr = [...shuffle(options), { translate: 'Не знаю', isTrue: false }];
+      const i = arr.findIndex(option => option.isTrue);
+      setShuffledOptions(arr);
+      setRightIndex(i);
+    }
   }, [options]);
 
   const receiveAnswer = (option: AudioCallOption, index: number) => {
@@ -185,8 +204,9 @@ const GameAudio: FC = () => {
               startAudioGame();
               setShowDifficulty(false);
             }}
+            sx={{ padding: 3 }}
           >
-            Начать
+            Начать игру
           </Button>
         </Dialog>
         <ResultsDialog showResult={showResult} />
@@ -196,61 +216,78 @@ const GameAudio: FC = () => {
 
   return (
     <div className={styles.page}>
-      <Container>
-        <div>
+      <div className={styles.soundBtnWrapper} onClick={() => setSoundOn(isSoundOn => !isSoundOn)}>
+        <img src={`/assets/img/sound-${isSoundOn ? 'on' : 'off'}.svg`} alt="" />
+      </div>
+      <div className={styles.container}>
+        <div className={styles.text}>
           Вопрос: {currentQuestion} / {totalWords}
         </div>
-        <div>Счет: {score}</div>
+        <div className={styles.text}>Счет: {score}</div>
         {answerIsReceived ? (
-          <p>{currentWord?.word}</p>
+          <div className={styles.wordInfoWrapper}>
+            <div className={styles.imageWrapper}>
+              <img className={styles.image} src={`${API_URL}/${currentWord?.image}`} alt="" />
+            </div>
+            <div className={styles.wordInfo}>
+              <div className={`${styles.audioBtnWrapper} ${styles.small}`} onClick={() => audio.current.play()}>
+                <button className={styles.audioBtn}>
+                  <img src="/assets/img/game-sound.svg" alt="" />
+                </button>
+              </div>
+              <span className={styles.wordTitle}>{currentWord?.word}</span>
+            </div>
+          </div>
         ) : (
-          <p>
-            <Button variant="contained" onClick={() => audio.current.play()}>
-              Play
-            </Button>
-          </p>
+          <div className={styles.audioBtnWrapper} onClick={() => audio.current.play()}>
+            <button className={styles.audioBtn}>
+              <img src="/assets/img/game-sound.svg" alt="" />
+            </button>
+          </div>
         )}
-        <Grid container spacing={1} justifyContent="center">
+        <div className={styles.answersWrapper}>
           {shuffledOptions.map((option, i) => {
-            const isAnsweredOptions = btnIndex === i;
-            const showStyle = answerIsReceived && isAnsweredOptions;
-            const style =
-              showStyle &&
-              (lastAnswerIsRight
-                ? {
-                    background: 'green',
-                  }
-                : {
-                    background: 'red',
-                  });
+            if (answerIsReceived && i === 5) return <div key={option.translate}></div>;
             return (
-              <Grid item key={option.translate}>
-                <Button
-                  sx={style || {}}
-                  variant="outlined"
-                  disabled={answerIsReceived}
+              <div
+                className={`${styles.answerBtnWrapper} ${i === 5 ? styles.skipBtn : ''} ${
+                  answerIsReceived && i === rightIndex ? styles.rightAnswer : ''
+                }  ${answerIsReceived && i !== rightIndex ? styles.wrongAnswer : ''}`}
+                key={option.translate}
+              >
+                <div
+                  className={styles.answerBtn}
                   onClick={() => {
-                    receiveAnswer(option, i);
+                    if (!answerIsReceived) {
+                      receiveAnswer(option, i);
+                    }
                   }}
                 >
+                  {lastAnswerIsRight && answerIsReceived && i === rightIndex ? (
+                    <img width="22" height="22" src="/assets/img/answer-right.svg" alt="" />
+                  ) : (
+                    <div className={styles.empty}></div>
+                  )}
+                  <span className={styles.counter}>{i + 1}</span>
                   {option.translate}
-                </Button>
-              </Grid>
+                </div>
+              </div>
             );
           })}
-        </Grid>
+        </div>
         <div>
           {answerIsReceived && (
-            <Button
+            <button
               onClick={() => {
                 showNextQuestion();
               }}
+              className={styles.nextBtn}
             >
-              NEXT
-            </Button>
+              <img width="42" height="20" src="/assets/img/arrow.svg" alt="" />
+            </button>
           )}
         </div>
-      </Container>
+      </div>
     </div>
   );
 };
