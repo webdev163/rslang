@@ -27,7 +27,6 @@ const GameAudio: FC = () => {
   const [rightIndex, setRightIndex] = useState(0);
   const [isSoundOn, setSoundOn] = useState(true);
 
-  const [btnIndex, setBtnIndex] = useState(0);
   const [lastAnswerIsRight, setLastAnswerIsRight] = useState(false);
 
   const { words, currentWord, isGameOn, isRouterParamsReceived, options, score } = useTypedSelector(
@@ -103,7 +102,7 @@ const GameAudio: FC = () => {
     }
   }, [options]);
 
-  const receiveAnswer = (option: AudioCallOption, index: number) => {
+  const receiveAnswer = (option: AudioCallOption) => {
     if (!currentWord) return;
     if (option.isTrue) {
       batch(() => {
@@ -121,13 +120,12 @@ const GameAudio: FC = () => {
       setLastAnswerIsRight(false);
     }
     setAnswerIsReceived(true);
-    setBtnIndex(index);
   };
 
   useEffect(() => {
     const funcs = shuffledOptions.map((option, i) => (e: KeyboardEvent) => {
       if (e.code === `Digit${i + 1}` || e.code === `Numpad${i + 1}`) {
-        receiveAnswer(option, i);
+        receiveAnswer(option);
       }
     });
     funcs.forEach(func => {
@@ -259,7 +257,7 @@ const GameAudio: FC = () => {
                   className={styles.answerBtn}
                   onClick={() => {
                     if (!answerIsReceived) {
-                      receiveAnswer(option, i);
+                      receiveAnswer(option);
                     }
                   }}
                 >
