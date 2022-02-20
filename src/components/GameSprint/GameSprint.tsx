@@ -192,8 +192,9 @@ const GameSprint: FC = () => {
               startGame();
               setShowDifficulty(false);
             }}
+            sx={{ padding: 3 }}
           >
-            Начать
+            Начать игру
           </Button>
         </Dialog>
         <ResultsDialog showResult={showResult} />
