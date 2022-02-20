@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import { LearningProgressProps } from './types';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import styles from './LearningProgress.module.scss';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-const LearningProgress: FC<LearningProgressProps> = ({ isLearned, answers, wordId }) => {
+
+import styles from './LearningProgress.module.scss';
+
+const LearningProgress: FC<LearningProgressProps> = ({ isLearned, wordId }) => {
   if (isLearned) return <CheckCircleOutlineIcon sx={{ fontSize: 30, color: '#f3c139' }} />;
 
   const { words } = useTypedSelector(state => state.userWords);

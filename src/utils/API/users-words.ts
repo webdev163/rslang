@@ -75,7 +75,6 @@ const updateUserWord = async (
   difficulty: string,
   optional = {},
 ): Promise<boolean> => {
-  console.log('send', optional);
   const resp = await fetch(`${API_URL}${RequestPaths.USERS}/${userId}${RequestPaths.WORDS}/${wordId}`, {
     method: 'PUT',
     headers: {

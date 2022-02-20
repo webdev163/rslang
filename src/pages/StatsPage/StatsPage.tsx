@@ -135,8 +135,6 @@ const StatsPage: FC = () => {
     return statArr;
   }, [audioStats, sprintStats, stat]);
 
-  console.log(guideStats, audioStats, sprintStats);
-
   const dateComparator: GridComparatorFn = (date1, date2) => {
     return (date1 as string) > (date2 as string) ? -1 : 1;
   };

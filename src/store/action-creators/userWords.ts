@@ -67,7 +67,6 @@ export const receiveUserAnswerAction =
           answersChain: [...answersChain, 0].join(','),
         };
       }
-      console.log(optionals);
       await updateUserWord(userId, token, userWord.wordId, difficulty, optionals);
     } else {
       let optionals: UserWordOptions = {
