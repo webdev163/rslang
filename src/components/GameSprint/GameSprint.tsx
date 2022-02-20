@@ -133,7 +133,7 @@ const GameSprint: FC = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [currentWord]);
+  }, [currentWord, gameOnPause, isGameOn]);
 
   const maxPointsForAnswer = 80;
   const answersCounterTemplate = pointsForAnswer < maxPointsForAnswer ? <p>{rightAnswers} / 3</p> : <p>1</p>;
