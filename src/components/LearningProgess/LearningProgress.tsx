@@ -29,13 +29,14 @@ const LearningProgress: FC<LearningProgressProps> = ({ isLearned, wordId, isHard
     for (let i = chain.length - 1; i >= 0; i -= 1) {
       if (chain[i] === 1) {
         progress++;
-        console.log(i, progress);
       } else {
         break;
       }
     }
   }
-  console.log(chain, progress);
+
+  if (!chain || chain.length === 0) return <span className={styles.new}>new</span>;
+
   const styleVariable = {
     '--progress': ` ${(100 * progress) / (difficulty === 'hard' ? 5 : 3)}%`,
   } as React.CSSProperties;
