@@ -3,6 +3,7 @@ import { WordResponse } from './requests';
 export interface SprintState {
   words: WordResponse[];
   group: number;
+  page: number;
   currentWord: WordResponse | null;
   translate: string;
   isTrue: boolean;
@@ -20,6 +21,7 @@ export enum SprintActionTypes {
   RESET_STATE = 'RESET_STATE',
   SET_WORDS = 'SET_WORDS',
   SET_CURRENT_WORD = 'SET_CURRENT_WORD',
+  REMOVE_WORD = 'REMOVE_WORD',
   SET_GROUP = 'SET_GROUP',
   START_GAME = 'START_GAME',
   STOP_GAME = 'STOP_GAME',
@@ -49,11 +51,20 @@ interface SetCurrentWordAction {
   };
 }
 
+interface RemoveWordAction {
+  type: SprintActionTypes.REMOVE_WORD;
+  payload: WordResponse;
+}
+
 interface SetWordsGroupAction {
   type: SprintActionTypes.SET_GROUP;
   payload: {
     group: number;
+    page: number;
     words: WordResponse[];
+    word: WordResponse;
+    isTrue: boolean;
+    translate: string;
   };
 }
 
@@ -99,6 +110,7 @@ export type SprintAction =
   | ResetStateAction
   | SetWordsAction
   | SetCurrentWordAction
+  | RemoveWordAction
   | SetWordsGroupAction
   | StartGameAction
   | StopGameAction
