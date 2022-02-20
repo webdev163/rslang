@@ -1,0 +1,53 @@
+@import '~/style/mixins';
+
+.progress{
+  position: relative;
+  --progress: 0%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: conic-gradient($base-color 0 0, $base-color 0% var(--progress), transparent var(--progress) 0 );
+  border: 2px solid $base-color;
+}
+
+.progress:hover{
+  @include active;
+  cursor:zoom-in;
+}
+
+.progress:hover .answers{
+  opacity: 1;
+}
+
+.answers{
+  position: absolute;
+  display: flex;
+  gap:2px;
+  padding: 5px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 6px 19px rgb(117 117 117 / 20%);
+  border: 1px solid #f0f0f0;
+  top: 35px;
+  left: -10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.answer{
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: $base-color;
+}
+
+.answer-wrong{
+  background-color: gray;
+}
+
+.new{
+  color: $base-color;
+  font-size: 0.7em;
+  font-weight: bold;
+}
