@@ -5,13 +5,9 @@ const getAggregatedWords = async (
   userId: string,
   token: string,
   filter: Record<string, unknown>,
-  group?: number,
-  page?: number,
   wordsPerPage?: number,
 ): Promise<AggregatedWordsResponse> => {
   const params = [];
-  if (group) params.push(`group=${group}`);
-  if (page) params.push(`page=${page}`);
   if (wordsPerPage) params.push(`wordsPerPage=${wordsPerPage}`);
   params.push(`filter=${JSON.stringify(filter)}`);
   const resp = await fetch(

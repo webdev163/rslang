@@ -68,8 +68,6 @@ export const setSprintGroupWithoutLearned =
             },
           ],
         },
-        group,
-        page,
         999,
       )
     )[0] as AggregatedWordsResponse;
@@ -90,7 +88,7 @@ export const setSprintDifficultWords =
     const state = getState();
     const { userId, token } = state.auth.user;
     const aggregatedWordsResponse = (
-      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, undefined, undefined, 999)
+      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, 999)
     )[0] as AggregatedWordsResponse;
     const aggregatedWords = aggregatedWordsResponse.paginatedResults;
     const promises = aggregatedWords.map(word => getWord(word._id));

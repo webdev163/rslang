@@ -77,8 +77,6 @@ export const setAudioGroupWithoutLearned =
             },
           ],
         },
-        group,
-        page,
         999,
       )
     )[0] as AggregatedWordsResponse;
@@ -99,7 +97,7 @@ export const setAudioDifficultWords =
     const state = getState();
     const { userId, token } = state.auth.user;
     const aggregatedWordsResponse = (
-      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, undefined, undefined, 20)
+      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, 20)
     )[0] as AggregatedWordsResponse;
     const aggregatedWords = aggregatedWordsResponse.paginatedResults;
     const promises = aggregatedWords.map(word => getWord(word._id));
