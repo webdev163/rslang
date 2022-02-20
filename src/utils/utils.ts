@@ -1,6 +1,10 @@
 import { API_URL } from './constants';
 
-export const playSound = (audio: string, audioExample: string | null, audioMeaning: string | null): void => {
+export const playSound = (
+  audio: string | undefined,
+  audioExample: string | null,
+  audioMeaning: string | null,
+): void => {
   const audioElem = new Audio();
   audioElem.src = `${API_URL}/${audio}`;
   audioElem.play();

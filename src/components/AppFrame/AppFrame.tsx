@@ -101,7 +101,7 @@ const AppFrame: FC = () => {
           </List>
         </Box>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 0 }}>
         <Toolbar />
         <Routes>
           <Route path="/" element={<MainPage />} />
