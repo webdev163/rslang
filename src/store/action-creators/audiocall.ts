@@ -83,6 +83,39 @@ export const setAudioGroupWithoutLearned =
     const aggregatedWords = aggregatedWordsResponse.paginatedResults;
     const promises = aggregatedWords.map(word => getWord(word._id));
     const words = await Promise.all(promises);
+    const wordsLimit = 20;
+    let currentPage = page;
+    while (words.length < wordsLimit) {
+      if (currentPage > 0) {
+        currentPage -= 1;
+        const additionalWordsResponse = (
+          (
+            await getAggregatedWords(
+              userId,
+              token,
+              {
+                $and: [
+                  { page, group },
+                  {
+                    $or: [
+                      { userWord: null },
+                      { 'userWord.optional': null },
+                      { 'userWord.optional.done': { $ne: true } },
+                    ],
+                  },
+                ],
+              },
+              999,
+            )
+          )[0] as AggregatedWordsResponse
+        ).paginatedResults.filter((item, index) => index < wordsLimit - words.length);
+        const promises = additionalWordsResponse.map(word => getWord(word._id));
+        const additionalWords = await Promise.all(promises);
+        words.push(...additionalWords);
+      } else {
+        break;
+      }
+    }
     dispatch({
       type: AudioActionTypes.SET_GROUP,
       payload: {
