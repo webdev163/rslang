@@ -194,6 +194,7 @@ const CardItem: FC<CardItemProps> = ({
               difficulty={isHard ? 'hard' : 'weak'}
               progress={1}
               answers={[true, false, true, true, false, true, true, false, true]}
+              wordId={wordId}
             />
           </div>
           <div className={styles.cardLabelsWrapper}>

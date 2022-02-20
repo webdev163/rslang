@@ -41,6 +41,7 @@ export const receiveUserAnswerAction =
       isNewWord = false;
       let optionals = userWord.optional || {};
       let difficulty = userWord.difficulty;
+      const answersChain = (optionals.answersChain || '').split(',');
       if (isRightAnswer) {
         const chain = optionals.rightChain || 0;
         const newChain = chain + 1;
@@ -51,21 +52,43 @@ export const receiveUserAnswerAction =
           optionals = { ...optionals, done: true };
           difficulty = 'weak';
         }
-        optionals = { ...optionals, rightAnswers: (optionals.rightAnswers || 0) + 1, rightChain: newChain };
+        optionals = {
+          ...optionals,
+          rightAnswers: (optionals.rightAnswers || 0) + 1,
+          rightChain: newChain,
+          answersChain: [...answersChain, 1].join(','),
+        };
       } else {
-        optionals = { ...optionals, wrongAnswers: (optionals.wrongAnswers || 0) + 1, rightChain: 0, done: false };
+        optionals = {
+          ...optionals,
+          wrongAnswers: (optionals.wrongAnswers || 0) + 1,
+          rightChain: 0,
+          done: false,
+          answersChain: [...answersChain, 0].join(','),
+        };
       }
+      console.log(optionals);
       await updateUserWord(userId, token, userWord.wordId, difficulty, optionals);
     } else {
       let optionals: UserWordOptions = {
         rightAnswers: 0,
         rightChain: 0,
         wrongAnswers: 0,
+        answersChain: '',
       };
       if (isRightAnswer) {
-        optionals = { ...optionals, rightAnswers: 1, rightChain: 1 };
+        optionals = {
+          ...optionals,
+          rightAnswers: 1,
+          rightChain: 1,
+          answersChain: [...optionals.answersChain.split(','), 1].join(','),
+        };
       } else {
-        optionals = { ...optionals, wrongAnswers: 1 };
+        optionals = {
+          ...optionals,
+          wrongAnswers: 1,
+          answersChain: [...optionals.answersChain.split(','), 0].join(','),
+        };
       }
       await addUserWord(userId, token, word.id, 'weak', optionals);
     }

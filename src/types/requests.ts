@@ -84,6 +84,7 @@ interface UserWordOptions {
   rightAnswers?: number;
   rightChain?: number;
   done?: boolean;
+  answersChain: string;
 }
 
 interface UserWordResponse {
