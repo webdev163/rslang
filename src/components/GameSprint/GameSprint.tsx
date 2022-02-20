@@ -22,6 +22,8 @@ const GameSprint: FC = () => {
   const {
     words,
     currentWord,
+    group,
+    page,
     isGameOn,
     isRouterParamsReceived,
     score,
@@ -35,8 +37,8 @@ const GameSprint: FC = () => {
     setSprintGroup,
     setSprintGroupWithoutLearned,
     setSprintDifficultWords,
-    setCurrentWord,
-    setRandowWord,
+    setNextSprintWord,
+    removeSprintWord,
     startGame,
     stopGame,
     receiveRouterStateInSprint,
@@ -67,8 +69,17 @@ const GameSprint: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (words.length) {
-      setCurrentWord(words[0], words);
+    if (!words.length && isGameOn) {
+      if (page > 0) {
+        if (userId) {
+          setSprintGroupWithoutLearned(group, page - 1);
+        } else {
+          setSprintGroup(group, page - 1);
+        }
+      } else {
+        stopGame();
+        setShowResult(true);
+      }
     }
   }, [words]);
 
@@ -81,22 +92,20 @@ const GameSprint: FC = () => {
 
   const receiveAnswer = (answer: boolean) => {
     if (!isGameOn || !currentWord) return;
-    if (isTrue === answer) {
-      batch(() => {
+    batch(() => {
+      if (isTrue === answer) {
         incrementScore();
         incrementRightAnswers();
         updateSprintRightAnswersArr(currentWord);
         receiveUserAnswerAction(true, currentWord, 'sprint');
-        setRandowWord(words);
-      });
-    } else {
-      batch(() => {
+      } else {
         updateSprintWrongAnswersArr(currentWord);
         resetSprintRigthAnswers();
-        setRandowWord(words);
         receiveUserAnswerAction(false, currentWord, 'sprint');
-      });
-    }
+      }
+      removeSprintWord(currentWord);
+      setNextSprintWord();
+    });
   };
 
   const handleTrueButton = () => {

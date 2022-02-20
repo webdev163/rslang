@@ -6,6 +6,23 @@ import { getAggregatedWords, getWord, getWords } from '../../utils/API';
 import { getRandomItem } from '../../utils/arrays';
 import { RootState } from '../reducers';
 
+const getWordTranslate = async (word: WordResponse, group: number) => {
+  const randomNum = Math.random() - 0.5;
+  let isTrue: boolean;
+  let translate: string;
+  if (randomNum >= 0) {
+    isTrue = true;
+    translate = word.wordTranslate;
+  } else {
+    isTrue = false;
+    const randomPageNumber = Math.floor(Math.random() * 30);
+    const randomPage = await getWords(group, randomPageNumber);
+    const randomWord = getRandomItem(randomPage);
+    translate = randomWord.wordTranslate;
+  }
+  return { isTrue, translate };
+};
+
 export const setSprintWords = (words: WordResponse[]): SprintAction => ({
   type: SprintActionTypes.SET_WORDS,
   payload: words,
@@ -15,38 +32,40 @@ export const resetSprintState = (): SprintAction => ({
   type: SprintActionTypes.RESET_STATE,
 });
 
-export const setCurrentWord = (word: WordResponse, words: WordResponse[]): SprintAction => {
-  const randomNum = Math.random() - 0.5;
-  let isTrue: boolean;
-  let translate: string;
-  if (randomNum >= 0) {
-    isTrue = true;
-    translate = word.wordTranslate;
-  } else {
-    isTrue = false;
-    const randomWord = getRandomItem(words);
-    translate = randomWord.wordTranslate;
-  }
-  return {
-    type: SprintActionTypes.SET_CURRENT_WORD,
-    payload: { word, isTrue, translate },
+export const setNextSprintWord =
+  (): ThunkAction<void, RootState, unknown, SprintAction> => async (dispatch, getState) => {
+    const state = getState();
+    const { words, group } = state.audio;
+    const word = getRandomItem(words);
+    if (word) {
+      const { isTrue, translate } = await getWordTranslate(word, group);
+      dispatch({
+        type: SprintActionTypes.SET_CURRENT_WORD,
+        payload: { word, isTrue, translate },
+      });
+    }
   };
-};
 
-export const setRandowWord = (words: WordResponse[]): SprintAction => {
-  const word = getRandomItem(words);
-  return setCurrentWord(word, words);
-};
+export const removeSprintWord = (word: WordResponse): SprintAction => ({
+  type: SprintActionTypes.REMOVE_WORD,
+  payload: word,
+});
 
 export const setSprintGroup =
   (group: number, page = Math.floor(Math.random() * 30)) =>
   async (dispatch: Dispatch<SprintAction>) => {
     const words = await getWords(group, page);
+    const word = getRandomItem(words);
+    const { isTrue, translate } = await getWordTranslate(word, group);
     dispatch({
       type: SprintActionTypes.SET_GROUP,
       payload: {
         words,
         group,
+        page,
+        word,
+        isTrue,
+        translate,
       },
     });
   };
@@ -68,19 +87,23 @@ export const setSprintGroupWithoutLearned =
             },
           ],
         },
-        group,
-        page,
         999,
       )
     )[0] as AggregatedWordsResponse;
     const aggregatedWords = aggregatedWordsResponse.paginatedResults;
     const promises = aggregatedWords.map(word => getWord(word._id));
     const words = await Promise.all(promises);
+    const word = getRandomItem(words);
+    const { isTrue, translate } = await getWordTranslate(word, group);
     dispatch({
       type: SprintActionTypes.SET_GROUP,
       payload: {
         words,
         group,
+        page,
+        word,
+        isTrue,
+        translate,
       },
     });
   };
@@ -90,16 +113,23 @@ export const setSprintDifficultWords =
     const state = getState();
     const { userId, token } = state.auth.user;
     const aggregatedWordsResponse = (
-      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, undefined, undefined, 999)
+      await getAggregatedWords(userId, token, { 'userWord.difficulty': 'hard' }, 999)
     )[0] as AggregatedWordsResponse;
     const aggregatedWords = aggregatedWordsResponse.paginatedResults;
     const promises = aggregatedWords.map(word => getWord(word._id));
     const words = await Promise.all(promises);
+    const word = getRandomItem(words);
+    const groupNumber = 6;
+    const { isTrue, translate } = await getWordTranslate(word, Math.floor(Math.random() * groupNumber));
     dispatch({
       type: SprintActionTypes.SET_GROUP,
       payload: {
         words,
         group: 0,
+        page: 0,
+        word,
+        isTrue,
+        translate,
       },
     });
   };

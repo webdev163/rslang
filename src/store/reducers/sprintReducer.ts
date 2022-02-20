@@ -3,6 +3,7 @@ import { SprintAction, SprintActionTypes, SprintState } from '../../types/sprint
 const initialState: SprintState = {
   words: [],
   group: 0,
+  page: 0,
   currentWord: null,
   translate: '',
   isTrue: false,
@@ -27,8 +28,18 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
         isTrue: action.payload.isTrue,
         translate: action.payload.translate,
       };
+    case SprintActionTypes.REMOVE_WORD:
+      return { ...state, words: state.words.filter(word => word.word !== action.payload.word) };
     case SprintActionTypes.SET_GROUP:
-      return { ...state, group: action.payload.group, words: action.payload.words };
+      return {
+        ...state,
+        group: action.payload.group,
+        page: action.payload.page,
+        words: action.payload.words,
+        currentWord: action.payload.word,
+        isTrue: action.payload.isTrue,
+        translate: action.payload.translate,
+      };
     case SprintActionTypes.START_GAME:
       return { ...state, isGameOn: true };
     case SprintActionTypes.STOP_GAME:
