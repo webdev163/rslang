@@ -1,5 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 
+import styles from './GameSprintTimer.module.scss';
+
 interface ITimer {
   initialTime?: number;
   onEnd: () => void;
@@ -25,14 +27,8 @@ const GameSprintTimer: FC<ITimer> = ({ initialTime = 60, onEnd, onClick, isPause
   }, [count, isPaused]);
 
   return (
-    <button
-      style={{
-        background: 'transparent',
-        border: 'none',
-      }}
-      onClick={onClick}
-    >
-      {count}
+    <button className={styles.btn} onClick={onClick}>
+      <span>{isPaused ? '||' : count}</span>
     </button>
   );
 };

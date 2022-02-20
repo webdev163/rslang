@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import { batch } from 'react-redux';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
@@ -8,17 +8,21 @@ import GameSprintTimer from '../GameSprintTimer';
 import { Button, Container, Dialog } from '@mui/material';
 import DifficultyDialog from '../DifficultyDialog';
 import ResultsDialog from '../ResultsDialog';
+import { API_URL } from '../../utils/constants';
 
 import styles from './GameSprint.module.scss';
 
 const GameSprint: FC = () => {
   const from = useLocationFrom();
 
+  const audio = useRef(new Audio());
+
   const [showDifficulty, setShowDifficulty] = useState(true);
   const [showResult, setShowResult] = useState(false);
 
   const { userId } = useTypedSelector(state => state.auth.user);
   const [gameOnPause, setGameOnPause] = useState(false);
+  const [isSoundOn, setSoundOn] = useState(true);
 
   const {
     words,
@@ -84,6 +88,21 @@ const GameSprint: FC = () => {
     }
   }, [words]);
 
+  useEffect(() => {
+    if (currentWord && isSoundOn) {
+      audio.current.src = `${API_URL}/${currentWord.audio}`;
+      audio.current.play();
+    }
+  }, [currentWord]);
+
+  useEffect(() => {
+    if (pointsForAnswer > 10 && isSoundOn) {
+      const audio = new Audio();
+      audio.src = '/assets/sound/next.mp3';
+      audio.play();
+    }
+  }, [pointsForAnswer]);
+
   useEffect(
     () => () => {
       resetSprintState();
@@ -99,10 +118,20 @@ const GameSprint: FC = () => {
         incrementRightAnswers();
         updateSprintRightAnswersArr(currentWord);
         receiveUserAnswerAction(true, currentWord, 'sprint');
+        if (isSoundOn) {
+          const audio = new Audio();
+          audio.src = '/assets/sound/correct.mp3';
+          audio.play();
+        }
       } else {
         updateSprintWrongAnswersArr(currentWord);
         resetSprintRigthAnswers();
         receiveUserAnswerAction(false, currentWord, 'sprint');
+        if (isSoundOn) {
+          const audio = new Audio();
+          audio.src = '/assets/sound/wrong.mp3';
+          audio.play();
+        }
       }
       removeSprintWord(currentWord);
       setNextSprintWord();
@@ -119,8 +148,8 @@ const GameSprint: FC = () => {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      const key = e.code;
       if (!gameOnPause) {
-        const key = e.code;
         if (key === 'ArrowRight') {
           receiveAnswer(true);
         }
@@ -128,15 +157,15 @@ const GameSprint: FC = () => {
           receiveAnswer(false);
         }
       }
+      if (key === 'Space') {
+        setGameOnPause(gameOnPause => !gameOnPause);
+      }
     };
     document.addEventListener('keydown', handleKeyPress);
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
   }, [currentWord]);
-
-  const maxPointsForAnswer = 80;
-  const answersCounterTemplate = pointsForAnswer < maxPointsForAnswer ? <p>{rightAnswers} / 3</p> : <p>1</p>;
 
   if (!isGameOn && !isRouterParamsReceived) {
     return (
@@ -173,8 +202,7 @@ const GameSprint: FC = () => {
   }
 
   return (
-    <div>
-      <h1 className={styles.title}>Sprint Game</h1>
+    <div className={styles.pageWrapper}>
       <GameSprintTimer
         isPaused={gameOnPause}
         initialTime={60}
@@ -187,25 +215,51 @@ const GameSprint: FC = () => {
         }}
       />
       <div className={styles.points}>{score}</div>
-      <div className={styles.game}>
-        {(rightAnswers > 0 || pointsForAnswer > 10) && answersCounterTemplate}
+      <div className={styles.cardWrapper}>
+        <div className={styles.soundToggleIcon} onClick={() => setSoundOn(isSoundOn => !isSoundOn)}>
+          <img src={`/assets/img/sound-${isSoundOn ? 'on' : 'off'}.svg`} alt="" />
+        </div>
+        <button className={styles.soundIcon} onClick={() => audio.current.play()}></button>
+        <div className={styles.circleWrapper}>
+          <div
+            className={`${styles.circleItem} ${rightAnswers > 0 || pointsForAnswer === 80 ? styles.done : ''}`}
+          ></div>
+          <div
+            className={`${styles.circleItem} ${rightAnswers > 1 ? styles.done : ''} ${
+              pointsForAnswer === 80 ? styles.hidden : ''
+            }`}
+          ></div>
+          <div
+            className={`${styles.circleItem} ${rightAnswers > 2 ? styles.done : ''} ${
+              pointsForAnswer === 80 ? styles.hidden : ''
+            }`}
+          ></div>
+        </div>
         {pointsForAnswer > 10 && (
           <div>
-            <p>+{pointsForAnswer} за слово</p>
+            <p className={styles.extra}>+ {pointsForAnswer} очков за слово</p>
           </div>
         )}
+        {pointsForAnswer === 10 && <div className={styles.empty}></div>}
+        <div className={styles.parrotsWrapper}>
+          <div className={styles.parrot1}></div>
+          <div className={`${styles.parrot2} ${pointsForAnswer < 20 ? styles.hidden : ''}`}></div>
+          <div className={`${styles.parrot3} ${pointsForAnswer < 40 ? styles.hidden : ''}`}></div>
+          <div className={`${styles.parrot4} ${pointsForAnswer < 80 ? styles.hidden : ''}`}></div>
+          <div className={styles.branch}></div>
+        </div>
         {currentWord && (
           <div>
-            <p>
-              <b>{currentWord.word}</b>
-            </p>
-            <p>{translate}</p>
-            <button onClick={handleFalseButton} disabled={gameOnPause}>
-              Неверно
-            </button>
-            <button onClick={handleTrueButton} disabled={gameOnPause}>
-              Верно
-            </button>
+            <p className={styles.word}>{currentWord.word}</p>
+            <p className={styles.translation}>{translate}</p>
+            <div className={styles.btnWrapper}>
+              <button className={`${styles.btn} ${styles.red}`} onClick={handleFalseButton} disabled={gameOnPause}>
+                Неверно
+              </button>
+              <button className={`${styles.btn} ${styles.green}`} onClick={handleTrueButton} disabled={gameOnPause}>
+                Верно
+              </button>
+            </div>
           </div>
         )}
       </div>
