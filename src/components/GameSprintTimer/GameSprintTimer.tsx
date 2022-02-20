@@ -3,24 +3,38 @@ import React, { FC, useState, useEffect } from 'react';
 interface ITimer {
   initialTime?: number;
   onEnd: () => void;
+  onClick: () => void;
+  isPaused: boolean;
 }
 
-const GameSprintTimer: FC<ITimer> = ({ initialTime = 60, onEnd }) => {
+const GameSprintTimer: FC<ITimer> = ({ initialTime = 60, onEnd, onClick, isPaused }) => {
   const [count, setCount] = useState(initialTime);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    if (count > 0) {
-      timer = setTimeout(() => setCount(prev => prev - 1), 1000);
-    } else {
-      onEnd();
+    if (!isPaused) {
+      let timer: ReturnType<typeof setTimeout>;
+      if (count > 0) {
+        timer = setTimeout(() => setCount(prev => prev - 1), 1000);
+      } else {
+        onEnd();
+      }
+      return () => {
+        clearTimeout(timer);
+      };
     }
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [count]);
+  }, [count, isPaused]);
 
-  return <div>{count}</div>;
+  return (
+    <button
+      style={{
+        background: 'transparent',
+        border: 'none',
+      }}
+      onClick={onClick}
+    >
+      {count}
+    </button>
+  );
 };
 
 export default GameSprintTimer;

@@ -18,6 +18,7 @@ const GameSprint: FC = () => {
   const [showResult, setShowResult] = useState(false);
 
   const { userId } = useTypedSelector(state => state.auth.user);
+  const [gameOnPause, setGameOnPause] = useState(false);
 
   const {
     words,
@@ -118,12 +119,14 @@ const GameSprint: FC = () => {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      const key = e.code;
-      if (key === 'ArrowRight') {
-        receiveAnswer(true);
-      }
-      if (key === 'ArrowLeft') {
-        receiveAnswer(false);
+      if (!gameOnPause) {
+        const key = e.code;
+        if (key === 'ArrowRight') {
+          receiveAnswer(true);
+        }
+        if (key === 'ArrowLeft') {
+          receiveAnswer(false);
+        }
       }
     };
     document.addEventListener('keydown', handleKeyPress);
@@ -132,7 +135,8 @@ const GameSprint: FC = () => {
     };
   }, [currentWord]);
 
-  const answersCounterTemplate = pointsForAnswer < 80 ? <p>{rightAnswers} / 3</p> : <p>1</p>;
+  const maxPointsForAnswer = 80;
+  const answersCounterTemplate = pointsForAnswer < maxPointsForAnswer ? <p>{rightAnswers} / 3</p> : <p>1</p>;
 
   if (!isGameOn && !isRouterParamsReceived) {
     return (
@@ -172,10 +176,14 @@ const GameSprint: FC = () => {
     <div>
       <h1 className={styles.title}>Sprint Game</h1>
       <GameSprintTimer
+        isPaused={gameOnPause}
         initialTime={60}
         onEnd={() => {
           stopGame();
           setShowResult(true);
+        }}
+        onClick={() => {
+          setGameOnPause(prev => !prev);
         }}
       />
       <div className={styles.points}>{score}</div>
@@ -192,8 +200,12 @@ const GameSprint: FC = () => {
               <b>{currentWord.word}</b>
             </p>
             <p>{translate}</p>
-            <button onClick={handleFalseButton}>Неверно</button>
-            <button onClick={handleTrueButton}>Верно</button>
+            <button onClick={handleFalseButton} disabled={gameOnPause}>
+              Неверно
+            </button>
+            <button onClick={handleTrueButton} disabled={gameOnPause}>
+              Верно
+            </button>
           </div>
         )}
       </div>
