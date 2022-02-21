@@ -135,13 +135,20 @@ const GameAudio: FC = () => {
         receiveAnswer(option);
       }
     });
-    funcs.forEach(func => {
-      document.addEventListener('keydown', func);
-    });
+    const handleKeysDown = (e: KeyboardEvent) => {
+      funcs.forEach(func => func(e));
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+        receiveAnswer(shuffledOptions[shuffledOptions.length - 1]);
+      }
+      if (e.code === 'Space') {
+        if (currentWord) {
+          audio.current.play();
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeysDown);
     return () => {
-      funcs.forEach(func => {
-        document.removeEventListener('keydown', func);
-      });
+      document.removeEventListener('keydown', handleKeysDown);
     };
   }, [shuffledOptions]);
 
@@ -161,6 +168,11 @@ const GameAudio: FC = () => {
         if (e.code === 'Enter' || e.code === 'NumpadEnter') {
           e.preventDefault();
           showNextQuestion();
+        }
+        if (e.code === 'Space') {
+          if (currentWord) {
+            audio.current.play();
+          }
         }
       };
       document.addEventListener('keydown', func);
