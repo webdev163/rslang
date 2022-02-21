@@ -89,11 +89,11 @@ const GameSprint: FC = () => {
   }, [words]);
 
   useEffect(() => {
-    if (currentWord && isSoundOn) {
+    if (isGameOn && currentWord && isSoundOn) {
       audio.current.src = `${API_URL}/${currentWord.audio}`;
       audio.current.play();
     }
-  }, [currentWord]);
+  }, [currentWord, isGameOn]);
 
   useEffect(() => {
     if (pointsForAnswer > 10 && isSoundOn) {
