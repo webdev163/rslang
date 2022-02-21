@@ -178,7 +178,7 @@ const GameSprint: FC = () => {
             setShowDifficulty(false);
           }}
         />
-        <ResultsDialog showResult={showResult} />
+        <ResultsDialog score={score} showResult={showResult} />
       </Container>
     );
   }
@@ -197,7 +197,7 @@ const GameSprint: FC = () => {
             Начать игру
           </Button>
         </Dialog>
-        <ResultsDialog showResult={showResult} />
+        <ResultsDialog score={score} showResult={showResult} />
       </Container>
     );
   }

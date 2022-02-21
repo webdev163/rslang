@@ -188,7 +188,7 @@ const GameAudio: FC = () => {
             setShowDifficulty(false);
           }}
         />
-        <ResultsDialog showResult={showResult} />
+        <ResultsDialog score={score} showResult={showResult} />
       </Container>
     );
   }
@@ -207,7 +207,7 @@ const GameAudio: FC = () => {
             Начать игру
           </Button>
         </Dialog>
-        <ResultsDialog showResult={showResult} />
+        <ResultsDialog score={score} showResult={showResult} />
       </Container>
     );
   }
