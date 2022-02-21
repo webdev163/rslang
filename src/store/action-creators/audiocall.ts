@@ -86,35 +86,28 @@ export const setAudioGroupWithoutLearned =
     const wordsLimit = 20;
     let currentPage = page;
     while (words.length < wordsLimit) {
-      if (currentPage > 0) {
-        currentPage -= 1;
-        const additionalWordsResponse = (
-          (
-            await getAggregatedWords(
-              userId,
-              token,
-              {
-                $and: [
-                  { page, group },
-                  {
-                    $or: [
-                      { userWord: null },
-                      { 'userWord.optional': null },
-                      { 'userWord.optional.done': { $ne: true } },
-                    ],
-                  },
-                ],
-              },
-              999,
-            )
-          )[0] as AggregatedWordsResponse
-        ).paginatedResults.filter((item, index) => index < wordsLimit - words.length);
-        const promises = additionalWordsResponse.map(word => getWord(word._id));
-        const additionalWords = await Promise.all(promises);
-        words.push(...additionalWords);
-      } else {
-        break;
-      }
+      if (currentPage === 0) break;
+      currentPage -= 1;
+      const additionalWordsResponse = (
+        (
+          await getAggregatedWords(
+            userId,
+            token,
+            {
+              $and: [
+                { page: currentPage, group },
+                {
+                  $or: [{ userWord: null }, { 'userWord.optional': null }, { 'userWord.optional.done': { $ne: true } }],
+                },
+              ],
+            },
+            999,
+          )
+        )[0] as AggregatedWordsResponse
+      ).paginatedResults.filter((item, index) => index < wordsLimit - words.length);
+      const promises = additionalWordsResponse.map(word => getWord(word._id));
+      const additionalWords = await Promise.all(promises);
+      words.push(...additionalWords);
     }
     dispatch({
       type: AudioActionTypes.SET_GROUP,
