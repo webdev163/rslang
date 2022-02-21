@@ -12,7 +12,7 @@ const GamesPage: FC = () => {
         <div className={styles.gamesWrapper}>
           <div className={styles.gamesItem}>
             <Link className={styles.link} to="/games/audio">
-              <h2>Аудиовызов</h2>
+              <h2 className={styles.subtitle}>Аудиовызов</h2>
               <div className={styles.image}>
                 <img src="/assets/img/audiogame.jpg" alt="Игра Аудиовызов" />
               </div>
@@ -20,7 +20,7 @@ const GamesPage: FC = () => {
           </div>
           <div className={styles.gamesItem}>
             <Link className={styles.link} to="/games/sprint">
-              <h2>Спринт</h2>
+              <h2 className={styles.subtitle}>Спринт</h2>
               <div className={styles.image}>
                 <img src="/assets/img/sprintgame.jpg" alt="Игра Спринт" />
               </div>

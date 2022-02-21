@@ -158,20 +158,10 @@ const CardItem: FC<CardItemProps> = ({
     if (isAuthorized) {
       return (
         <div className={styles.cardButtonsWrapper}>
-          <Button
-            variant="outlined"
-            onClick={toggleHard}
-            sx={{ flexBasis: '48%', fontSize: 18, border: '1px solid #b9b9b9' }}
-            disabled={isLearnt}
-          >
+          <Button variant="outlined" onClick={toggleHard} sx={{ border: '1px solid #b9b9b9' }} disabled={isLearnt}>
             {isHard ? 'Убрать из сложных' : 'Добавить в сложные'}
           </Button>
-          <Button
-            variant="outlined"
-            onClick={toggleLearnt}
-            sx={{ flexBasis: '48%', fontSize: 18, border: '1px solid #b9b9b9' }}
-            disabled={isHard}
-          >
+          <Button variant="outlined" onClick={toggleLearnt} sx={{ border: '1px solid #b9b9b9' }} disabled={isHard}>
             {isLearnt ? 'Убрать из изученных' : 'Добавить в изученные'}
           </Button>
         </div>
