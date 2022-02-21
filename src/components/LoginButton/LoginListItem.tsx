@@ -9,9 +9,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router';
 import LoginDialog from './LoginDialog';
-import { LoginListItemProps } from './types';
 
-const LoginListItem: FC<LoginListItemProps> = ({ withText }) => {
+const LoginListItem: FC = () => {
   const navigate = useNavigate();
   const auth = useTypedSelector(state => state.auth);
   const isAuthorized = auth.isAuthorized;
@@ -41,7 +40,7 @@ const LoginListItem: FC<LoginListItemProps> = ({ withText }) => {
         onClick={() => (isAuthorized ? handleSignOut() : handleClickOpen())}
       >
         <ListItemIcon>{isAuthorized ? <LogoutIcon /> : <LoginIcon />}</ListItemIcon>
-        {withText && <ListItemText primary={!isAuthorized ? 'Войти' : 'Выйти'} />}
+        <ListItemText primary={!isAuthorized ? 'Войти' : 'Выйти'} />
       </ListItem>
       <LoginDialog open={open} onClose={handleClose} />
     </>
