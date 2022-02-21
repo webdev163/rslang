@@ -6,13 +6,12 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import styles from './LearningProgress.module.scss';
 
 const LearningProgress: FC<LearningProgressProps> = ({ isLearned, wordId, isHard }) => {
-  if (isLearned) return <CheckCircleOutlineIcon sx={{ fontSize: 30, color: '#f3c139' }} />;
+  // if (isLearned) return <CheckCircleOutlineIcon sx={{ fontSize: 30, color: '#f3c139' }} />;
 
   const { words } = useTypedSelector(state => state.userWords);
 
   const curUserWord = words.find(word => word.wordId === wordId);
-  if (!curUserWord) return <span className={styles.new}>new</span>;
-
+  if (!curUserWord) return null; //<span className={styles.new}>new</span>;
   // const progress = curUserWord.optional && curUserWord.optional.rightChain;
   const difficulty = isHard ? 'hard' : 'weak';
 
@@ -35,8 +34,11 @@ const LearningProgress: FC<LearningProgressProps> = ({ isLearned, wordId, isHard
     }
   }
 
-  if (!chain || chain.length === 0) return <span className={styles.new}>new</span>;
+  if (!isLearned && (!chain || chain.length === 0)) return <span className={styles.new}>new</span>;
+  if (isLearned && (!chain || chain.length === 0)) return null; // checked as learnt without learning
 
+  if ((progress >= 3 && !isHard) || (progress >= 5 && isHard))
+    return <CheckCircleOutlineIcon sx={{ fontSize: 30, color: '#f3c139' }} />;
   const styleVariable = {
     '--progress': ` ${(100 * progress) / (difficulty === 'hard' ? 5 : 3)}%`,
   } as React.CSSProperties;
@@ -52,7 +54,10 @@ const LearningProgress: FC<LearningProgressProps> = ({ isLearned, wordId, isHard
 
   return (
     <div className={styles.progress} style={styleVariable}>
-      <div className={styles.answers}>{answersEls}</div>
+      <div className={styles.answers}>
+        {answersEls}
+        {chain && chain.length === 1 && <span className={styles.new}>new</span>}
+      </div>
     </div>
   );
 };
