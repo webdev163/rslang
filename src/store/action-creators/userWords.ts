@@ -41,7 +41,7 @@ export const receiveUserAnswerAction =
       isNewWord = false;
       let optionals = userWord.optional || {};
       let difficulty = userWord.difficulty;
-      const answersChain = (optionals.answersChain || '').split(',');
+      const answersChain = optionals.answersChain ? optionals.answersChain.split(',') : [];
       if (isRightAnswer) {
         const chain = optionals.rightChain || 0;
         const newChain = chain + 1;
@@ -80,13 +80,13 @@ export const receiveUserAnswerAction =
           ...optionals,
           rightAnswers: 1,
           rightChain: 1,
-          answersChain: [...optionals.answersChain.split(','), 1].join(','),
+          answersChain: '1',
         };
       } else {
         optionals = {
           ...optionals,
           wrongAnswers: 1,
-          answersChain: [...optionals.answersChain.split(','), 0].join(','),
+          answersChain: '0',
         };
       }
       await addUserWord(userId, token, word.id, 'weak', optionals);

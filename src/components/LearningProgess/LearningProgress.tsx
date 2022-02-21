@@ -23,8 +23,6 @@ const LearningProgress: FC<LearningProgressProps> = ({ isLearned, wordId, isHard
   let progress = 0;
 
   if (chain) {
-    chain.shift(); // first element zero - means viewed
-
     for (let i = chain.length - 1; i >= 0; i -= 1) {
       if (chain[i] === 1) {
         progress++;
