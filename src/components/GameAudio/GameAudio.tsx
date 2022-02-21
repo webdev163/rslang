@@ -58,7 +58,9 @@ const GameAudio: FC = () => {
   }, [words]);
 
   useEffect(() => {
-    isFullscreenOn ? document.querySelector(`.${styles.page}`)?.requestFullscreen() : document.exitFullscreen();
+    if (isGameOn) {
+      isFullscreenOn ? document.querySelector(`.${styles.page}`)?.requestFullscreen() : document.exitFullscreen();
+    }
   }, [isFullscreenOn]);
 
   useEffect(() => {

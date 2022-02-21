@@ -75,7 +75,11 @@ const GameSprint: FC = () => {
   }, []);
 
   useEffect(() => {
-    isFullscreenOn ? document.querySelector(`.${styles.pageWrapper}`)?.requestFullscreen() : document.exitFullscreen();
+    if (isGameOn) {
+      isFullscreenOn
+        ? document.querySelector(`.${styles.pageWrapper}`)?.requestFullscreen()
+        : document.exitFullscreen();
+    }
   }, [isFullscreenOn]);
 
   useEffect(() => {
