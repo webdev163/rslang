@@ -26,6 +26,7 @@ const GameAudio: FC = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [rightIndex, setRightIndex] = useState(0);
   const [isSoundOn, setSoundOn] = useState(true);
+  const [isFullscreenOn, setFullscreenOn] = useState(false);
 
   const [lastAnswerIsRight, setLastAnswerIsRight] = useState(false);
 
@@ -55,6 +56,10 @@ const GameAudio: FC = () => {
       setIsTotalWordsCounted(true);
     }
   }, [words]);
+
+  useEffect(() => {
+    isFullscreenOn ? document.querySelector(`.${styles.page}`)?.requestFullscreen() : document.exitFullscreen();
+  }, [isFullscreenOn]);
 
   useEffect(() => {
     if (from) {
@@ -212,10 +217,17 @@ const GameAudio: FC = () => {
     );
   }
 
+  const toggleFullscreen = () => {
+    setFullscreenOn(isFullscreenOn => !isFullscreenOn);
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.soundBtnWrapper} onClick={() => setSoundOn(isSoundOn => !isSoundOn)}>
         <img src={`/assets/img/sound-${isSoundOn ? 'on' : 'off'}.svg`} alt="" />
+      </div>
+      <div className={styles.fullscreenWrapper} onClick={() => toggleFullscreen()}>
+        <img src={'/assets/img/fullscreen.svg'} alt="" />
       </div>
       <div className={styles.container}>
         <div className={styles.text}>
