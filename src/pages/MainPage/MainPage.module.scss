@@ -20,6 +20,9 @@
   margin-top: 50px;
   max-width: 1400px;
   font-size: 24px;
+  @media screen and (max-width: 1000px) {
+    font-size: 22px;
+  }
 }
 
 .descr-wrapper {
@@ -38,8 +41,12 @@
   justify-content: space-between;
 }
 
-.about-item {
-  max-width: 700px;
+.descr-item {
+  @media screen and (max-width: 1100px) {
+    flex-direction: column;
+    padding: 20px;
+    max-width: 500px;
+  }
 }
 
 .descr-title, .about-title {
@@ -51,6 +58,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  @media screen and (max-width: 900px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .descr-body {
@@ -77,10 +88,19 @@
   max-width: 700px;
   padding-left: 12px;
   padding-right: 12px;
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+    padding: 20px;
+    max-width: 400px;
+    align-items: center;
+  }
 }
 
 .about-image {
   max-width: 300px;
+  @media screen and (max-width: 1000px) {
+    margin-bottom: 10px;
+  }
 }
 
 .about-body {

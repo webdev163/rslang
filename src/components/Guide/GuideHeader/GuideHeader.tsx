@@ -12,10 +12,14 @@ const GuideHeader: FC = () => {
 
   return (
     <div className={styles.wrapper}>
-      <SelectDifficulty />
-      <SelectPage />
-      <SelectGame />
-      {isAuthorized ? <ButtonHard /> : ''}
+      <div className={styles.selectWrapper}>
+        <SelectDifficulty />
+        <SelectPage />
+      </div>
+      <div className={styles.btnWrapper}>
+        <SelectGame />
+        {isAuthorized ? <ButtonHard /> : ''}
+      </div>
     </div>
   );
 };

@@ -219,3 +219,12 @@
   width: 164px;
   height: 55px;
 }
+
+.fullscreen-wrapper {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  &:hover {
+    cursor: pointer;
+  }
+}

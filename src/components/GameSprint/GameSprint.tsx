@@ -23,6 +23,7 @@ const GameSprint: FC = () => {
   const { userId } = useTypedSelector(state => state.auth.user);
   const [gameOnPause, setGameOnPause] = useState(false);
   const [isSoundOn, setSoundOn] = useState(true);
+  const [isFullscreenOn, setFullscreenOn] = useState(false);
 
   const {
     words,
@@ -74,6 +75,14 @@ const GameSprint: FC = () => {
   }, []);
 
   useEffect(() => {
+    if (isGameOn) {
+      isFullscreenOn
+        ? document.querySelector(`.${styles.pageWrapper}`)?.requestFullscreen()
+        : document.exitFullscreen();
+    }
+  }, [isFullscreenOn]);
+
+  useEffect(() => {
     if (!words.length && isGameOn) {
       if (page > 0) {
         if (userId) {
@@ -109,6 +118,10 @@ const GameSprint: FC = () => {
     },
     [],
   );
+
+  const toggleFullscreen = () => {
+    setFullscreenOn(isFullscreenOn => !isFullscreenOn);
+  };
 
   const receiveAnswer = (answer: boolean) => {
     if (!isGameOn || !currentWord) return;
@@ -215,6 +228,9 @@ const GameSprint: FC = () => {
           setGameOnPause(prev => !prev);
         }}
       />
+      <div className={styles.fullscreenWrapper} onClick={() => toggleFullscreen()}>
+        <img src={'/assets/img/fullscreen.svg'} alt="" />
+      </div>
       <div className={styles.points}>{score}</div>
       <div className={styles.cardWrapper}>
         <div className={styles.soundToggleIcon} onClick={() => setSoundOn(isSoundOn => !isSoundOn)}>

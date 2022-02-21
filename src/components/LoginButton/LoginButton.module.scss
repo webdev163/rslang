@@ -9,7 +9,12 @@
   min-width: 400px;
   width: min-content;
   text-align: center;
+}
 
-
-
+.tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 215px;
+  margin: 0 auto;
 }
