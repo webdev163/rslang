@@ -47,8 +47,8 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const ResultsDialog: FC<ResultsDialogProps> = ({ showResult }) => {
-  const { score, rightAnswersArr, wrongAnswersArr } = useTypedSelector(state => state.audio);
+const ResultsDialog: FC<ResultsDialogProps> = ({ showResult, score }) => {
+  const { rightAnswersArr, wrongAnswersArr } = useTypedSelector(state => state.audio);
   const { resetAudioState } = useActions();
   const navigate = useNavigate();
 

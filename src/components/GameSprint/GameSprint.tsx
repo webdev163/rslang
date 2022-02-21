@@ -98,11 +98,11 @@ const GameSprint: FC = () => {
   }, [words]);
 
   useEffect(() => {
-    if (currentWord && isSoundOn) {
+    if (isGameOn && currentWord && isSoundOn) {
       audio.current.src = `${API_URL}/${currentWord.audio}`;
       audio.current.play();
     }
-  }, [currentWord]);
+  }, [currentWord, isGameOn]);
 
   useEffect(() => {
     if (pointsForAnswer > 10 && isSoundOn) {
@@ -191,7 +191,7 @@ const GameSprint: FC = () => {
             setShowDifficulty(false);
           }}
         />
-        <ResultsDialog showResult={showResult} />
+        <ResultsDialog score={score} showResult={showResult} />
       </Container>
     );
   }
@@ -210,7 +210,7 @@ const GameSprint: FC = () => {
             Начать игру
           </Button>
         </Dialog>
-        <ResultsDialog showResult={showResult} />
+        <ResultsDialog score={score} showResult={showResult} />
       </Container>
     );
   }

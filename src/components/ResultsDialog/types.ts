@@ -1,5 +1,6 @@
 export interface ResultsDialogProps {
   showResult: boolean;
+  score: number;
 }
 
 export interface DialogTitleProps {
