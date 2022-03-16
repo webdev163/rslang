@@ -1,0 +1,19 @@
+.title {
+  color: $base-color;
+  margin-left: 3px;
+}
+
+body {
+  overflow-y: scroll;
+}
+
+.guide-wrapper {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 20px;
+}
+
+.wrapper-inner {
+  min-height: 70vh;
+}

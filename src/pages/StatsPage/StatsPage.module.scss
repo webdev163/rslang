@@ -1,0 +1,26 @@
+.title {
+  color: $base-color;
+}
+
+.subtitle {
+  margin-top: 75px;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table {
+  height: 400px;
+  min-width: 400px;
+}
+
+.body-wrapper {
+  min-height: 70vh;
+}
+
+.wrapper {
+  padding: 10px 20px;
+}

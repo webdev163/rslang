@@ -1,0 +1,230 @@
+.page-wrapper {
+  background-color: #0d3848;
+  background-image: url('/assets/img/sprint-bottom.svg'),
+  url('/assets/img/sprint-top-left.svg'),
+  url('/assets/img/sprint-top-right.svg');
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-size: 100%, auto, auto;
+  height: calc(100vh - 64px);
+  background-position: bottom, 0 0, 100% 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.card-wrapper {
+  text-align: center;
+  padding: 20px 40px;
+  max-width: 500px;
+  border-radius: 8px;
+  border: 1px solid #fff;
+  background-color: hsla(0, 0%, 100%, .06);
+  min-height: 475px;
+  min-width: 482px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 15px;
+  position: relative;
+}
+
+.points {
+  text-align: center;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.circle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 115px;
+}
+
+.circle-item {
+  width: 26px;
+  height: 26px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #14333E;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+  &.done {
+    background-image: url('/assets/img/answer-right2.svg');
+  }
+}
+
+.parrots-wrapper {
+  width: 204px;
+  height: 64px;
+  position: relative;
+  margin-top: 30px;
+}
+
+.branch {
+  width: 204px;
+  height: 6px;
+  position: absolute;
+  bottom: 6px;
+  background-image: url('/assets/img/branch.svg');
+}
+
+.parrot1 {
+  width: 54px;
+  height: 63px;
+  bottom: -2px;
+  background-image: url('/assets/img/parrot1.svg');
+  position: absolute;
+  left: 0;
+}
+
+.parrot2 {
+  width: 54px;
+  height: 52px;
+  bottom: 1px;
+  background-image: url('/assets/img/parrot2.svg');
+  position: absolute;
+  left: 56px;
+}
+
+.parrot3 {
+  width: 44px;
+  height: 58px;
+  bottom: -3px;
+  background-image: url('/assets/img/parrot3.svg');
+  position: absolute;
+  right: 48px;
+}
+
+.parrot4 {
+  width: 45px;
+  height: 65px;
+  bottom: -3px;
+  background-image: url('/assets/img/parrot4.svg');
+  position: absolute;
+  right: 0;
+}
+
+.extra {
+  color: #fff;
+}
+
+.word {
+  font-size: 36px;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.translation {
+  font-size: 26px;
+  color: hsla(0, 0%, 100%, .6);
+}
+
+.btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 400px;
+}
+
+.btn {
+  width: 183px;
+  height: 50px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #fff;
+  border-radius: 4px;
+  text-align: center;
+  position: relative;
+  margin-left: 9px;
+  margin-right: 9px;
+  border: none;
+  transition: background-color .3s;
+  margin-bottom: 50px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.green {
+  background-color: #28c38a;
+  &:hover {
+    background-color: #23aa78;
+  }
+  &:after {
+    position: absolute;
+    bottom: -45px;
+    display: block;
+    content: "\2192";
+    color: #7e919f;
+    font-size: 28px;
+    left: 80px;
+  }
+}
+
+.red {
+  background-color: #ed593b;
+  &:hover {
+    background-color: #d34d32;
+  }
+  &:after {
+    position: absolute;
+    bottom: -45px;
+    display: block;
+    content: "\2190";
+    color: #7e919f;
+    font-size: 28px;
+    left: 80px;
+  }
+}
+
+.sound-icon {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  background-image: url('/assets/img/sound2.svg');
+  filter: invert(100%) sepia(20%) saturate(463%) hue-rotate(306deg) brightness(111%) contrast(100%);
+  &:hover {
+    filter: invert(48%) sepia(62%) saturate(4226%) hue-rotate(193deg) brightness(84%) contrast(88%);
+    cursor: pointer;
+  }
+}
+
+.sound-toggle-icon {
+  width: 23px;
+  height: 24px;
+  position: absolute;
+  top: -45px;
+  right: 0;
+  cursor: pointer;
+  position: absolute;
+}
+
+.hidden {
+  display: none;
+}
+
+.empty {
+  width: 164px;
+  height: 55px;
+}
+
+.fullscreen-wrapper {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  &:hover {
+    cursor: pointer;
+  }
+}
